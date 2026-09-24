@@ -1,0 +1,37 @@
+services:
+  postgres:
+    container_name: hackaton-db
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5434:5432"
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src/max_hackaton:/app
+    environment:
+          - WATCHFILES_FORCE_POLLING=true
+          - UV_PROJECT_ENVIRONMENT=/src/max_hackaton/.venv
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+
+volumes:
+  postgres_data:
