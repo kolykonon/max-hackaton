@@ -30,6 +30,27 @@ services:
       postgres:
         condition: service_healthy
 
+  web:
+    build:
+      context: ./frontend
+      args:
+        VITE_USE_MOCKS: ${VITE_USE_MOCKS:-false}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Сертификаты — в томе, чтобы не выпускать их заново при каждом перезапуске
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:
