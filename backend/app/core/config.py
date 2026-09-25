@@ -4,19 +4,23 @@ from pydantic import Field, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class SettingsConfigMixin:
-    model_config = SettingsConfigDict(  # миксин чтобы не дублировать везде конфиг
+class SettingsConfigDictMixin:
+    """Миксин для того чтобы не писать везде конфиг"""
+
+    model_config = SettingsConfigDict(
         env_file="../.env",
         extra="ignore",
         case_sensitive=False,
     )
 
     @classmethod
-    def from_env(cls) -> Self:
+    def from_env(cls) -> Self:  # метод, чтобы классы брали настройки из env-файла
         return cls()
 
 
-class PostgresSettings(BaseSettings, SettingsConfigMixin):
+class PostgresSettings(BaseSettings, SettingsConfigDictMixin):
+    """Класс настроек для постгреса"""
+
     postgres_host: str
     postgres_port: int
     postgres_user: str
@@ -24,7 +28,7 @@ class PostgresSettings(BaseSettings, SettingsConfigMixin):
     postgres_db: str
 
     @property
-    def postgres_dsn(self) -> str:
+    def postgres_dsn(self) -> str:  # отсюда брать postgres url
         return str(
             PostgresDsn.build(
                 scheme="postgresql+asyncpg",
@@ -36,10 +40,27 @@ class PostgresSettings(BaseSettings, SettingsConfigMixin):
         )
 
 
-class Settings(BaseSettings):
+class BotSettings(BaseSettings, SettingsConfigDictMixin):
+    """Класс настроек макс-бота"""
+
+    max_bot_token: str
+
+
+class DevSettings(BaseSettings, SettingsConfigDictMixin):
+    """Класс настроек для разработки"""
+
+    auth_dev_mode: bool
+    demo_mode: bool
+
+
+class Settings(BaseSettings, SettingsConfigDictMixin):
+    """Общий класс настроек,"""
+
     postgres_settings: PostgresSettings = Field(
         default_factory=PostgresSettings.from_env
     )
+    bot_settings: BotSettings = Field(default_factory=BotSettings.from_env)
+    dev_settings: DevSettings = Field(default_factory=DevSettings.from_env)
 
 
 settings = Settings()
