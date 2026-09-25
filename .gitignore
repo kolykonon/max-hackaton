@@ -8,3 +8,4 @@ __pycache__
 .python-version
 .env
 node_modules
+.ruff_cache

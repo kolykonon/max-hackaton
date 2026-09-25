@@ -44,6 +44,7 @@ class BotSettings(BaseSettings, SettingsConfigDictMixin):
     """Класс настроек макс-бота"""
 
     max_bot_token: str
+    init_data_ttl: int
 
 
 class DevSettings(BaseSettings, SettingsConfigDictMixin):
