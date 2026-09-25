@@ -1,0 +1,18 @@
+.referral-banner {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+
+  &__icon {
+    flex-shrink: 0;
+    color: $color-accent;
+  }
+
+  &__text {
+    flex: 1;
+  }
+
+  &__chevron {
+    color: $color-text-tertiary;
+  }
+}

@@ -1,0 +1,30 @@
+.onboarding-nav {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+  padding: $space-s $page-gutter;
+  @include safe-bottom($space-s);
+
+  &__back {
+    --MaxUi-Button_background: transparent;
+    --MaxUi-Button_foreground: #{$color-text-themed};
+
+    flex-shrink: 0;
+    width: 60px;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-round;
+  }
+
+  &__next {
+    width: 60px;
+    margin-left: auto;
+    border-radius: $radius-round;
+    box-shadow: 0 6px 16px color-mix(in srgb, #{$color-tone-blue} 35%, transparent);
+  }
+
+  // Без согласия кнопка серая, но нажимается — чтобы показать подсказку у чекбокса
+  &__start--disabled {
+    --MaxUi-Button_background: var(--button-secondary);
+    --MaxUi-Button_foreground: #{$color-text-tertiary};
+  }
+}

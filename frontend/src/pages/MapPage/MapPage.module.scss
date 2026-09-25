@@ -1,0 +1,13 @@
+.map-page {
+  gap: 0;
+
+  &__map {
+    position: relative;
+    flex: 1;
+    min-height: 320px;
+  }
+
+  &__legend {
+    padding: $space-s $page-gutter;
+  }
+}

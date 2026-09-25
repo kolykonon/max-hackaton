@@ -1,0 +1,17 @@
+.data-section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+
+  &__head {
+    display: flex;
+    gap: $space-s;
+    align-items: center;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+  }
+}

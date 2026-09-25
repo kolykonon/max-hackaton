@@ -1,0 +1,10 @@
+.referrals-page__text {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  margin-top: $space-s;
+
+  > span {
+    display: block;
+  }
+}

@@ -1,0 +1,45 @@
+.checkbox {
+  display: flex;
+  gap: $space-s;
+  align-items: flex-start;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &__input {
+    @include visually-hidden;
+  }
+
+  &__box {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: 2px solid $color-border;
+    border-radius: $radius-xs;
+    background: $color-bg;
+    color: $color-text-inverse;
+    transition: background $transition-fast, border-color $transition-fast;
+
+    &--checked {
+      border-color: $color-accent;
+      background: $color-accent;
+    }
+  }
+
+  &__input:focus-visible + &__box {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+
+  &--invalid &__box {
+    border-color: $color-negative;
+  }
+
+  &__label {
+    padding-top: $space-3xs;
+    color: $color-text;
+    @include text(body);
+  }
+}

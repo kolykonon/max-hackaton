@@ -1,0 +1,15 @@
+.geo-region-card {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+
+  &__icon,
+  &__check {
+    flex-shrink: 0;
+    color: $color-accent;
+  }
+
+  &__text {
+    flex: 1;
+  }
+}

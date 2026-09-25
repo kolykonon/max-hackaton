@@ -1,0 +1,29 @@
+.segmented-control {
+  display: flex;
+  padding: $space-3xs;
+  border-radius: $radius-m;
+  background: var(--button-secondary);
+
+  &__item {
+    @include reset-button;
+    @include focus-ring;
+    display: flex;
+    flex: 1;
+    gap: $space-2xs;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 $space-s;
+    border-radius: $radius-s;
+    color: $color-text;
+    cursor: pointer;
+    transition: background $transition-fast, color $transition-fast;
+    -webkit-tap-highlight-color: transparent;
+    @include text(detail, detail-strong);
+
+    &--selected {
+      background: $color-accent;
+      color: $color-text-inverse;
+    }
+  }
+}

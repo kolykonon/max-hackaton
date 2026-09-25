@@ -1,0 +1,15 @@
+.honorary-condition {
+  display: flex;
+  gap: $space-m;
+  align-items: center;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+
+    > span {
+      display: block;
+    }
+  }
+}

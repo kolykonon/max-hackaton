@@ -1,0 +1,48 @@
+.blood-group-strip {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: $space-2xs;
+
+  &__cell {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2xs;
+    align-items: center;
+  }
+
+  &__item {
+    @include reset-button;
+    @include focus-ring;
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 72px;
+    border: 2px solid transparent;
+    border-radius: $radius-m;
+    background: $color-bg-secondary;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    &--selected {
+      border-color: $color-accent;
+      background: $color-bg;
+    }
+  }
+
+  &__label {
+    color: $color-text;
+    @include text(body, body-strong);
+  }
+
+  &__item--selected &__label {
+    color: $color-text-themed;
+  }
+
+  &__mine {
+    color: $color-text-themed;
+    @include text(label);
+  }
+}

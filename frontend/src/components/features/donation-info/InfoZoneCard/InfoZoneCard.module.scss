@@ -1,0 +1,22 @@
+.info-zone-card {
+  display: flex;
+  gap: $space-m;
+  align-items: flex-start;
+
+  &__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-s;
+    min-width: 0;
+  }
+
+  &__title {
+    display: block;
+  }
+
+  &__link {
+    align-self: flex-start;
+    margin-top: $space-2xs;
+  }
+}

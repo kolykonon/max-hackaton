@@ -1,0 +1,11 @@
+.booking-time__center {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2xs;
+  margin: $space-xs 0 $space-m;
+  text-align: center;
+
+  > * {
+    display: block;
+  }
+}

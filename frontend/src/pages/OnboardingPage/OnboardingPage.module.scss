@@ -1,0 +1,11 @@
+.onboarding-page {
+  &__progress {
+    padding: $space-m $page-gutter $space-xs;
+  }
+
+  &__slide {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+}

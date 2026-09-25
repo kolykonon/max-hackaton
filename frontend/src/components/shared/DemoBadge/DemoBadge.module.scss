@@ -1,0 +1,25 @@
+.demo-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding: $space-2xs $space-s;
+  border-radius: $radius-round;
+  white-space: nowrap;
+  @include text(label, label-strong);
+
+  &--themed {
+    color: $color-text-themed;
+    @include soft-bg($color-tone-blue, 10%);
+  }
+
+  &--neutral {
+    color: $color-text-secondary;
+    background: $color-bg-tertiary;
+  }
+
+  &--overlay {
+    color: $color-text-secondary;
+    background: color-mix(in srgb, #{$color-bg} 85%, transparent);
+    backdrop-filter: blur(8px);
+  }
+}

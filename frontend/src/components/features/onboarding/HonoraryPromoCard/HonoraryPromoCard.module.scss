@@ -1,0 +1,35 @@
+.honorary-promo {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+
+  &__head {
+    display: flex;
+    gap: $space-m;
+    align-items: center;
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: $radius-m;
+    color: $color-tone-yellow;
+    @include soft-bg($color-tone-yellow, 16%);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+  }
+
+  &__title,
+  &__condition,
+  &__subtitle {
+    display: block;
+  }
+}

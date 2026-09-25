@@ -1,0 +1,49 @@
+.appointment-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+
+  &__label {
+    align-self: flex-start;
+    padding: $space-2xs $space-s;
+    border-radius: $radius-s;
+    color: $color-text-themed;
+    @include soft-bg($color-tone-blue, 10%);
+    @include text(detail, detail-strong);
+  }
+
+  &__date {
+    display: block;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2xs;
+  }
+
+  &__type {
+    display: flex;
+    gap: $space-xs;
+    align-items: center;
+  }
+
+  &__center,
+  &__address {
+    display: block;
+  }
+
+  &__reminder {
+    display: flex;
+    gap: $space-s;
+    align-items: center;
+    padding-top: $space-s;
+    border-top: 1px solid $color-divider;
+    color: $color-text-secondary;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-s;
+  }
+}

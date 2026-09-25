@@ -1,0 +1,25 @@
+.slot-button {
+  @include reset-button;
+  @include pressable;
+  @include focus-ring;
+  height: 48px;
+  border: 1px solid $color-divider;
+  border-radius: $radius-m;
+  background: $color-bg-card;
+  color: $color-text;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  @include text(body);
+
+  &--busy {
+    border-color: transparent;
+    background: $color-bg-tertiary;
+    color: $color-icon-mute;
+  }
+
+  &--selected {
+    border-color: $color-accent;
+    background: $color-accent;
+    color: $color-text-inverse;
+  }
+}

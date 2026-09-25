@@ -1,0 +1,9 @@
+.consent-section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+
+  > span {
+    display: block;
+  }
+}

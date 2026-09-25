@@ -1,0 +1,50 @@
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+  padding: $space-s $page-gutter $space-xs;
+  background: $color-bg;
+
+  &__row {
+    position: relative;
+    display: flex;
+    gap: $space-xs;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  &__back {
+    flex-shrink: 0;
+    margin-left: -$space-xs;
+    color: $color-text;
+  }
+
+  &__titles {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__title,
+  &__subtitle {
+    display: block;
+  }
+
+  &__after {
+    flex-shrink: 0;
+  }
+
+  // Заголовок по центру экрана, стрелка остаётся слева
+  &--center &__titles {
+    padding: 0 44px;
+    text-align: center;
+  }
+
+  &--center &__back {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+}

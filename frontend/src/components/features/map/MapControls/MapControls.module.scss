@@ -1,0 +1,16 @@
+.map-controls {
+  position: absolute;
+  top: $space-s;
+  right: $space-s;
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+
+  &__button {
+    box-shadow: $shadow-card;
+  }
+
+  &__locate {
+    color: $color-accent;
+  }
+}

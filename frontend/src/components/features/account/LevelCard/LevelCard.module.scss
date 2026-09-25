@@ -1,0 +1,28 @@
+.level-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+
+  &__head {
+    display: flex;
+    gap: $space-s;
+    align-items: center;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    color: $color-status-urgent;
+  }
+
+  &__title {
+    flex: 1;
+  }
+
+  &__chevron {
+    color: $color-text-tertiary;
+  }
+
+  &__caption {
+    display: block;
+  }
+}

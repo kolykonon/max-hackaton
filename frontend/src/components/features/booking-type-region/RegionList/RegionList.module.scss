@@ -1,0 +1,20 @@
+.region-list {
+  margin: 0 (-$page-gutter);
+
+  &__item {
+    width: 100%;
+    padding-right: $page-gutter;
+    padding-left: $page-gutter;
+    text-align: left;
+  }
+
+  &__check {
+    color: $color-accent;
+  }
+
+  &__empty {
+    display: block;
+    padding: $space-xl 0;
+    text-align: center;
+  }
+}

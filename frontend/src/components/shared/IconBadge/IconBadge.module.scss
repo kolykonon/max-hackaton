@@ -1,0 +1,48 @@
+.icon-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-round;
+  font-weight: 700;
+
+  &--s {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  &--m {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  &--l {
+    width: 48px;
+    height: 48px;
+    font-size: 17px;
+  }
+
+  &--xl {
+    width: 64px;
+    height: 64px;
+    font-size: 22px;
+  }
+
+  $tones: (
+    'blue': $color-tone-blue,
+    'red': $color-tone-red,
+    'green': $color-tone-green,
+    'yellow': $color-tone-yellow,
+    'purple': $color-tone-purple,
+    'gray': $color-tone-gray,
+  );
+
+  @each $name, $color in $tones {
+    &--#{$name} {
+      color: $color;
+      @include soft-bg($color, 12%);
+    }
+  }
+}

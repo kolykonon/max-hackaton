@@ -1,0 +1,82 @@
+@use 'variables' as *;
+
+// Текст по токенам Max UI: text(title), text(body, body-strong)
+@mixin text($size, $weight: $size) {
+  font-family: var(--family-base);
+  font-size: var(--font-size-#{$size});
+  line-height: var(--line-height-#{$size});
+  font-weight: var(--font-weight-#{$weight});
+}
+
+@mixin card {
+  background: $color-bg-card;
+  border: 1px solid $color-divider;
+  border-radius: $radius-l;
+  box-shadow: $shadow-card;
+}
+
+// Полупрозрачный фон нужного цвета
+@mixin soft-bg($color, $amount: 12%) {
+  background: color-mix(in srgb, #{$color} $amount, transparent);
+}
+
+@mixin reset-button {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+}
+
+@mixin pressable {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform $transition-fast, opacity $transition-fast;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    cursor: default;
+    transform: none;
+  }
+}
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+}
+
+@mixin safe-bottom($extra: 0px) {
+  padding-bottom: calc(#{$extra} + env(safe-area-inset-bottom));
+}
+
+@mixin line-clamp($lines) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@mixin hide-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

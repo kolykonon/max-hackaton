@@ -1,0 +1,68 @@
+.bullet-list {
+  display: flex;
+  flex-direction: column;
+
+  &--gap-s {
+    gap: $space-xs;
+  }
+
+  &--gap-m {
+    gap: $space-s;
+  }
+
+  &__item {
+    display: flex;
+    gap: $space-s;
+    align-items: flex-start;
+  }
+
+  &__marker {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__text {
+    display: block;
+    min-width: 0;
+  }
+
+  &__item--dot &__marker,
+  &__item--dot-red &__marker {
+    width: 8px;
+    height: 8px;
+    margin: 6px 4px 0;
+    border-radius: $radius-round;
+    background: $color-accent;
+  }
+
+  &__item--dot-red &__marker {
+    background: $color-status-urgent;
+    opacity: 0.6;
+  }
+
+  &__item--check &__marker,
+  &__item--cross &__marker {
+    width: 24px;
+    height: 24px;
+    margin-top: -2px;
+    border-radius: $radius-round;
+  }
+
+  &__item--check &__marker {
+    background: $color-positive;
+    color: $color-text-inverse;
+  }
+
+  &__item--cross &__marker {
+    color: $color-negative;
+    @include soft-bg($color-tone-red, 14%);
+  }
+
+  &__item--number &__marker {
+    min-width: 20px;
+    color: $color-text-secondary;
+    @include text(body);
+  }
+}

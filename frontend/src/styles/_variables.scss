@@ -1,0 +1,84 @@
+// Цвета берём из токенов Max UI, чтобы работала смена темы.
+// Свои HEX только там, где у Max UI нет подходящего токена (светофор, капли).
+
+// Фоны
+$color-bg: var(--background-primary);
+$color-bg-secondary: var(--background-secondary);
+$color-bg-tertiary: var(--background-tertiary);
+$color-bg-card: var(--background-card);
+$color-bg-overlay: var(--background-overlay);
+
+// Текст
+$color-text: var(--text-primary);
+$color-text-secondary: var(--text-secondary);
+$color-text-tertiary: var(--text-tertiary);
+$color-text-themed: var(--text-themed);
+$color-text-negative: var(--text-negative);
+$color-text-inverse: var(--text-primary-inverse);
+
+// Акценты и разделители
+$color-accent: var(--button-primary);
+$color-positive: var(--icon-positive);
+$color-negative: var(--icon-negative);
+$color-icon-mute: var(--icon-mute);
+$color-divider: var(--divider-secondary);
+$color-border: var(--divider-primary);
+
+// Светофор
+$color-status-urgent: #ef3e46;
+$color-status-low: #f7b52c;
+$color-status-enough: #34b75a;
+$color-status-none: #c7c9cf;
+
+// Виды донации
+$color-drop-blood: #d8222d;
+$color-drop-plasma: #f6b73c;
+
+// Мягкие фоны для иконок
+$color-tone-blue: #007aff;
+$color-tone-red: #ef3e46;
+$color-tone-green: #1abe43;
+$color-tone-yellow: #f2a90f;
+$color-tone-purple: #8a4dff;
+$color-tone-gray: #87898f;
+
+// Отступы
+$space-3xs: 2px;
+$space-2xs: 4px;
+$space-xs: 8px;
+$space-s: 12px;
+$space-m: 16px;
+$space-l: 20px;
+$space-xl: 24px;
+$space-2xl: 32px;
+$space-3xl: 40px;
+
+$page-gutter: $space-m;
+
+// Скругления
+$radius-xs: 8px;
+$radius-s: 10px;
+$radius-m: 12px;
+$radius-l: 16px;
+$radius-xl: 20px;
+$radius-sheet: 24px;
+$radius-round: 999px;
+
+// Размеры
+$tabbar-height: 64px;
+$control-height: 52px;
+$header-height: 56px;
+
+// Тени
+$shadow-card: 0 1px 2px rgb(0 0 0 / 4%), 0 4px 16px rgb(0 0 0 / 4%);
+$shadow-floating: 0 4px 24px rgb(0 0 0 / 12%);
+
+// Анимации
+$transition-fast: 0.15s ease;
+$transition-base: 0.25s ease;
+
+// Слои
+$z-sticky: 10;
+$z-tabbar: 20;
+$z-overlay: 100;
+$z-toast: 200;

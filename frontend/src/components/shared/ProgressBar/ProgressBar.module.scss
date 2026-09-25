@@ -1,0 +1,15 @@
+.progress-bar {
+  overflow: hidden;
+  width: 100%;
+  height: 8px;
+  border-radius: $radius-round;
+  background: var(--button-secondary);
+
+  &__fill {
+    display: block;
+    height: 100%;
+    border-radius: $radius-round;
+    background: $color-accent;
+    transition: width $transition-base;
+  }
+}
