@@ -4,7 +4,7 @@ from typing import Self
 from pydantic import Field, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# backend/app/core/config.py -> backend/app/core -> backend/app
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ENV_FILE = BASE_DIR / ".env"
 
@@ -41,7 +41,6 @@ class PostgresSettings(BaseSettings, SettingsConfigDictMixin):
                 password=self.postgres_password,
                 host=self.postgres_host,
                 port=self.postgres_port,
-                path=self.postgres_db,
             )
         )
 
@@ -61,7 +60,7 @@ class BotSettings(BaseSettings, SettingsConfigDictMixin):
     max_webhook_url: str = ""
     max_mode: str = "polling"  # "webhook" | "polling"
 
-    # SSL (сертификаты НУЦ Минцифры, через запятую)
+    # SSL (сертификаты минцифры, через запятую)
     ssl_cert_files: str = ""
 
     @property
@@ -71,7 +70,8 @@ class BotSettings(BaseSettings, SettingsConfigDictMixin):
 
 class DevSettings(BaseSettings, SettingsConfigDictMixin):
     """Класс настроек для разработки"""
-
+    
+    api_v1_prefix = "/api/v1/"
     auth_dev_mode: bool = False
     demo_mode: bool = True
 

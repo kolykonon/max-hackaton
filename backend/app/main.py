@@ -5,6 +5,7 @@ from fastapi import FastAPI
 
 from app.bot import webhook
 from app.integrations.max_api import MaxBotClient
+from app.core.config import settings
 
 log = logging.getLogger(__name__)
 
