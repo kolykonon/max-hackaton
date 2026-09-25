@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: hackaton-db
-    image: postgres:latest
+    image: postgres:17
     restart: always
     ports:
       - "5434:5432"
@@ -16,13 +16,11 @@ services:
       retries: 5
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
+    build: ./backend
     ports:
       - "8000:8000"
     volumes:
-      - ./src/max_hackaton:/app
+      - ./backend/app:/backend/app
     environment:
           - WATCHFILES_FORCE_POLLING=true
           - UV_PROJECT_ENVIRONMENT=/src/max_hackaton/.venv
