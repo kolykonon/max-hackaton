@@ -4,16 +4,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.bot import webhook
-from app.core.config import get_settings
 from app.integrations.max_api import MaxBotClient
 
 log = logging.getLogger(__name__)
-settings = get_settings()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Один клиент MAX на всё приложение
     app.state.max = MaxBotClient()
     log.info("MaxBotClient создан, base_url=%s", app.state.max.base_url)
     try:

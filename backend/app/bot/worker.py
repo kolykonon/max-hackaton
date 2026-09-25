@@ -4,11 +4,10 @@ import logging
 import uvicorn
 
 from app.bot.handlers import handle_update
-from app.core.config import get_settings
+from app.core.config import settings
 from app.integrations.max_api import MaxBotClient
 
 log = logging.getLogger(__name__)
-settings = get_settings()
 
 
 async def poll_loop(client: MaxBotClient) -> None:
@@ -34,7 +33,7 @@ async def poll_loop(client: MaxBotClient) -> None:
 
 
 async def run_polling() -> None:
-    if not settings.max_bot_token:
+    if not settings.bot_settings.max_bot_token:
         log.error("MAX_BOT_TOKEN не задан — заполни .env")
         return
     client = MaxBotClient()
@@ -60,7 +59,7 @@ def main() -> None:
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
-    if settings.max_mode == "polling":
+    if settings.bot_settings.max_mode == "polling":
         asyncio.run(run_polling())
     else:
         run_webhook()

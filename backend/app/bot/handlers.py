@@ -1,7 +1,7 @@
 import logging
 
 from app.bot import texts
-from app.integrations.max_api import MaxBotClient, open_app_keyboard
+from app.integrations.max_api import MaxBotClient, link_keyboard
 
 log = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ async def _send_start(client: MaxBotClient, user_id: int) -> None:
         await client.send_message(
             user_id,
             texts.START_MESSAGE,
-            attachments=open_app_keyboard(texts.START_BUTTON),
+            attachments=link_keyboard(texts.START_BUTTON),
         )
     except Exception:
         log.exception("Не удалось отправить приветствие user_id=%s", user_id)
@@ -53,7 +53,7 @@ async def _send_fallback(client: MaxBotClient, user_id: int) -> None:
         await client.send_message(
             user_id,
             texts.FALLBACK_MESSAGE,
-            attachments=open_app_keyboard(texts.START_BUTTON),
+            attachments=link_keyboard(texts.START_BUTTON),
         )
     except Exception:
         log.exception("Не удалось отправить заглушку user_id=%s", user_id)
@@ -65,10 +65,9 @@ async def send_appointment_confirmed(client: MaxBotClient, max_user_id: int) -> 
         await client.send_message(
             max_user_id,
             texts.CONFIRMED_MESSAGE,
-            attachments=open_app_keyboard(texts.CONFIRMED_BUTTON, start_param="appointment"),
+            attachments=link_keyboard(texts.CONFIRMED_BUTTON, start_param="appointment"),
         )
     except Exception:
-        # По ТЗ: запись всё равно создаётся, ошибку пишем в лог
         log.exception("Не удалось отправить подтверждение user_id=%s", max_user_id)
 
 
@@ -77,7 +76,7 @@ async def send_reminder(client: MaxBotClient, max_user_id: int) -> None:
         await client.send_message(
             max_user_id,
             texts.REMINDER_MESSAGE,
-            attachments=open_app_keyboard(texts.REMINDER_BUTTON, start_param="appointment"),
+            attachments=link_keyboard(texts.REMINDER_BUTTON, start_param="appointment"),
         )
     except Exception:
         log.exception("Не удалось отправить напоминание user_id=%s", max_user_id)

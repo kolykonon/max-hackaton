@@ -5,10 +5,9 @@ from typing import Any
 
 import httpx
 
-from app.core.config import get_settings
+from app.core.config import settings
 
 log = logging.getLogger(__name__)
-settings = get_settings()
 
 
 @lru_cache(maxsize=1)
@@ -19,7 +18,7 @@ def _build_ssl_context() -> ssl.SSLContext:
     Если пусто — используется стандартный certifi.
     """
     ctx = ssl.create_default_context()
-    for path in settings.ssl_cert_files_list:
+    for path in settings.bot_settings.ssl_cert_files_list:
         try:
             ctx.load_verify_locations(path)
             log.info("SSL: загружен сертификат %s", path)
@@ -32,8 +31,10 @@ class MaxBotClient:
     """Клиент MAX Bot API. https://dev.max.ru/docs-api"""
 
     def __init__(self, token: str | None = None, base_url: str | None = None) -> None:
-        self.token = token or settings.max_bot_token
-        self.base_url = (base_url or settings.max_api_base_url).rstrip("/")
+        self.token = token or settings.bot_settings.max_bot_token
+        self.base_url = (
+            base_url or settings.bot_settings.max_api_base_url
+        ).rstrip("/")
         self._client = httpx.AsyncClient(
             base_url=self.base_url,
             headers={"Authorization": self.token},
@@ -43,8 +44,6 @@ class MaxBotClient:
 
     async def aclose(self) -> None:
         await self._client.aclose()
-
-    # --- Внутренний хелпер ---
 
     @staticmethod
     def _check(resp: httpx.Response) -> None:
@@ -116,10 +115,15 @@ class MaxBotClient:
         return resp.json()
 
 
-def open_app_keyboard(
+def link_keyboard(
     button_text: str, start_param: str | None = None
 ) -> list[dict[str, Any]]:
-    url = settings.webapp_url
+    """Кнопка-ссылка. Работает без задеплоенного мини-приложения.
+
+    Когда появится веб-апп и он будет привязан к боту в кабинете MAX —
+    можно будет вернуть open_app.
+    """
+    url = settings.bot_settings.webapp_url
     if start_param:
         url = f"{url}?startapp={start_param}"
     return [
@@ -129,9 +133,9 @@ def open_app_keyboard(
                 "buttons": [
                     [
                         {
-                            "type": "open_app",
+                            "type": "link",
                             "text": button_text,
-                            "web_app": url,
+                            "url": url,
                         }
                     ]
                 ]
