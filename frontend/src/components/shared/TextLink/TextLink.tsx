@@ -1,6 +1,7 @@
 import { ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 
+import { openLink } from '@/bridge/max'
 import { cn } from '@/utils/cn'
 
 import styles from './TextLink.module.scss'
@@ -14,7 +15,7 @@ interface TextLinkProps {
   className?: string
 }
 
-/** Ссылка фирменного цвета: «Все льготы и привилегии ›». С href открывается во внешнем браузере. */
+/** Ссылка фирменного цвета: «Все льготы и привилегии ›». С href открывается во внешнем браузере через MAX Bridge. */
 export const TextLink = ({ children, onClick, href, withChevron = true, underline, className }: TextLinkProps) => {
   const classes = cn(styles['text-link'], underline && styles['text-link--underline'], className)
   const content = (
@@ -26,7 +27,16 @@ export const TextLink = ({ children, onClick, href, withChevron = true, underlin
 
   if (href) {
     return (
-      <a href={href} target="_blank" rel="noreferrer" className={classes}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        className={classes}
+        onClick={(event) => {
+          event.preventDefault()
+          openLink(href)
+        }}
+      >
         {content}
       </a>
     )

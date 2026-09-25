@@ -1,14 +1,17 @@
 import { Typography } from '@maxhub/max-ui'
 
+import { useProgress } from '@/api/hooks/me'
 import { HonoraryConditionCard } from '@/components/features/honorary/HonoraryConditionCard/HonoraryConditionCard'
 import { PageHeader } from '@/components/layout/PageHeader/PageHeader'
 import { Screen } from '@/components/layout/Screen/Screen'
 import { BulletList } from '@/components/shared/BulletList/BulletList'
 import { BulletListItem } from '@/components/shared/BulletList/BulletListItem'
+import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
 import { InfoRow } from '@/components/shared/InfoRow/InfoRow'
 import { ProgressBar } from '@/components/shared/ProgressBar/ProgressBar'
+import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { BENEFITS_FOOTNOTE, HONORARY_BENEFITS } from '@/content/benefits'
-import { DEMO_PROGRESS } from '@/content/demo'
+import { formatYearsMonths } from '@/utils/format'
 
 import styles from './HonoraryPage.module.scss'
 
@@ -21,18 +24,37 @@ const HOW_TO_APPLY = [
 
 /** Экран «Звание почётного донора»: условия, прогресс и льготы. */
 export const HonoraryPage = () => {
-  const { whole, plasma, etaText } = DEMO_PROGRESS
-  const total = whole + plasma
-  const goal = whole >= 25 ? 40 : 60
+  const progress = useProgress()
+
+  const renderProgress = () => {
+    if (progress.isPending) return <Skeleton height={64} />
+    if (progress.isError) {
+      return <ErrorState compact text="Не удалось загрузить прогресс" onRetry={() => progress.refetch()} />
+    }
+    const { total, honorary } = progress.data
+    if (honorary.achieved) {
+      return <Typography.Text variant="body">🏅 Вы набрали донации для звания. Как его оформить — ниже.</Typography.Text>
+    }
+    return (
+      <>
+        <Typography.Text variant="body">
+          {total} из {honorary.mixed.goal} донаций
+          {honorary.eta && (
+            <>
+              {' '}· до звания примерно <b>{formatYearsMonths(honorary.eta.years, honorary.eta.months)}</b>
+            </>
+          )}
+        </Typography.Text>
+        <ProgressBar value={total} max={honorary.mixed.goal} />
+      </>
+    )
+  }
 
   return (
     <Screen header={<PageHeader title="Почётный донор России" align="center" />}>
       <section className={styles['honorary-page__section']}>
         <Typography.Text variant="subheader">Ваш прогресс</Typography.Text>
-        <Typography.Text variant="body">
-          {total} из {goal} донаций · до звания примерно <b>{etaText}</b>
-        </Typography.Text>
-        <ProgressBar value={total} max={goal} />
+        {renderProgress()}
       </section>
 
       <section className={styles['honorary-page__section']}>

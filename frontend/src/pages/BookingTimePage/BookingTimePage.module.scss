@@ -9,3 +9,17 @@
     display: block;
   }
 }
+
+.booking-time__empty {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  align-items: center;
+  padding: $space-2xl 0;
+  text-align: center;
+}
+
+.booking-time__empty-actions {
+  display: flex;
+  gap: $space-s;
+}

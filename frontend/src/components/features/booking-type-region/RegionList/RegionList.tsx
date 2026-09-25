@@ -1,6 +1,6 @@
 import { CellList, Typography } from '@maxhub/max-ui'
 
-import type { Region } from '@/content/demo'
+import type { Region } from '@/api/types'
 
 import styles from './RegionList.module.scss'
 import { RegionListItem } from './RegionListItem'

@@ -1,5 +1,5 @@
 import { StatusDot } from '@/components/shared/StatusDot/StatusDot'
-import { BLOOD_GROUP_NAMES } from '@/content/demo'
+import { BLOOD_GROUP_NAMES } from '@/content/bloodGroups'
 import { STATUS_A11Y } from '@/content/status'
 import type { BloodGroup, StockStatus } from '@/content/types'
 import { cn } from '@/utils/cn'

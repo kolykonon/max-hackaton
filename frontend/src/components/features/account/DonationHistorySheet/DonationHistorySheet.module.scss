@@ -48,3 +48,10 @@
     @include line-clamp(2);
   }
 }
+
+.donation-history-sheet__loading {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  padding-top: $space-xs;
+}

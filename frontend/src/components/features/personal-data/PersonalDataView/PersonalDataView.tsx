@@ -1,6 +1,6 @@
 import { IdCard, Phone, ShieldPlus } from 'lucide-react'
 
-import type { PersonalData } from '@/content/demo'
+import type { PersonalDataFields as PersonalData } from '@/api/types'
 
 import { DataRow } from '../DataRow/DataRow'
 import { DataSection } from '../DataSection/DataSection'
@@ -11,19 +11,19 @@ interface PersonalDataViewProps {
 
 /** Режим просмотра: три блока с данными. */
 export const PersonalDataView = ({ data }: PersonalDataViewProps) => {
-  const fullName = [data.lastName, data.firstName, data.middleName].filter(Boolean).join(' ')
-  const passport = [data.passportSeries, data.passportNumber].filter(Boolean).join(' ')
+  const fullName = [data.last_name, data.first_name, data.middle_name].filter(Boolean).join(' ')
+  const passport = [data.passport_series, data.passport_number].filter(Boolean).join(' ')
 
   return (
     <>
       <DataSection icon={IdCard} title="Паспорт РФ">
-        <DataRow label="ФИО" value={data.lastName && data.firstName ? fullName : ''} />
-        <DataRow label="Серия и номер" value={data.passportSeries && data.passportNumber ? passport : ''} />
-        <DataRow label="Кем выдан" value={data.passportIssuedBy} />
-        <DataRow label="Код подразделения" value={data.passportDivisionCode} />
+        <DataRow label="ФИО" value={data.last_name && data.first_name ? fullName : ''} />
+        <DataRow label="Серия и номер" value={data.passport_series && data.passport_number ? passport : ''} />
+        <DataRow label="Кем выдан" value={data.passport_issued_by} />
+        <DataRow label="Код подразделения" value={data.passport_division_code} />
       </DataSection>
       <DataSection icon={ShieldPlus} title="Полис ОМС">
-        <DataRow label="Номер полиса" value={data.omsNumber} />
+        <DataRow label="Номер полиса" value={data.oms_number} />
       </DataSection>
       <DataSection icon={Phone} title="Контакты">
         <DataRow label="Телефон" value={data.phone} />

@@ -56,3 +56,21 @@ export const addDays = (date: Date, days: number): Date => {
 
 export const startOfDay = (date: Date): Date =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate())
+
+/** «2026-10-14» → локальная дата без сдвига часового пояса. */
+export const parseISODate = (value: string): Date => {
+  const [year, month, day] = value.slice(0, 10).split('-').map(Number)
+  return new Date(year, month - 1, day)
+}
+
+/** Локальная дата → «2026-10-14». */
+export const toISODate = (date: Date): string =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+
+/** «4 года 2 месяца» */
+export const formatYearsMonths = (years: number, months: number): string => {
+  const parts = []
+  if (years > 0) parts.push(`${years} ${plural(years, ['год', 'года', 'лет'])}`)
+  if (months > 0 || years === 0) parts.push(`${months} ${plural(months, ['месяц', 'месяца', 'месяцев'])}`)
+  return parts.join(' ')
+}

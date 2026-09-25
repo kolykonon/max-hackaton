@@ -1,6 +1,6 @@
 import { IdCard, Phone, ShieldPlus } from 'lucide-react'
 
-import type { PersonalData } from '@/content/demo'
+import type { PersonalDataFields as PersonalData } from '@/api/types'
 
 import { DataField } from '../DataField/DataField'
 import { DataSection } from '../DataSection/DataSection'
@@ -36,18 +36,18 @@ export const PersonalDataForm = ({ data, errors, onChange, onBlur }: PersonalDat
   return (
     <>
       <DataSection icon={IdCard} title="Паспорт РФ">
-        {renderField('lastName', true)}
-        {renderField('firstName')}
-        {renderField('middleName')}
+        {renderField('last_name', true)}
+        {renderField('first_name')}
+        {renderField('middle_name')}
         <div className={styles['personal-data-form__row']}>
-          {renderField('passportSeries')}
-          {renderField('passportNumber')}
+          {renderField('passport_series')}
+          {renderField('passport_number')}
         </div>
-        {renderField('passportIssuedBy')}
-        {renderField('passportDivisionCode')}
+        {renderField('passport_issued_by')}
+        {renderField('passport_division_code')}
       </DataSection>
       <DataSection icon={ShieldPlus} title="Полис ОМС">
-        {renderField('omsNumber')}
+        {renderField('oms_number')}
       </DataSection>
       <DataSection icon={Phone} title="Контакты">
         {renderField('phone')}

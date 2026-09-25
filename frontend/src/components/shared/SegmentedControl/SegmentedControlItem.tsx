@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 
+import { haptic } from '@/bridge/max'
 import { cn } from '@/utils/cn'
 
 import styles from './SegmentedControl.module.scss'
@@ -17,7 +18,10 @@ export const SegmentedControlItem = ({ selected, onSelect, before, children }: S
     role="radio"
     aria-checked={selected}
     className={cn(styles['segmented-control__item'], selected && styles['segmented-control__item--selected'])}
-    onClick={onSelect}
+    onClick={() => {
+      haptic.selection()
+      onSelect()
+    }}
   >
     {before}
     {children}

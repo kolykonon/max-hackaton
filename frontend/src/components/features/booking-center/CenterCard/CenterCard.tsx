@@ -2,32 +2,31 @@ import { Typography } from '@maxhub/max-ui'
 import { Check, MapPin } from 'lucide-react'
 
 import { Card } from '@/components/shared/Card/Card'
+import type { BookingCenter } from '@/api/types'
 import { StatusDot } from '@/components/shared/StatusDot/StatusDot'
-import type { Center } from '@/content/demo'
 import { GROUP_STATUS_TEXT } from '@/content/status'
 import { cn } from '@/utils/cn'
+import { plural } from '@/utils/format'
 
 import { CenterPhoto } from '../CenterPhoto/CenterPhoto'
 import styles from './CenterCard.module.scss'
 
 interface CenterCardProps {
-  center: Center
+  center: BookingCenter
   selected: boolean
-  /** Без геопозиции расстояние не показываем. */
-  showDistance?: boolean
-  /** Если группа пользователя неизвестна, строки светофора нет. */
-  showGroupStatus?: boolean
   onSelect: () => void
 }
 
 /** Карточка центра крови в списке и под картой. */
-export const CenterCard = ({ center, selected, showDistance = true, showGroupStatus = true, onSelect }: CenterCardProps) => {
-  const distance = `${center.distanceKm.toLocaleString('ru-RU')} км`
-  const slots = `${center.freeSlots} свободных мест`
+/** Без геопозиции расстояния нет (distance_km = null), без группы пользователя — строки светофора. */
+export const CenterCard = ({ center, selected, onSelect }: CenterCardProps) => {
+  const slots = `${center.free_slots} ${plural(center.free_slots, ['свободное место', 'свободных места', 'свободных мест'])}`
+  const meta = center.distance_km !== null ? `${center.distance_km.toLocaleString('ru-RU')} км · ${slots}` : slots
+  const status = center.group_status
 
   return (
     <Card variant={selected ? 'selected' : 'outlined'} padding="s" onClick={onSelect} className={styles['center-card']}>
-      <CenterPhoto alt={center.name} />
+      <CenterPhoto src={center.photo_url ?? undefined} alt={center.name} />
       <div className={styles['center-card__info']}>
         <Typography.Text variant="title" className={styles['center-card__name']}>
           {center.name}
@@ -39,13 +38,13 @@ export const CenterCard = ({ center, selected, showDistance = true, showGroupSta
           </Typography.Text>
         </span>
         <Typography.Text variant="detail" color="tertiary" className={styles['center-card__meta']}>
-          {showDistance ? `${distance} · ${slots}` : slots}
+          {meta}
         </Typography.Text>
-        {showGroupStatus && (
-          <span className={cn(styles['center-card__status'], styles[`center-card__status--${center.groupStatus}`])}>
-            <StatusDot status={center.groupStatus} />
+        {status && (
+          <span className={cn(styles['center-card__status'], styles[`center-card__status--${status}`])}>
+            <StatusDot status={status} />
             <Typography.Text variant="detail" color="inherit">
-              {GROUP_STATUS_TEXT[center.groupStatus]}
+              {GROUP_STATUS_TEXT[status]}
             </Typography.Text>
           </span>
         )}

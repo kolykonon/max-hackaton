@@ -9,3 +9,10 @@
     flex-direction: column;
   }
 }
+
+.onboarding-page__error {
+  display: block;
+  padding: 0 $page-gutter;
+  color: $color-text-negative;
+  text-align: center;
+}

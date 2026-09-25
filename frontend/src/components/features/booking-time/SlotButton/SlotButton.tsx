@@ -1,3 +1,4 @@
+import { haptic } from '@/bridge/max'
 import { cn } from '@/utils/cn'
 
 import styles from './SlotButton.module.scss'
@@ -17,7 +18,10 @@ export const SlotButton = ({ time, isFree, selected, onSelect }: SlotButtonProps
     disabled={!isFree}
     aria-pressed={selected}
     aria-label={isFree ? time : `${time}, занято`}
-    onClick={onSelect}
+    onClick={() => {
+      haptic.selection()
+      onSelect()
+    }}
   >
     {time}
   </button>

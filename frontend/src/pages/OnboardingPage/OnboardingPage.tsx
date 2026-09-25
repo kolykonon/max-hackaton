@@ -1,6 +1,8 @@
+import { Typography } from '@maxhub/max-ui'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { useCompleteOnboarding } from '@/api/hooks/me'
 import { OnboardingBenefits } from '@/components/features/onboarding/OnboardingBenefits/OnboardingBenefits'
 import { OnboardingEligibility } from '@/components/features/onboarding/OnboardingEligibility/OnboardingEligibility'
 import { OnboardingGreeting } from '@/components/features/onboarding/OnboardingGreeting/OnboardingGreeting'
@@ -20,7 +22,7 @@ export const OnboardingPage = () => {
   const [consent, setConsent] = useState(false)
   const [showConsentHint, setShowConsentHint] = useState(false)
   const [contraindicationsOpen, setContraindicationsOpen] = useState(false)
-  const [starting, setStarting] = useState(false)
+  const completeOnboarding = useCompleteOnboarding()
 
   const next = () => setSlide((current) => Math.min(current + 1, SLIDES_COUNT))
   const back = () => setSlide((current) => Math.max(current - 1, 1))
@@ -31,14 +33,12 @@ export const OnboardingPage = () => {
     if (value) setShowConsentHint(false)
   }
 
-  // TODO: POST /me/onboarding; ошибка — «Не удалось сохранить…» над кнопками
   const start = () => {
     if (!consent) {
       setShowConsentHint(true)
       return
     }
-    setStarting(true)
-    window.setTimeout(() => navigate('/home', { replace: true }), 600)
+    completeOnboarding.mutate(undefined, { onSuccess: () => navigate('/home', { replace: true }) })
   }
 
   const isLast = slide === SLIDES_COUNT
@@ -47,13 +47,20 @@ export const OnboardingPage = () => {
     <Screen
       header={<ProgressSegments total={SLIDES_COUNT} current={slide} className={styles['onboarding-page__progress']} />}
       footer={
-        <OnboardingNav
-          onBack={slide > 1 ? back : undefined}
-          onNext={isLast ? undefined : next}
-          onStart={isLast ? start : undefined}
-          startDisabled={!consent}
-          starting={starting}
-        />
+        <>
+          {isLast && completeOnboarding.isError && (
+            <Typography.Text variant="description" className={styles['onboarding-page__error']} role="alert">
+              Не удалось сохранить. Проверьте интернет и попробуйте ещё раз
+            </Typography.Text>
+          )}
+          <OnboardingNav
+            onBack={slide > 1 ? back : undefined}
+            onNext={isLast ? undefined : next}
+            onStart={isLast ? start : undefined}
+            startDisabled={!consent}
+            starting={completeOnboarding.isPending}
+          />
+        </>
       }
     >
       <div className={styles['onboarding-page__slide']} {...swipe}>

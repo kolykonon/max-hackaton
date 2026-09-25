@@ -1,7 +1,9 @@
 import { Button, Typography } from '@maxhub/max-ui'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { useEligibility } from '@/api/hooks/me'
+import { useLocateRegion, useRegions } from '@/api/hooks/regions'
 import { DonationTypeSwitch } from '@/components/features/booking-type-region/DonationTypeSwitch/DonationTypeSwitch'
 import { GeoRegionCard } from '@/components/features/booking-type-region/GeoRegionCard/GeoRegionCard'
 import { RegionList } from '@/components/features/booking-type-region/RegionList/RegionList'
@@ -9,27 +11,52 @@ import { RegionSearch } from '@/components/features/booking-type-region/RegionSe
 import { Screen } from '@/components/layout/Screen/Screen'
 import { StepHeader } from '@/components/layout/StepHeader/StepHeader'
 import { StickyFooter } from '@/components/layout/StickyFooter/StickyFooter'
-import { DEMO_REGION, NEXT_ALLOWED_WHOLE, REGIONS } from '@/content/demo'
+import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
+import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import type { DonationType } from '@/content/types'
-import { formatDayMonth } from '@/utils/format'
+import { useGeolocation } from '@/hooks/useGeolocation'
+import { useBookingStore } from '@/store/booking'
+import { formatDayMonth, parseISODate } from '@/utils/format'
 
 import styles from './BookingTypeRegionPage.module.scss'
+
+const ACCUSATIVE: Record<DonationType, string> = { whole_blood: 'Цельную кровь', plasma: 'Плазму' }
+
+const normalize = (value: string) => value.trim().toLowerCase().replaceAll('ё', 'е')
 
 /** Шаг 1 — вид донации и регион. */
 export const BookingTypeRegionPage = () => {
   const navigate = useNavigate()
-  const [type, setType] = useState<DonationType>('whole_blood')
-  // Демо: геопозиция разрешена и определила Москву
-  const geoRegion = DEMO_REGION
-  const [regionId, setRegionId] = useState<number | null>(geoRegion.id)
+  const { donationType, regionId, setDonationType, setRegion } = useBookingStore()
+  const regions = useRegions()
+  const eligibility = useEligibility()
+  const geo = useGeolocation()
+  const located = useLocateRegion(geo.status === 'granted' ? { lat: geo.lat, lon: geo.lon } : null)
+  const geoRegion = located.data?.region ?? null
   const [query, setQuery] = useState('')
 
-  const regions = useMemo(() => {
-    const normalized = query.trim().toLowerCase().replaceAll('ё', 'е')
-    return REGIONS.filter((region) => region.name.toLowerCase().replaceAll('ё', 'е').includes(normalized))
-  }, [query])
+  // Если геопозицию разрешили — регион подставлен и выбран
+  useEffect(() => {
+    if (geoRegion?.has_centers && regionId === null) setRegion(geoRegion.id)
+  }, [geoRegion, regionId, setRegion])
 
-  const hint = type === 'whole_blood' ? `Цельную кровь можно сдать с ${formatDayMonth(NEXT_ALLOWED_WHOLE)}` : undefined
+  const filtered = useMemo(
+    () => (regions.data ?? []).filter((region) => normalize(region.name).includes(normalize(query))),
+    [regions.data, query],
+  )
+
+  const hint =
+    eligibility.data?.interval_active[donationType]
+      ? `${ACCUSATIVE[donationType]} можно сдать с ${formatDayMonth(parseISODate(eligibility.data.next_allowed[donationType]))}`
+      : undefined
+
+  const renderRegions = () => {
+    if (regions.isPending) return Array.from({ length: 6 }, (_, i) => <Skeleton key={i} height={48} radius="s" />)
+    if (regions.isError) {
+      return <ErrorState compact text="Не удалось загрузить регионы" retrying={regions.isFetching} onRetry={() => regions.refetch()} />
+    }
+    return <RegionList regions={filtered} selectedId={regionId} onSelect={setRegion} />
+  }
 
   return (
     <Screen
@@ -42,16 +69,18 @@ export const BookingTypeRegionPage = () => {
         </StickyFooter>
       }
     >
-      <DonationTypeSwitch value={type} onChange={setType} hint={hint} />
+      <DonationTypeSwitch value={donationType} onChange={setDonationType} hint={hint} />
       <section className={styles['booking-type-region__region']}>
         <Typography.Text variant="subheader">Регион</Typography.Text>
-        <GeoRegionCard
-          regionName={geoRegion.name}
-          selected={regionId === geoRegion.id}
-          onSelect={() => setRegionId(geoRegion.id)}
-        />
+        {geoRegion && (
+          <GeoRegionCard
+            regionName={geoRegion.name}
+            selected={regionId === geoRegion.id}
+            onSelect={() => setRegion(geoRegion.id)}
+          />
+        )}
         <RegionSearch value={query} onChange={setQuery} />
-        <RegionList regions={regions} selectedId={regionId} onSelect={setRegionId} />
+        {renderRegions()}
       </section>
     </Screen>
   )

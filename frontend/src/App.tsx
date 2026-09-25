@@ -16,11 +16,11 @@ import { MapPage } from '@/pages/MapPage/MapPage'
 import { OnboardingPage } from '@/pages/OnboardingPage/OnboardingPage'
 import { PersonalDataPage } from '@/pages/PersonalDataPage/PersonalDataPage'
 import { ReferralsPage } from '@/pages/ReferralsPage/ReferralsPage'
+import { StartPage } from '@/pages/StartPage/StartPage'
 
-// TODO: старт через GET /me → онбординг или /home (ТЗ §8). Пока всегда начинаем с онбординга.
 const App = () => (
   <Routes>
-    <Route path="/" element={<Navigate to="/onboarding" replace />} />
+    <Route path="/" element={<StartPage />} />
     <Route path="/onboarding" element={<OnboardingPage />} />
     <Route path="/consent" element={<ConsentPage />} />
 

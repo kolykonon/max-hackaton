@@ -17,3 +17,12 @@
     box-shadow: $shadow-floating;
   }
 }
+
+.booking-center__empty {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  align-items: center;
+  padding: $space-2xl 0;
+  text-align: center;
+}

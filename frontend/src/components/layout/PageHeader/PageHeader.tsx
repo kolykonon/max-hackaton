@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { useBackButton } from '@/hooks/useBackButton'
 import { cn } from '@/utils/cn'
 
 import styles from './PageHeader.module.scss'
@@ -33,6 +34,8 @@ export const PageHeader = ({
   className,
 }: PageHeaderProps) => {
   const navigate = useNavigate()
+  const handleBack = onBack ?? (() => navigate(-1))
+  useBackButton(hideBack ? null : handleBack)
 
   return (
     <header className={cn(styles['page-header'], styles[`page-header--${align}`], className)}>
@@ -43,7 +46,7 @@ export const PageHeader = ({
             variant="ghost"
             aria-label="Назад"
             className={styles['page-header__back']}
-            onClick={onBack ?? (() => navigate(-1))}
+            onClick={handleBack}
           >
             <ArrowLeft size={24} />
           </IconButton>

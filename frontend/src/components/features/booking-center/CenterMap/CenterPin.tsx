@@ -1,26 +1,25 @@
 import { MapPin } from 'lucide-react'
 
-import type { Center } from '@/content/demo'
+import type { StockStatus } from '@/content/types'
 import { cn } from '@/utils/cn'
 
 import styles from './CenterMap.module.scss'
 
 interface CenterPinProps {
-  center: Center
+  name: string
+  status: StockStatus
+  /** Положение на карте в процентах. */
+  position: { x: number; y: number }
   selected: boolean
   onSelect: () => void
 }
 
-export const CenterPin = ({ center, selected, onSelect }: CenterPinProps) => (
+export const CenterPin = ({ name, status, position, selected, onSelect }: CenterPinProps) => (
   <button
     type="button"
-    className={cn(
-      styles['center-map__pin'],
-      styles[`center-map__pin--${center.groupStatus}`],
-      selected && styles['center-map__pin--selected'],
-    )}
-    style={{ left: `${center.mapX}%`, top: `${center.mapY}%` }}
-    aria-label={center.name}
+    className={cn(styles['center-map__pin'], styles[`center-map__pin--${status}`], selected && styles['center-map__pin--selected'])}
+    style={{ left: `${position.x}%`, top: `${position.y}%` }}
+    aria-label={name}
     aria-pressed={selected}
     onClick={onSelect}
   >

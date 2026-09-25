@@ -1,4 +1,4 @@
-import type { PersonalData } from '@/content/demo'
+import type { PersonalDataFields as PersonalData } from '@/api/types'
 import { countDigits, MASKS } from '@/utils/masks'
 
 export type FieldKey = keyof PersonalData
@@ -19,38 +19,38 @@ const NAME_PATTERN = /^[A-Za-zА-Яа-яЁё]+(-[A-Za-zА-Яа-яЁё]+)*$/
 const required = (message: string) => (value: string) => (value.trim() ? null : message)
 
 export const FIELDS: Record<FieldKey, FieldConfig> = {
-  lastName: {
+  last_name: {
     label: 'Фамилия',
     validate: (value) => (NAME_PATTERN.test(value.trim()) ? null : 'Введите фамилию'),
   },
-  firstName: {
+  first_name: {
     label: 'Имя',
     validate: (value) => (NAME_PATTERN.test(value.trim()) ? null : 'Введите имя'),
   },
-  middleName: { label: 'Отчество', optional: true },
-  passportSeries: {
+  middle_name: { label: 'Отчество', optional: true },
+  passport_series: {
     label: 'Серия',
     inputMode: 'numeric',
     placeholder: '0000',
     mask: MASKS.series,
     validate: (value) => (countDigits(value) === 4 ? null : 'Серия — 4 цифры'),
   },
-  passportNumber: {
+  passport_number: {
     label: 'Номер',
     inputMode: 'numeric',
     placeholder: '000000',
     mask: MASKS.number,
     validate: (value) => (countDigits(value) === 6 ? null : 'Номер — 6 цифр'),
   },
-  passportIssuedBy: { label: 'Кем выдан', validate: required('Укажите, кем выдан паспорт') },
-  passportDivisionCode: {
+  passport_issued_by: { label: 'Кем выдан', validate: required('Укажите, кем выдан паспорт') },
+  passport_division_code: {
     label: 'Код подразделения',
     inputMode: 'numeric',
     placeholder: '000-000',
     mask: MASKS.divisionCode,
     validate: (value) => (countDigits(value) === 6 ? null : 'Код подразделения — 6 цифр'),
   },
-  omsNumber: {
+  oms_number: {
     label: 'Номер полиса',
     inputMode: 'numeric',
     placeholder: '0000 0000 0000 0000',
@@ -73,14 +73,14 @@ export const FIELDS: Record<FieldKey, FieldConfig> = {
 }
 
 export const FIELD_ORDER: FieldKey[] = [
-  'lastName',
-  'firstName',
-  'middleName',
-  'passportSeries',
-  'passportNumber',
-  'passportIssuedBy',
-  'passportDivisionCode',
-  'omsNumber',
+  'last_name',
+  'first_name',
+  'middle_name',
+  'passport_series',
+  'passport_number',
+  'passport_issued_by',
+  'passport_division_code',
+  'oms_number',
   'phone',
   'email',
 ]

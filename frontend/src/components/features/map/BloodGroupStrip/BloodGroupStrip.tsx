@@ -1,4 +1,4 @@
-import { BLOOD_GROUPS } from '@/content/demo'
+import { BLOOD_GROUPS } from '@/content/bloodGroups'
 import type { BloodGroup, StockStatus } from '@/content/types'
 
 import styles from './BloodGroupStrip.module.scss'
