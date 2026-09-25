@@ -1,3 +1,4 @@
+from collections.abc import AsyncIterator
 from typing import Annotated
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -14,7 +15,7 @@ class Base(DeclarativeBase):
     pass
 
 
-async def get_session():
+async def get_session() -> AsyncIterator[AsyncSession]:
     async with sessionmaker() as session:
         yield session
 
