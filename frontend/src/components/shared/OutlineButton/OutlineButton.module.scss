@@ -2,7 +2,6 @@
   --MaxUi-Button_background: transparent;
   --MaxUi-Button_background-active: #{$color-bg-tertiary};
 
-  // Две кнопки в ряд не влезают со стандартными 22px по бокам
   padding-right: $space-s;
   padding-left: $space-s;
   border: 1.5px solid currentcolor;
@@ -25,7 +24,6 @@
   }
 }
 
-// Чуть мельче стандартного, чтобы «Данные неверны» влезало в половину ширины
 .outline-button__content {
   font-size: var(--font-size-action-medium);
 }

@@ -1,10 +1,6 @@
-// Контракт API из ТЗ §6. Когда бэк отдаст /api/openapi.json, заменить на types.gen.ts из openapi-typescript.
-
 import type { BloodGroup, DonationType, StockStatus } from '@/content/types'
 
-/** Дата в формате YYYY-MM-DD. */
 export type ISODate = string
-/** Дата и время в ISO 8601. */
 export type ISODateTime = string
 
 export interface ApiErrorBody {
@@ -14,8 +10,6 @@ export interface ApiErrorBody {
     fields?: Record<string, string>
   }
 }
-
-// Профиль
 
 export interface Me {
   id: number

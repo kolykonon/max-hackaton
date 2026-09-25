@@ -11,14 +11,12 @@ import { queryClient } from '@/api/queryClient'
 
 import App from './App.tsx'
 
-/** MSW включается через VITE_USE_MOCKS=true и не попадает в сборку без него. */
 const enableMocking = async () => {
   if (import.meta.env.VITE_USE_MOCKS !== 'true') return
   const { worker } = await import('@/api/mocks/browser')
   await worker.start({ onUnhandledRequest: 'bypass', quiet: true })
 }
 
-// Тёмную тему не рисовали — закрепляем светлую. Платформа (iOS/Android) определяется сама.
 enableMocking().then(() => {
   createRoot(document.getElementById('root')!).render(
     <StrictMode>

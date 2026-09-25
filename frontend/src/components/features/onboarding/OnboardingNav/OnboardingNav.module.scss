@@ -22,7 +22,6 @@
     box-shadow: 0 6px 16px color-mix(in srgb, #{$color-tone-blue} 35%, transparent);
   }
 
-  // Без согласия кнопка серая, но нажимается — чтобы показать подсказку у чекбокса
   &__start--disabled {
     --MaxUi-Button_background: var(--button-secondary);
     --MaxUi-Button_foreground: #{$color-text-tertiary};

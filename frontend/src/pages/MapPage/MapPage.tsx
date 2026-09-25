@@ -21,14 +21,12 @@ import { formatDayMonth } from '@/utils/format'
 
 import styles from './MapPage.module.scss'
 
-// Заглушка: три зоны вместо карты России. TODO: SVG-карта на d3-geo из russia.topo.json (FE2)
 const SPOTS: Record<string, { x: number; y: number; size: number }> = {
   'RU-MOS': { x: 34, y: 58, size: 34 },
   'RU-MOW': { x: 34, y: 58, size: 12 },
   'RU-SPE': { x: 22, y: 24, size: 14 },
 }
 
-/** Экран «Карта» — донорский светофор. Нижнее меню скрыто. */
 export const MapPage = () => {
   const navigate = useNavigate()
   const toast = useToast()
@@ -37,7 +35,6 @@ export const MapPage = () => {
   const me = useMe()
   const userGroup = me.data?.blood.group ?? null
   const [zoneCode, setZoneCode] = useState('RU-MOW')
-  // undefined — пользователь ещё не выбирал, берём его группу; null — выбор снят
   const [pickedGroup, setPickedGroup] = useState<BloodGroup | null | undefined>(undefined)
   const group = pickedGroup === undefined ? userGroup : pickedGroup
 
@@ -45,7 +42,6 @@ export const MapPage = () => {
   const zone = zones.find((item) => item.code === zoneCode)
   const zoneName = regions.data?.find((region) => region.code === zoneCode)?.name ?? ''
 
-  // Повторное нажатие на выбранную группу снимает выбор
   const toggleGroup = (value: BloodGroup) => setPickedGroup(group === value ? null : value)
 
   const renderMap = () => {

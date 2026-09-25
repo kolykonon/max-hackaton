@@ -4,7 +4,6 @@
   border-radius: $radius-l;
   text-align: left;
 
-  // Кнопка: сброс идёт первым, чтобы варианты и отступы ниже его перекрыли
   &--pressable {
     @include reset-button;
     @include pressable;

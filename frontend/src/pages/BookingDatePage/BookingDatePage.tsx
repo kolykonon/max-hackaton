@@ -21,7 +21,6 @@ import styles from './BookingDatePage.module.scss'
 const monthIndex = (date: Date) => date.getFullYear() * 12 + date.getMonth()
 const firstOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1)
 
-/** Шаг 2 — дата. */
 export const BookingDatePage = () => {
   const navigate = useNavigate()
   const { donationType, regionId, date, rescheduleId, setDate } = useBookingStore()
@@ -34,7 +33,6 @@ export const BookingDatePage = () => {
   const today = startOfDay(new Date())
   const availableDays = new Set(data?.days.filter((day) => day.available).map((day) => day.date))
   const lastDay = data ? parseISODate(data.to) : today
-  // При открытии показан месяц с первой доступной датой
   const month = shownMonth ?? firstOfMonth(data?.first_available ? parseISODate(data.first_available) : today)
   const earliest = data ? parseISODate(data.earliest_allowed) : today
 

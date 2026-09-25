@@ -15,7 +15,6 @@ interface TabBarItemProps {
 export const TabBarItem = ({ to, icon: Icon, label }: TabBarItemProps) => {
   const location = useLocation()
 
-  // Повторное нажатие на активную вкладку прокручивает экран наверх
   const onClick = () => {
     if (location.pathname === to) {
       document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' })

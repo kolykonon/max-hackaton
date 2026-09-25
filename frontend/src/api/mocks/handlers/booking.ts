@@ -20,8 +20,6 @@ const toRegion = (r: (typeof REGIONS)[number]): Region => ({
   has_centers: r.hasCenters,
 })
 
-// Слоты: пн–сб 08:00–14:00 шагом 15 минут, часть занята детерминированно
-
 const TIMES = Array.from({ length: 24 }, (_, i) => {
   const minutes = 8 * 60 + i * 15
   return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
@@ -31,7 +29,6 @@ const takenSlotIds = () => new Set(db.state.appointments.filter((a) => a.status 
 
 const isBusyByDemo = (centerId: number, date: string, time: string) => {
   const day = parseISODate(date).getDate()
-  // Пара дней в месяце занята полностью, в остальные — примерно каждый третий слот
   if (day === 7 || day === 21) return true
   return (centerId * 7 + day * 3 + Number(time.replace(':', ''))) % 3 === 0
 }
@@ -90,7 +87,6 @@ export const bookingHandlers = [
     return HttpResponse.json(REGIONS.map(toRegion))
   }),
 
-  // Демо: геопозиция всегда в Москве
   http.get(`${BASE}/regions/locate`, async () => {
     await latency()
     return HttpResponse.json({ region: toRegion(REGIONS.find((r) => r.id === MOSCOW_ID)!) })
@@ -154,7 +150,6 @@ export const bookingHandlers = [
         group_status: c.groupStatus,
       }))
       .filter((c) => c.free_slots > 0)
-      // Сначала «нужна срочно», потом по расстоянию или алфавиту; при переносе текущий центр первым
       .sort((a, b) => {
         if (a.id === pinId) return -1
         if (b.id === pinId) return 1

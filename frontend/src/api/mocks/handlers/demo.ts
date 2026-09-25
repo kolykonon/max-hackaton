@@ -10,7 +10,6 @@ export const demoHandlers = [
     return HttpResponse.json({})
   }),
 
-  // Напоминание шлёт бот — в моках делать нечего
   http.post(`${BASE}/demo/appointments/:id/remind`, async () => {
     await latency()
     return HttpResponse.json({})

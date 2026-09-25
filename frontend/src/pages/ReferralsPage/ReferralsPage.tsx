@@ -17,7 +17,6 @@ import styles from './ReferralsPage.module.scss'
 
 const SHARE_TEXT = 'Стань донором крови вместе со мной — запишись в «Капле» в MAX'
 
-// TODO: тексты экрана — до 4-го дня (ТЗ §13)
 export const ReferralsPage = () => {
   const toast = useToast()
   const referrals = useReferrals()

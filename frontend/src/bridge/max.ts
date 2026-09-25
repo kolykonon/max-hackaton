@@ -1,6 +1,3 @@
-// Обёртка над MAX Bridge (window.WebApp): https://dev.max.ru/docs/webapps/bridge
-// Вне MAX все методы работают как заглушки, чтобы приложение открывалось в обычном браузере.
-
 type HapticImpact = 'light' | 'medium' | 'heavy' | 'rigid' | 'soft'
 type HapticNotification = 'error' | 'success' | 'warning'
 

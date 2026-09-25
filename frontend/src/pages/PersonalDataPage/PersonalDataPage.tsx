@@ -78,7 +78,6 @@ export const PersonalDataPage = () => {
         toast.show('Данные сохранены')
       },
       onError: (error) => {
-        // 422 — бэк вернул ошибки по полям, показываем их у полей
         if (error instanceof ApiError && error.fields) {
           setErrors(error.fields as FieldErrors)
           scrollToFirstError()

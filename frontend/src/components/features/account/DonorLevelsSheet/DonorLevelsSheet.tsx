@@ -12,9 +12,7 @@ interface DonorLevelsSheetProps {
   onClose: () => void
 }
 
-/** Шторка «Уровни донора». */
 export const DonorLevelsSheet = ({ open, total, onClose }: DonorLevelsSheetProps) => {
-  // В DONOR_LEVELS на 0-м месте «Будущий донор», которого в списке нет
   const currentIndex = getLevelIndex(total) - 1
 
   return (

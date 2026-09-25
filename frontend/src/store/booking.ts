@@ -48,7 +48,6 @@ export const useBookingStore = create<BookingState>()((set, get) => ({
 
   startNew: () => set(initial),
 
-  // Вид и регион — как в текущей записи, текущий центр выбран и стоит первым
   startReschedule: (appointment) =>
     set({
       ...initial,

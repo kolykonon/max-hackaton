@@ -1,5 +1,3 @@
-// Состояние моков. Хранится в localStorage, чтобы демо переживало перезагрузку страницы.
-
 import type { DonationType } from '@/content/types'
 import { toISODate } from '@/utils/format'
 
@@ -9,7 +7,6 @@ import { CENTERS, DEMO_PERSONAL_DATA, DONATIONS, REGIONS } from './fixtures'
 export interface MockDonation {
   id: number
   type: DonationType
-  /** ISO-строка, чтобы сериализовать в localStorage. */
   date: string
   centerName: string
 }
@@ -72,8 +69,6 @@ export const db = {
   },
 }
 
-// Регионы и центры
-
 export const REGION_CODES: Record<string, string> = { Москва: 'RU-MOW', 'Московская область': 'RU-MOS', 'Санкт-Петербург': 'RU-SPE' }
 
 export const regionCode = (id: number, name: string) => REGION_CODES[name] ?? `RU-${String(id).padStart(2, '0')}`
@@ -123,8 +118,6 @@ export const centersOf = (regionId: number): MockCenter[] => {
 
 export const findCenter = (centerId: number): MockCenter | undefined =>
   REGIONS.flatMap((r) => centersOf(r.id)).find((c) => c.id === centerId)
-
-// Слоты. id кодирует центр, вид донации, дату и время: centerId·10¹³ + вид·10¹² + YYYYMMDD·10⁴ + HHMM
 
 const TYPE_CODE: Record<DonationType, number> = { whole_blood: 0, plasma: 1 }
 

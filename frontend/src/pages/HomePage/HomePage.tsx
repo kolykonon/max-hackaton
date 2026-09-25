@@ -17,7 +17,6 @@ import { useToast } from '@/hooks/useToast'
 import { useBookingStore } from '@/store/booking'
 import { formatDateTimeShort, formatDayMonth, parseISODate } from '@/utils/format'
 
-/** Главный экран «Запись»: карточка светофора и карточка записи (есть / нет). */
 export const HomePage = () => {
   const navigate = useNavigate()
   const toast = useToast()
@@ -30,7 +29,6 @@ export const HomePage = () => {
 
   const appointment = current.data?.appointment ?? null
 
-  // Пока берём цельную кровь (ТЗ §13, открытый вопрос)
   const nextAllowed =
     eligibility.data?.interval_active.whole_blood ? formatDayMonth(parseISODate(eligibility.data.next_allowed.whole_blood)) : undefined
 

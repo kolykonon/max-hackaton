@@ -15,7 +15,6 @@ import { formatYearsMonths } from '@/utils/format'
 
 import styles from './HonoraryPage.module.scss'
 
-// TODO: тексты экрана — до 4-го дня (ТЗ §13)
 const HOW_TO_APPLY = [
   'Возьмите в центре крови справку о количестве донаций',
   'Подайте заявление через Госуслуги или в соцзащите по месту жительства',

@@ -24,7 +24,6 @@ const ACCUSATIVE: Record<DonationType, string> = { whole_blood: 'Цельную 
 
 const normalize = (value: string) => value.trim().toLowerCase().replaceAll('ё', 'е')
 
-/** Шаг 1 — вид донации и регион. */
 export const BookingTypeRegionPage = () => {
   const navigate = useNavigate()
   const { donationType, regionId, setDonationType, setRegion } = useBookingStore()
@@ -35,7 +34,6 @@ export const BookingTypeRegionPage = () => {
   const geoRegion = located.data?.region ?? null
   const [query, setQuery] = useState('')
 
-  // Если геопозицию разрешили — регион подставлен и выбран
   useEffect(() => {
     if (geoRegion?.has_centers && regionId === null) setRegion(geoRegion.id)
   }, [geoRegion, regionId, setRegion])

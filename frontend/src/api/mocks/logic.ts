@@ -1,5 +1,3 @@
-// Бизнес-логика из ТЗ §5 для моков. На бэке она своя, с тестами, — здесь только чтобы фронт вёл себя правдоподобно.
-
 import type { DonationType } from '@/content/types'
 import { addDays, startOfDay } from '@/utils/format'
 
@@ -23,7 +21,6 @@ const last = (donations: MockDonation[], type: DonationType): Date | null => {
 const maxDate = (...dates: (Date | null)[]): Date =>
   new Date(Math.max(...dates.filter((d): d is Date => d !== null).map((d) => d.getTime())))
 
-/** §5.1: next_whole = max(today, last_whole + 60, last_plasma + 30); next_plasma = max(today, last_plasma + 14, last_whole + 30). */
 export const getNextAllowed = (donations: MockDonation[]): Record<DonationType, Date> => {
   const today = startOfDay(new Date())
   const lastWhole = last(donations, 'whole_blood')
@@ -52,7 +49,6 @@ const getEtaDate = (x: number, y: number, next: Record<DonationType, Date>): Dat
   if (y < 60) candidates.push(addDays(next.plasma, 14 * (60 - y - 1)))
   if (x + y < 60) candidates.push(addDays(next.plasma, 14 * (60 - x - y - 1)))
 
-  // Чередование: кровь → плазма через 30 → кровь через 30, пока X < 25, потом плазма раз в 14 до X+Y = 40
   let date = next.whole_blood
   let whole = x
   let plasma = y

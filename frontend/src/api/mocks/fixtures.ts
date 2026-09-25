@@ -1,5 +1,3 @@
-// Демо-данные для моков MSW. На бэке аналог — сиды и демо-профиль (ТЗ §5.4).
-
 import type { PersonalDataFields } from '@/api/types'
 import type { BloodGroup, DonationType } from '@/content/types'
 import { addDays, startOfDay } from '@/utils/format'

@@ -1,6 +1,5 @@
 @use 'variables' as *;
 
-// Текст по токенам Max UI: text(title), text(body, body-strong)
 @mixin text($size, $weight: $size) {
   font-family: var(--family-base);
   font-size: var(--font-size-#{$size});
@@ -15,7 +14,6 @@
   box-shadow: $shadow-card;
 }
 
-// Полупрозрачный фон нужного цвета
 @mixin soft-bg($color, $amount: 12%) {
   background: color-mix(in srgb, #{$color} $amount, transparent);
 }
