@@ -16,7 +16,9 @@ class Appointment(Base, TimestampMixin):
     donation_type: Mapped[str] = mapped_column(String(16))
     starts_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     status: Mapped[str] = mapped_column(String(16), default="active", index=True)
-    rescheduled_from_id: Mapped[int | None] = mapped_column(ForeignKey("appointments.id"))
+    rescheduled_from_id: Mapped[int | None] = mapped_column(
+        ForeignKey("appointments.id")
+    )
     reminder_sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 

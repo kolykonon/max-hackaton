@@ -1,11 +1,11 @@
 from pathlib import Path
 from typing import Self
 
-from pydantic import Field, PostgresDsn
+from pydantic import Field, PostgresDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 ENV_FILE = BASE_DIR / ".env"
 
 
@@ -60,18 +60,19 @@ class BotSettings(BaseSettings, SettingsConfigDictMixin):
     max_webhook_url: str = ""
     max_mode: str = "polling"  # "webhook" | "polling"
 
-    # SSL (сертификаты минцифры, через запятую)
-    ssl_cert_files: str = ""
+    # SSL (папка с сертификатами минцифры, относительный путь - от корня репозитория)
+    ssl_certs_dir: Path = BASE_DIR / "certs"
 
-    @property
-    def ssl_cert_files_list(self) -> list[str]:
-        return [p.strip() for p in self.ssl_cert_files.split(",") if p.strip()]
+    @field_validator("ssl_certs_dir")
+    @classmethod
+    def resolve_ssl_certs_dir(cls, value: Path) -> Path:
+        return value if value.is_absolute() else BASE_DIR / value
 
 
 class DevSettings(BaseSettings, SettingsConfigDictMixin):
     """Класс настроек для разработки"""
-    
-    api_v1_prefix = "/api/v1/"
+
+    api_v1_prefix: str = "/api/v1/"
     auth_dev_mode: bool = False
     demo_mode: bool = True
 
