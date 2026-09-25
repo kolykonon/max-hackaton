@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import json
 import time
+from typing import Any
 from urllib.parse import parse_qsl
 
 
@@ -21,7 +22,7 @@ def validate_sign(sign: str, check_string: str, bot_token: str, data: dict) -> b
     return hmac.compare_digest(calculated_sign, sign)
 
 
-def validate_init_data(raw: str, bot_token: str, ttl: int):
+def validate_init_data(raw: str, bot_token: str, ttl: int) -> dict[str, Any]:
     """Метод для валидации инит даты, которую дает макс"""
 
     parsed_data = dict(
