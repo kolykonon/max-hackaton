@@ -5,26 +5,31 @@ from pydantic import Field, PostgresDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+# backend/app/core/config.py -> backend/app/core -> backend/app -> backend
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 ENV_FILE = BASE_DIR / ".env"
+
+_ENV_CONFIG = SettingsConfigDict(
+    env_file=str(ENV_FILE),
+    extra="ignore",
+    case_sensitive=False,
+)
 
 
 class SettingsConfigDictMixin:
     """Миксин для того чтобы не писать везде конфиг"""
 
-    model_config = SettingsConfigDict(
-        env_file=str(ENV_FILE),
-        extra="ignore",
-        case_sensitive=False,
-    )
+    model_config = _ENV_CONFIG
 
     @classmethod
     def from_env(cls) -> Self:  # метод, чтобы классы брали настройки из env-файла
         return cls()
 
 
-class PostgresSettings(BaseSettings, SettingsConfigDictMixin):
+class PostgresSettings(SettingsConfigDictMixin, BaseSettings):
     """Класс настроек для постгреса"""
+
+    model_config = _ENV_CONFIG
 
     postgres_host: str
     postgres_port: int
@@ -46,8 +51,10 @@ class PostgresSettings(BaseSettings, SettingsConfigDictMixin):
         )
 
 
-class BotSettings(BaseSettings, SettingsConfigDictMixin):
+class BotSettings(SettingsConfigDictMixin, BaseSettings):
     """Класс настроек макс-бота"""
+
+    model_config = _ENV_CONFIG
 
     max_bot_token: str
     init_data_ttl: int = 86400
@@ -56,12 +63,10 @@ class BotSettings(BaseSettings, SettingsConfigDictMixin):
     max_bot_username: str = ""
     webapp_url: str = "https://example.ru"
 
-    # Webhook
     max_webhook_secret: str = ""
     max_webhook_url: str = ""
-    max_mode: str = "polling"  # "webhook" | "polling"
+    max_mode: str = "polling"
 
-    # SSL (папка с сертификатами минцифры, относительный путь - от корня репозитория)
     ssl_certs_dir: Path = BASE_DIR / "certs"
 
     @field_validator("ssl_certs_dir")
@@ -70,8 +75,10 @@ class BotSettings(BaseSettings, SettingsConfigDictMixin):
         return value if value.is_absolute() else BASE_DIR / value
 
 
-class DevSettings(BaseSettings, SettingsConfigDictMixin):
+class DevSettings(SettingsConfigDictMixin, BaseSettings):
     """Класс настроек для разработки"""
+
+    model_config = _ENV_CONFIG
 
     api_v1_prefix: str = "/api/v1/"
     auth_dev_mode: bool = False
@@ -85,8 +92,10 @@ class DevSettings(BaseSettings, SettingsConfigDictMixin):
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
 
-class Settings(BaseSettings, SettingsConfigDictMixin):
+class Settings(SettingsConfigDictMixin, BaseSettings):
     """Общий класс настроек,"""
+
+    model_config = _ENV_CONFIG
 
     postgres_settings: PostgresSettings = Field(
         default_factory=PostgresSettings.from_env
