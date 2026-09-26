@@ -31,7 +31,14 @@ export const Screen = ({
   className,
   contentClassName,
 }: ScreenProps) => (
-  <div className={cn(styles.screen, withTabBar && styles['screen--with-tabbar'], className)}>
+  <div
+    className={cn(
+      styles.screen,
+      withTabBar && styles['screen--with-tabbar'],
+      !withTabBar && Boolean(footer) && styles['screen--with-footer'],
+      className,
+    )}
+  >
     {header && <div className={styles.screen__header}>{header}</div>}
     <main
       className={cn(

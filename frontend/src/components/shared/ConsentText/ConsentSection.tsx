@@ -1,10 +1,10 @@
 import { Typography } from '@maxhub/max-ui'
 
-import { BulletList } from '@/components/shared/BulletList/BulletList'
-import { BulletListItem } from '@/components/shared/BulletList/BulletListItem'
 import type { InfoSection } from '@/content/donationTypes'
 
-import styles from './ConsentSection.module.scss'
+import { BulletList } from '../BulletList/BulletList'
+import { BulletListItem } from '../BulletList/BulletListItem'
+import styles from './ConsentText.module.scss'
 
 interface ConsentSectionProps {
   section: InfoSection

@@ -1,5 +1,5 @@
 import type { PersonalData, PersonalDataFieldName, PersonalDataInput } from '@/api/types'
-import { countDigits, MASKS } from '@/utils/masks'
+import { countDigits, MASK_PATTERNS, MASKS } from '@/utils/masks'
 
 export type FieldKey = PersonalDataFieldName
 
@@ -11,7 +11,8 @@ interface FieldConfig {
   label: string
   inputMode?: 'text' | 'numeric' | 'tel' | 'email'
   placeholder?: string
-  mask?: (value: string) => string
+  /** Шаблон IMask. */
+  mask?: string
   /** Возвращает текст ошибки или null. Правила и тексты — из confirming.md. */
   validate?: (value: string) => string | null
   optional?: boolean
@@ -35,14 +36,14 @@ export const FIELDS: Record<FieldKey, FieldConfig> = {
     label: 'Серия',
     inputMode: 'numeric',
     placeholder: '0000',
-    mask: MASKS.series,
+    mask: MASK_PATTERNS.series,
     validate: (value) => (countDigits(value) === 4 ? null : 'Серия — 4 цифры'),
   },
   passport_number: {
     label: 'Номер',
     inputMode: 'numeric',
     placeholder: '000000',
-    mask: MASKS.number,
+    mask: MASK_PATTERNS.number,
     validate: (value) => (countDigits(value) === 6 ? null : 'Номер — 6 цифр'),
   },
   passport_issued_by: { label: 'Кем выдан', validate: required('Укажите, кем выдан паспорт') },
@@ -50,21 +51,21 @@ export const FIELDS: Record<FieldKey, FieldConfig> = {
     label: 'Код подразделения',
     inputMode: 'numeric',
     placeholder: '000-000',
-    mask: MASKS.divisionCode,
+    mask: MASK_PATTERNS.divisionCode,
     validate: (value) => (countDigits(value) === 6 ? null : 'Код подразделения — 6 цифр'),
   },
   oms_number: {
     label: 'Номер полиса',
     inputMode: 'numeric',
     placeholder: '0000 0000 0000 0000',
-    mask: MASKS.oms,
+    mask: MASK_PATTERNS.oms,
     validate: (value) => (countDigits(value) === 16 ? null : 'Номер полиса — 16 цифр'),
   },
   phone: {
     label: 'Телефон',
     inputMode: 'tel',
     placeholder: '+7 (000) 000-00-00',
-    mask: MASKS.phone,
+    mask: MASK_PATTERNS.phone,
     validate: (value) => (countDigits(value) === 11 ? null : 'Введите номер телефона полностью'),
   },
   email: {

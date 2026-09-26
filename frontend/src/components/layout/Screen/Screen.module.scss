@@ -1,11 +1,20 @@
 .screen {
+  // Где висят уведомления (Toast): над нижним меню, над кнопками или у края экрана
+  --toast-offset: #{$space-xl};
+
   display: flex;
   flex-direction: column;
   height: 100dvh;
   background: $color-bg;
 
   &--with-tabbar {
+    --toast-offset: calc(#{$tabbar-height} + #{$space-xl});
+
     padding-bottom: calc(#{$tabbar-height} + env(safe-area-inset-bottom));
+  }
+
+  &--with-footer {
+    --toast-offset: calc(#{$control-height} + #{$space-2xl} + #{$space-m});
   }
 
   &__header {

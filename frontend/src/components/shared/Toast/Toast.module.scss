@@ -12,7 +12,7 @@
 
 .toast {
   position: fixed;
-  bottom: calc(#{$tabbar-height} + #{$space-xl} + env(safe-area-inset-bottom));
+  bottom: calc(var(--toast-offset, #{$space-xl}) + env(safe-area-inset-bottom));
   left: 50%;
   z-index: $z-toast;
   width: max-content;

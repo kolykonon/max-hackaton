@@ -2,6 +2,7 @@ import { IconButton, Typography } from '@maxhub/max-ui'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 import { Card } from '@/components/shared/Card/Card'
+import { useSwipe } from '@/hooks/useSwipe'
 import { formatMonthYear, isSameDay } from '@/utils/format'
 
 import styles from './Calendar.module.scss'
@@ -30,36 +31,43 @@ const getGridDays = (month: Date): Date[] => {
   return Array.from({ length: weeks * 7 }, (_, i) => new Date(first.getFullYear(), first.getMonth(), i - offset + 1))
 }
 
-/** Календарь месяца с доступными днями. */
-export const Calendar = ({ month, today, selected, canGoPrev, canGoNext, isAvailable, onSelect, onPrev, onNext }: CalendarProps) => (
-  <Card padding="m" className={styles.calendar}>
-    <div className={styles.calendar__header}>
-      <IconButton size="small" variant="ghost" aria-label="Предыдущий месяц" disabled={!canGoPrev} onClick={onPrev}>
-        <ChevronLeft size={22} />
-      </IconButton>
-      <Typography.Text variant="title">{formatMonthYear(month)}</Typography.Text>
-      <IconButton size="small" variant="ghost" aria-label="Следующий месяц" disabled={!canGoNext} onClick={onNext}>
-        <ChevronRight size={22} />
-      </IconButton>
-    </div>
-    <div className={styles.calendar__grid} role="grid">
-      {WEEKDAYS.map((weekday) => (
-        <Typography.Text key={weekday} variant="description" color="tertiary" className={styles.calendar__weekday}>
-          {weekday}
-        </Typography.Text>
-      ))}
-      {getGridDays(month).map((date) => (
-        <CalendarDay
-          key={date.toISOString()}
-          date={date}
-          outside={date.getMonth() !== month.getMonth()}
-          past={date < today}
-          available={isAvailable(date)}
-          isToday={isSameDay(date, today)}
-          selected={selected !== null && isSameDay(date, selected)}
-          onSelect={() => onSelect(date)}
-        />
-      ))}
-    </div>
-  </Card>
-)
+/** Календарь месяца с доступными днями. Месяцы листаются стрелками и свайпом. */
+export const Calendar = ({ month, today, selected, canGoPrev, canGoNext, isAvailable, onSelect, onPrev, onNext }: CalendarProps) => {
+  const swipe = useSwipe({
+    onSwipeLeft: () => canGoNext && onNext(),
+    onSwipeRight: () => canGoPrev && onPrev(),
+  })
+
+  return (
+    <Card padding="m" className={styles.calendar}>
+      <div className={styles.calendar__header}>
+        <IconButton size="small" variant="ghost" aria-label="Предыдущий месяц" disabled={!canGoPrev} onClick={onPrev}>
+          <ChevronLeft size={22} />
+        </IconButton>
+        <Typography.Text variant="title">{formatMonthYear(month)}</Typography.Text>
+        <IconButton size="small" variant="ghost" aria-label="Следующий месяц" disabled={!canGoNext} onClick={onNext}>
+          <ChevronRight size={22} />
+        </IconButton>
+      </div>
+      <div className={styles.calendar__grid} role="grid" {...swipe}>
+        {WEEKDAYS.map((weekday) => (
+          <Typography.Text key={weekday} variant="description" color="tertiary" className={styles.calendar__weekday}>
+            {weekday}
+          </Typography.Text>
+        ))}
+        {getGridDays(month).map((date) => (
+          <CalendarDay
+            key={date.toISOString()}
+            date={date}
+            outside={date.getMonth() !== month.getMonth()}
+            past={date < today}
+            available={isAvailable(date)}
+            isToday={isSameDay(date, today)}
+            selected={selected !== null && isSameDay(date, selected)}
+            onSelect={() => onSelect(date)}
+          />
+        ))}
+      </div>
+    </Card>
+  )
+}

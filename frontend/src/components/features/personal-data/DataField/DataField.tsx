@@ -1,5 +1,7 @@
 import { Input, Typography } from '@maxhub/max-ui'
-import { useId } from 'react'
+import type { FactoryOpts } from 'imask'
+import { useCallback, useEffect, useId, useMemo, useRef } from 'react'
+import { useIMask } from 'react-imask'
 
 import { cn } from '@/utils/cn'
 
@@ -9,6 +11,8 @@ interface DataFieldProps {
   label: string
   value: string
   error?: string
+  /** Шаблон IMask. Без него поле принимает любой текст. */
+  mask?: string
   inputMode?: 'text' | 'numeric' | 'tel' | 'email'
   placeholder?: string
   autoFocus?: boolean
@@ -16,10 +20,24 @@ interface DataFieldProps {
   onBlur: () => void
 }
 
-/** Поле ввода с подписью сверху и ошибкой снизу. */
-export const DataField = ({ label, value, error, inputMode, placeholder, autoFocus, onChange, onBlur }: DataFieldProps) => {
+const ANY_TEXT = /^.*$/
+
+/**
+ * Поле ввода с подписью сверху и ошибкой снизу.
+ * Значение ведёт IMask (он же держит курсор при правке в середине), поэтому input неконтролируемый:
+ * начальное значение — defaultValue, изменения приходят в onChange.
+ */
+export const DataField = ({ label, value, error, mask, inputMode, placeholder, autoFocus, onChange, onBlur }: DataFieldProps) => {
   const id = useId()
   const errorId = `${id}-error`
+  const maskOptions = useMemo<FactoryOpts>(() => (mask ? { mask } : { mask: ANY_TEXT }), [mask])
+  // useIMask пересоздаёт маску при новом onAccept, и курсор прыгает в конец. Держим колбэк стабильным
+  const onChangeRef = useRef(onChange)
+  useEffect(() => {
+    onChangeRef.current = onChange
+  })
+  const onAccept = useCallback((accepted: string) => onChangeRef.current(accepted), [])
+  const { ref } = useIMask<HTMLInputElement>(maskOptions, { defaultValue: value, onAccept })
 
   return (
     <div className={cn(styles['data-field'], error && styles['data-field--invalid'])} data-invalid={Boolean(error)}>
@@ -29,8 +47,8 @@ export const DataField = ({ label, value, error, inputMode, placeholder, autoFoc
         </label>
       </Typography.Text>
       <Input
+        ref={ref}
         id={id}
-        value={value}
         inputMode={inputMode}
         type={inputMode === 'email' ? 'email' : 'text'}
         placeholder={placeholder}
@@ -38,7 +56,6 @@ export const DataField = ({ label, value, error, inputMode, placeholder, autoFoc
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
         innerClassNames={{ container: styles['data-field__input'] }}
-        onChange={(event) => onChange(event.target.value)}
         onBlur={onBlur}
       />
       {error && (

@@ -4,6 +4,9 @@
   gap: $space-xs;
 
   &__link {
+    @include reset-button;
+    display: inline;
+    cursor: pointer;
     color: $color-text-themed;
     text-decoration: underline;
     text-underline-offset: 2px;

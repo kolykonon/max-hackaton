@@ -16,6 +16,7 @@ interface OnboardingEligibilityProps {
   onConsentChange: (value: boolean) => void
   showConsentHint: boolean
   onOpenContraindications: () => void
+  onOpenConsent: () => void
 }
 
 /** Экран 3 онбординга: кто может сдать кровь и согласие. */
@@ -24,6 +25,7 @@ export const OnboardingEligibility = ({
   onConsentChange,
   showConsentHint,
   onOpenContraindications,
+  onOpenConsent,
 }: OnboardingEligibilityProps) => (
   <div className={styles['onboarding-eligibility']}>
     <Illustration alt="Иллюстрация: планшет с чек-листом" icon={ClipboardCheck} heightVh={18} />
@@ -41,6 +43,6 @@ export const OnboardingEligibility = ({
     <Typography.Text variant="description" color="tertiary" className={styles['onboarding-eligibility__disclaimer']}>
       {ADMISSION_DISCLAIMER}
     </Typography.Text>
-    <ConsentCheckbox checked={consent} onChange={onConsentChange} showHint={showConsentHint} />
+    <ConsentCheckbox checked={consent} onChange={onConsentChange} showHint={showConsentHint} onOpenConsent={onOpenConsent} />
   </div>
 )

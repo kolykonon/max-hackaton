@@ -26,7 +26,8 @@ export const PersonalDataForm = ({ data, errors, onChange, onBlur }: PersonalDat
         inputMode={field.inputMode}
         placeholder={field.placeholder}
         autoFocus={autoFocus}
-        onChange={(value) => onChange(key, field.mask ? field.mask(value) : value)}
+        mask={field.mask}
+        onChange={(value) => onChange(key, value)}
         onBlur={() => onBlur(key)}
       />
     )

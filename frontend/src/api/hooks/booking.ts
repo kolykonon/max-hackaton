@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import type { DonationType } from '@/content/types'
 
@@ -36,6 +36,8 @@ export const useBookingCenters = ({ regionId, donationType, date, lat, lon, pinC
         pin_center_id: pinCenterId,
       }),
     enabled: regionId !== null && date !== null,
+    // Сначала список приходит без координат, потом с ними — не мигаем скелетоном при пересортировке
+    placeholderData: keepPreviousData,
   })
 
 export const useBookingSlots = (centerId: number | null, donationType: DonationType, date: string | null) =>

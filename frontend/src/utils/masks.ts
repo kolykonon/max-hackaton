@@ -1,33 +1,23 @@
-// Простые маски ввода. Когда подключим react-imask (ТЗ §2), заменить на него.
+import IMask from 'imask'
 
-const onlyDigits = (value: string): string => value.replace(/\D/g, '')
+// Маски на IMask (ТЗ §2): «0» — цифра, {7} — фиксированный символ, который входит в значение.
+export const MASK_PATTERNS = {
+  series: '0000',
+  number: '000000',
+  divisionCode: '000-000',
+  oms: '0000 0000 0000 0000',
+  phone: '+{7} (000) 000-00-00',
+} as const
 
-/** Заполняет шаблон, где «0» — цифра: applyPattern('7700', '000-000') → «770-0». */
-const applyPattern = (value: string, pattern: string): string => {
-  const digits = onlyDigits(value)
-  let result = ''
-  let index = 0
-  for (const char of pattern) {
-    if (index >= digits.length) break
-    if (char === '0') {
-      result += digits[index]
-      index += 1
-    } else {
-      result += char
-    }
-  }
-  return result
-}
+const format = (pattern: string) => (value: string) => IMask.pipe(value, { mask: pattern })
 
+/** Форматирование для показа: MASKS.phone('+79001234567') → «+7 (900) 123-45-67». */
 export const MASKS = {
-  series: (value: string) => onlyDigits(value).slice(0, 4),
-  number: (value: string) => onlyDigits(value).slice(0, 6),
-  divisionCode: (value: string) => applyPattern(value, '000-000'),
-  oms: (value: string) => applyPattern(value, '0000 0000 0000 0000'),
-  phone: (value: string) => {
-    const digits = onlyDigits(value).replace(/^[78]/, '')
-    return digits ? applyPattern(digits, '+7 (000) 000-00-00') : ''
-  },
+  series: format(MASK_PATTERNS.series),
+  number: format(MASK_PATTERNS.number),
+  divisionCode: format(MASK_PATTERNS.divisionCode),
+  oms: format(MASK_PATTERNS.oms),
+  phone: format(MASK_PATTERNS.phone),
 }
 
-export const countDigits = (value: string): number => onlyDigits(value).length
+export const countDigits = (value: string): number => value.replace(/\D/g, '').length

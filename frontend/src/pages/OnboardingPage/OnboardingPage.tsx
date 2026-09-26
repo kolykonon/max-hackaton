@@ -8,6 +8,8 @@ import { OnboardingEligibility } from '@/components/features/onboarding/Onboardi
 import { OnboardingGreeting } from '@/components/features/onboarding/OnboardingGreeting/OnboardingGreeting'
 import { OnboardingNav } from '@/components/features/onboarding/OnboardingNav/OnboardingNav'
 import { Screen } from '@/components/layout/Screen/Screen'
+import { BottomSheet } from '@/components/shared/BottomSheet/BottomSheet'
+import { ConsentText } from '@/components/shared/ConsentText/ConsentText'
 import { ContraindicationsSheet } from '@/components/shared/ContraindicationsSheet/ContraindicationsSheet'
 import { ProgressSegments } from '@/components/shared/ProgressSegments/ProgressSegments'
 import { useSwipe } from '@/hooks/useSwipe'
@@ -16,12 +18,15 @@ import styles from './OnboardingPage.module.scss'
 
 const SLIDES_COUNT = 3
 
+type Sheet = 'contraindications' | 'consent' | null
+
 export const OnboardingPage = () => {
   const navigate = useNavigate()
   const [slide, setSlide] = useState(1)
   const [consent, setConsent] = useState(false)
   const [showConsentHint, setShowConsentHint] = useState(false)
-  const [contraindicationsOpen, setContraindicationsOpen] = useState(false)
+  // Шторки, а не переходы: иначе онбординг теряет экран и галочку согласия
+  const [sheet, setSheet] = useState<Sheet>(null)
   const completeOnboarding = useCompleteOnboarding()
 
   const next = () => setSlide((current) => Math.min(current + 1, SLIDES_COUNT))
@@ -71,11 +76,15 @@ export const OnboardingPage = () => {
             consent={consent}
             onConsentChange={onConsentChange}
             showConsentHint={showConsentHint}
-            onOpenContraindications={() => setContraindicationsOpen(true)}
+            onOpenContraindications={() => setSheet('contraindications')}
+            onOpenConsent={() => setSheet('consent')}
           />
         )}
       </div>
-      <ContraindicationsSheet open={contraindicationsOpen} onClose={() => setContraindicationsOpen(false)} />
+      <ContraindicationsSheet open={sheet === 'contraindications'} onClose={() => setSheet(null)} />
+      <BottomSheet open={sheet === 'consent'} onClose={() => setSheet(null)} title="Согласие на обработку персональных данных">
+        <ConsentText />
+      </BottomSheet>
     </Screen>
   )
 }
