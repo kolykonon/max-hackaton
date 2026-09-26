@@ -9,6 +9,7 @@ from app.core.db import SessionDep
 from app.core.errors import AppError
 from app.core.utils.data_validate import validate_init_data
 from app.models import User
+from app.schemas.common import ErrorCode
 from app.services.demo_profile import create_demo_profile
 
 
@@ -44,7 +45,7 @@ async def get_current_user(
         }
         start_param = None  # pyright: ignore[reportUnusedVariable]  # noqa: F841
     else:
-        raise AppError(401, "Unauthorized")
+        raise AppError(401, ErrorCode.UNAUTHORIZED, "Unauthorized")
 
     stmt = (
         insert(User)
