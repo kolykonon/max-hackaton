@@ -1,6 +1,7 @@
 from collections.abc import AsyncIterator
 from typing import Annotated
 
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -21,5 +22,5 @@ async def get_session() -> AsyncIterator[AsyncSession]:
 
 
 SessionDep = Annotated[
-    AsyncSession, get_session
+    AsyncSession, Depends(get_session)
 ]  # прокидывать в функции где нужна бд def foo(session: SessionDep)
