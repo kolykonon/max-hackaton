@@ -41,6 +41,7 @@ class PostgresSettings(BaseSettings, SettingsConfigDictMixin):
                 password=self.postgres_password,
                 host=self.postgres_host,
                 port=self.postgres_port,
+                path=self.postgres_db,
             )
         )
 
