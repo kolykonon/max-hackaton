@@ -22,8 +22,7 @@ services:
     volumes:
       - ./backend/app:/backend/app
     environment:
-          - WATCHFILES_FORCE_POLLING=true
-          - UV_PROJECT_ENVIRONMENT=/src/max_hackaton/.venv
+      - WATCHFILES_FORCE_POLLING=true
     env_file:
       - .env
     depends_on:
@@ -37,14 +36,13 @@ services:
         VITE_USE_MOCKS: ${VITE_USE_MOCKS:-false}
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - "${WEB_HTTP_PORT:-80}:80"
+      - "${WEB_HTTPS_PORT:-443}:443"
+      - "${WEB_HTTPS_PORT:-443}:443/udp"
     environment:
       - DOMAIN=${DOMAIN:-localhost}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      # Сертификаты — в томе, чтобы не выпускать их заново при каждом перезапуске
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
