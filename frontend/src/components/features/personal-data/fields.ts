@@ -1,7 +1,10 @@
-import type { PersonalDataFields as PersonalData } from '@/api/types'
+import type { PersonalData, PersonalDataFieldName, PersonalDataInput } from '@/api/types'
 import { countDigits, MASKS } from '@/utils/masks'
 
-export type FieldKey = keyof PersonalData
+export type FieldKey = PersonalDataFieldName
+
+/** Значения формы: всегда строки, с маской для показа. */
+export type PersonalDataValues = Record<FieldKey, string>
 export type FieldErrors = Partial<Record<FieldKey, string>>
 
 interface FieldConfig {
@@ -85,12 +88,36 @@ export const FIELD_ORDER: FieldKey[] = [
   'email',
 ]
 
-export const validateAll = (data: PersonalData): FieldErrors =>
+export const validateAll = (data: PersonalDataValues): FieldErrors =>
   FIELD_ORDER.reduce<FieldErrors>((errors, key) => {
     const error = FIELDS[key].validate?.(data[key])
     if (error) errors[key] = error
     return errors
   }, {})
 
-export const isComplete = (data: PersonalData): boolean =>
-  FIELD_ORDER.every((key) => FIELDS[key].optional || data[key].trim())
+const digits = (value: string) => value.replace(/\D/g, '')
+
+/** Ответ API → значения формы: null становится пустой строкой, номера получают маску. */
+export const fromApi = (data: PersonalData): PersonalDataValues => {
+  const values = Object.fromEntries(FIELD_ORDER.map((key) => [key, data[key] ?? ''])) as PersonalDataValues
+  return {
+    ...values,
+    passport_division_code: MASKS.divisionCode(values.passport_division_code),
+    oms_number: MASKS.oms(values.oms_number),
+    phone: MASKS.phone(values.phone),
+  }
+}
+
+/** Значения формы → тело PUT: без маски, как требует PersonalDataInput. */
+export const toApi = (values: PersonalDataValues): PersonalDataInput => ({
+  last_name: values.last_name.trim(),
+  first_name: values.first_name.trim(),
+  middle_name: values.middle_name.trim() || null,
+  passport_series: digits(values.passport_series),
+  passport_number: digits(values.passport_number),
+  passport_issued_by: values.passport_issued_by.trim(),
+  passport_division_code: MASKS.divisionCode(values.passport_division_code),
+  oms_number: digits(values.oms_number),
+  phone: `+7${digits(values.phone).slice(-10)}`,
+  email: values.email.trim(),
+})

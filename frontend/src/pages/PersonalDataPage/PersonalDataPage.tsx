@@ -4,8 +4,16 @@ import { useNavigate } from 'react-router-dom'
 
 import { ApiError } from '@/api/client'
 import { usePersonalData, useSavePersonalData } from '@/api/hooks/me'
-import type { PersonalDataFields } from '@/api/types'
-import { FIELD_ORDER, FIELDS, isComplete, validateAll, type FieldErrors, type FieldKey } from '@/components/features/personal-data/fields'
+import {
+  FIELD_ORDER,
+  FIELDS,
+  fromApi,
+  toApi,
+  validateAll,
+  type FieldErrors,
+  type FieldKey,
+  type PersonalDataValues,
+} from '@/components/features/personal-data/fields'
 import { PersonalDataForm } from '@/components/features/personal-data/PersonalDataForm/PersonalDataForm'
 import { PersonalDataView } from '@/components/features/personal-data/PersonalDataView/PersonalDataView'
 import { PageHeader } from '@/components/layout/PageHeader/PageHeader'
@@ -21,9 +29,6 @@ import { useToast } from '@/hooks/useToast'
 
 import styles from './PersonalDataPage.module.scss'
 
-const pickFields = (data: PersonalDataFields): PersonalDataFields =>
-  Object.fromEntries(FIELD_ORDER.map((key) => [key, data[key] ?? ''])) as unknown as PersonalDataFields
-
 const scrollToFirstError = () =>
   window.requestAnimationFrame(() =>
     document.querySelector('[data-invalid="true"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
@@ -35,11 +40,13 @@ export const PersonalDataPage = () => {
   const toast = useToast()
   const query = usePersonalData()
   const save = useSavePersonalData()
-  const [draft, setDraft] = useState<PersonalDataFields | null>(null)
+  const [draft, setDraft] = useState<PersonalDataValues | null>(null)
   const [errors, setErrors] = useState<FieldErrors>({})
   const [leaveOpen, setLeaveOpen] = useState(false)
 
-  const data = query.data ? pickFields(query.data) : null
+  const data = query.data ? fromApi(query.data) : null
+  // Обязательные поля проверяет бэк: пустой missing_fields — можно идти дальше
+  const complete = query.data?.missing_fields.length === 0
   const editing = draft !== null
   const hasChanges = Boolean(draft && data && FIELD_ORDER.some((key) => draft[key] !== data[key]))
 
@@ -72,7 +79,7 @@ export const PersonalDataPage = () => {
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return scrollToFirstError()
 
-    save.mutate(draft, {
+    save.mutate(toApi(draft), {
       onSuccess: () => {
         setDraft(null)
         toast.show('Данные сохранены')
@@ -134,7 +141,7 @@ export const PersonalDataPage = () => {
               <OutlineButton stretched disabled={!data} onClick={startEditing}>
                 Данные неверны
               </OutlineButton>
-              <Button size="large" stretched disabled={!data || !isComplete(data)} onClick={() => navigate('/booking/type')}>
+              <Button size="large" stretched disabled={!complete} onClick={() => navigate('/booking/type')}>
                 Далее
               </Button>
             </>

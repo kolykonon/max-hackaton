@@ -1,17 +1,17 @@
 import { http, HttpResponse } from 'msw'
 
 import { BLOOD_GROUPS } from '@/content/bloodGroups'
-import type { BloodGroup, DonationType, StockStatus } from '@/content/types'
+import type { BloodGroup, DonationType } from '@/content/types'
 import { addDays, parseISODate, startOfDay, toISODate } from '@/utils/format'
 
-import type { Appointment, BookingCenter, BookingDates, BookingSlots, MapStatus, Region, SlotPeriod } from '../../types'
+import type { Appointment, AppointmentResponse, BookingCenter, BookingDates, BookingSlots, MapStatus, Region, SlotPeriod } from '../../types'
 import { REGIONS } from '../fixtures'
 import { centersOf, db, decodeSlot, encodeSlot, findCenter, MOSCOW_ID, regionCode } from '../db'
 import { getNextAllowed } from '../logic'
 import { apiError, BASE, latency } from '../utils'
 
 const WINDOW_DAYS = 61
-const STATUSES: StockStatus[] = ['urgent', 'low', 'enough']
+const STATUSES = ['urgent', 'low', 'enough'] as const
 
 const toRegion = (r: (typeof REGIONS)[number]): Region => ({
   id: r.id,
@@ -38,7 +38,12 @@ const slotsFor = (centerId: number, donationType: DonationType, date: string) =>
   const isWorkday = parseISODate(date).getDay() !== 0
   return TIMES.map((time) => {
     const id = encodeSlot(centerId, donationType, date, time)
-    return { id, local_time: time, is_free: isWorkday && !isBusyByDemo(centerId, date, time) && !taken.has(id) }
+    return {
+      id,
+      starts_at: `${date}T${time}:00+03:00`,
+      local_time: time,
+      is_free: isWorkday && !isBusyByDemo(centerId, date, time) && !taken.has(id),
+    }
   })
 }
 
@@ -96,11 +101,11 @@ export const bookingHandlers = [
     await latency()
     const regions: MapStatus['regions'] = REGIONS.map((r) => {
       // ~10% регионов без данных
-      if (r.id % 10 === 3) return { code: regionCode(r.id, r.name), statuses: {}, worst: 'none' as const }
+      if (r.id % 10 === 3) return { code: regionCode(r.id, r.name), statuses: {}, worst: null }
       const statuses = Object.fromEntries(
         BLOOD_GROUPS.map((group, i) => [group, STATUSES[(r.id + i * 2) % 3]]),
-      ) as Record<BloodGroup, StockStatus>
-      const worst = STATUSES.find((s) => Object.values(statuses).includes(s)) ?? 'none'
+      ) as Record<BloodGroup, (typeof STATUSES)[number]>
+      const worst = STATUSES.find((s) => Object.values(statuses).includes(s)) ?? null
       return { code: regionCode(r.id, r.name), statuses, worst }
     })
     return HttpResponse.json({ updated_at: addDays(new Date(), -1).toISOString(), regions })
@@ -166,7 +171,7 @@ export const bookingHandlers = [
     const type = url.searchParams.get('donation_type') as DonationType
     const date = url.searchParams.get('date')!
     const center = findCenter(centerId)
-    if (!center) return apiError(404, 'center_not_found', 'Центр не найден')
+    if (!center) return apiError(404, 'not_found', 'Центр не найден')
     const groups = (['morning', 'day', 'evening'] as SlotPeriod[])
       .map((period) => ({ period, slots: slotsFor(centerId, type, date).filter((s) => periodOf(s.local_time) === period) }))
       .filter((group) => group.slots.length > 0)
@@ -177,7 +182,8 @@ export const bookingHandlers = [
   http.get(`${BASE}/appointments/current`, async () => {
     await latency()
     const active = db.activeAppointment()
-    return HttpResponse.json({ appointment: active ? toAppointment(active.id, active.slotId, active.donationType) : null })
+    const result: AppointmentResponse = { appointment: active ? toAppointment(active.id, active.slotId, active.donationType) : null }
+    return HttpResponse.json(result)
   }),
 
   http.post(`${BASE}/appointments`, async ({ request }) => {
@@ -189,29 +195,34 @@ export const bookingHandlers = [
     const appointment = { id: db.nextId(), slotId, donationType: decodeSlot(slotId).donationType, status: 'active' as const }
     db.state.appointments.push(appointment)
     db.save()
-    return HttpResponse.json(toAppointment(appointment.id, slotId, appointment.donationType), { status: 201 })
+    const result: AppointmentResponse = { appointment: toAppointment(appointment.id, slotId, appointment.donationType) }
+    return HttpResponse.json(result, { status: 201 })
   }),
 
   http.post(`${BASE}/appointments/:id/reschedule`, async ({ params, request }) => {
     await latency()
     const { slot_id: slotId } = (await request.json()) as { slot_id: number }
-    const current = db.state.appointments.find((a) => a.id === Number(params.id) && a.status === 'active')
+    const current = db.state.appointments.find((a) => a.id === Number(params.id))
     if (!current) return apiError(404, 'appointment_not_found', 'Запись не найдена')
+    if (current.status !== 'active') return apiError(409, 'appointment_not_active', 'Запись уже неактивна')
     const error = checkBooking(slotId, current.id)
     if (error) return error
     current.status = 'rescheduled'
     const appointment = { id: db.nextId(), slotId, donationType: decodeSlot(slotId).donationType, status: 'active' as const }
     db.state.appointments.push(appointment)
     db.save()
-    return HttpResponse.json(toAppointment(appointment.id, slotId, appointment.donationType), { status: 201 })
+    const result: AppointmentResponse = { appointment: toAppointment(appointment.id, slotId, appointment.donationType) }
+    return HttpResponse.json(result, { status: 201 })
   }),
 
   http.post(`${BASE}/appointments/:id/cancel`, async ({ params }) => {
     await latency()
-    const current = db.state.appointments.find((a) => a.id === Number(params.id) && a.status === 'active')
+    const current = db.state.appointments.find((a) => a.id === Number(params.id))
     if (!current) return apiError(404, 'appointment_not_found', 'Запись не найдена')
+    if (current.status !== 'active') return apiError(409, 'appointment_not_active', 'Запись уже неактивна')
     current.status = 'cancelled'
     db.save()
-    return HttpResponse.json({})
+    const result: AppointmentResponse = { appointment: null }
+    return HttpResponse.json(result)
   }),
 ]

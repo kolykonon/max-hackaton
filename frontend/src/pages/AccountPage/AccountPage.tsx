@@ -118,7 +118,7 @@ export const AccountPage = () => {
     <Screen withTabBar>
       <ProfileHeader
         firstName={me.data.first_name}
-        lastName={me.data.last_name}
+        lastName={me.data.last_name ?? ''}
         photoUrl={me.data.photo_url ?? undefined}
         onAvatarClick={onAvatarClick}
       />

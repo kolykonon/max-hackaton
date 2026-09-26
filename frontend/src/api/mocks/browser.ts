@@ -8,7 +8,7 @@ import { apiError, BASE, shouldFail } from './utils'
 
 /** Первым идёт перехватчик принудительных ошибок — см. shouldFail. */
 const failureHandler = http.all(`${BASE}/*`, ({ request }) => {
-  if (shouldFail(new URL(request.url).pathname)) return apiError(500, 'mock_failure', 'Принудительная ошибка мока')
+  if (shouldFail(new URL(request.url).pathname)) return apiError(500, 'internal_error', 'Принудительная ошибка мока')
   return undefined
 })
 

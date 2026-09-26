@@ -1,4 +1,4 @@
-import type { PersonalDataFields } from '@/api/types'
+import type { PersonalDataInput } from '@/api/types'
 import type { BloodGroup, DonationType } from '@/content/types'
 import { addDays, startOfDay } from '@/utils/format'
 
@@ -6,14 +6,15 @@ export const DEMO_USER = {
   firstName: 'Иван',
   lastName: 'Иванов',
   bloodGroup: '2+' as BloodGroup,
-  kell: 'K-',
+  kell: 'K-' as const,
   phenotype: 'CcDee',
   donorCode: '1234-5678',
   referralsCount: 3,
   referralLink: 'https://max.ru/kaplya_bot?startapp=ref_7K2P9Q',
 }
 
-export const DEMO_PERSONAL_DATA: PersonalDataFields = {
+/** Как в API: без маски. */
+export const DEMO_PERSONAL_DATA: PersonalDataInput = {
   last_name: 'Иванов',
   first_name: 'Иван',
   middle_name: 'Иванович',
@@ -21,8 +22,8 @@ export const DEMO_PERSONAL_DATA: PersonalDataFields = {
   passport_number: '123456',
   passport_issued_by: 'ГУ МВД России по г. Москве',
   passport_division_code: '770-001',
-  oms_number: '1234 5678 9012 3456',
-  phone: '+7 (900) 123-45-67',
+  oms_number: '1234567890123456',
+  phone: '+79001234567',
   email: 'ivanov@mail.ru',
 }
 

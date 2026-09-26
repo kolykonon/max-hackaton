@@ -1,12 +1,12 @@
 import { IdCard, Phone, ShieldPlus } from 'lucide-react'
 
-import type { PersonalDataFields as PersonalData } from '@/api/types'
 
 import { DataRow } from '../DataRow/DataRow'
 import { DataSection } from '../DataSection/DataSection'
+import type { PersonalDataValues } from '../fields'
 
 interface PersonalDataViewProps {
-  data: PersonalData
+  data: PersonalDataValues
 }
 
 /** Режим просмотра: три блока с данными. */

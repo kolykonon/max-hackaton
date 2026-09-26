@@ -18,11 +18,12 @@ import { DONATION_TYPE_LABEL } from '@/content/donationTypes'
 import { useToast } from '@/hooks/useToast'
 import { useBookingStore } from '@/store/booking'
 import { formatDateTimeFull, parseISODate } from '@/utils/format'
+import { MASKS } from '@/utils/masks'
 
 import styles from './BookingCheckPage.module.scss'
 
-/** Тексты для ошибок записи из API (ТЗ §6). */
-const ERROR_TEXT: Record<string, string> = {
+/** Тексты по коду ошибки. message из API — для логов, пользователю его не показываем. */
+const ERROR_TEXT: Partial<Record<string, string>> = {
   active_exists: 'У вас уже есть запись. Отмените или перенесите её на главной',
   interval_not_passed: 'Интервал после прошлой донации ещё не прошёл. Выберите более позднюю дату',
   personal_data_incomplete: 'Заполните личные данные, чтобы записаться',
@@ -53,7 +54,7 @@ export const BookingCheckPage = () => {
       setSlotTakenOpen(true)
       return
     }
-    toast.show(ERROR_TEXT[error.code] ?? error.message)
+    toast.show(ERROR_TEXT[error.code] ?? 'Не удалось записаться. Попробуйте ещё раз')
   }
 
   const submit = () => {
@@ -98,7 +99,7 @@ export const BookingCheckPage = () => {
           value={formatDateTimeFull(parseISODate(date), slot.time)}
           onEdit={() => navigate('/booking/date')}
         />
-        <SummarySection label="Донор" value={donorName} caption={donor.data?.phone} />
+        <SummarySection label="Донор" value={donorName} caption={donor.data?.phone ? MASKS.phone(donor.data.phone) : undefined} />
       </SummaryCard>
       <div className={styles['booking-check__hints']}>
         <InfoRow

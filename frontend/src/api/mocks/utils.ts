@@ -1,12 +1,15 @@
 import { delay, HttpResponse } from 'msw'
 
+import type { ErrorCode } from '../types'
+
 export const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
 
 /** Имитация сети. */
 export const latency = () => delay(350)
 
-export const apiError = (status: number, code: string, message: string, fields?: Record<string, string>) =>
-  HttpResponse.json({ error: { code, message, ...(fields ? { fields } : {}) } }, { status })
+/** Ошибка в формате Error из openapi.yaml: fields всегда есть, null — если не 422 формы. */
+export const apiError = (status: number, code: ErrorCode, message: string, fields: Record<string, string> | null = null) =>
+  HttpResponse.json({ error: { code, message, fields } }, { status })
 
 /**
  * Принудительные ошибки для проверки состояний «Ошибка загрузки».

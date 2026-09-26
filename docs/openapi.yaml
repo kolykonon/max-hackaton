@@ -1,0 +1,1104 @@
+openapi: 3.1.0
+info:
+  title: Капля API
+  version: 0.1.0
+  description: |
+    Контракт бэкенда мини-приложения «Капля» (ТЗ §6).
+
+    Общие правила:
+    - Даты — `YYYY-MM-DD`. Время — ISO 8601 с часовым поясом (`starts_at`) и рядом
+      `local_time: "09:30"` по местному времени региона центра.
+    - Ошибки — всегда `{"error": {"code", "message", "fields"}}`. `fields` заполнен
+      только для 422 при сохранении формы, иначе `null`.
+    - Авторизация — заголовок `X-Max-Init-Data: <window.WebApp.initData>`.
+      Локально при `AUTH_DEV_MODE=true` можно вместо него слать `X-Dev-User-Id: <int>`.
+    - Все данные демо.
+
+servers:
+  - url: /api/v1
+
+security:
+  - MaxInitData: []
+  - DevUserId: []
+
+tags:
+  - name: profile
+    description: Профиль и кабинет (Коля)
+  - name: regions
+    description: Регионы и карта-светофор (Миша)
+  - name: booking
+    description: Мастер записи (Миша)
+  - name: appointments
+    description: Записи (Миша)
+  - name: demo
+    description: Демо-эндпоинты, работают только при DEMO_MODE=true (Коля)
+  - name: service
+    description: Служебное
+
+paths:
+  # ───────────────────────── Профиль ─────────────────────────
+  /me:
+    get:
+      tags: [profile]
+      operationId: getMe
+      summary: Текущий пользователь
+      description: |
+        При первом запросе бэк создаёт пользователя и демо-профиль (§5.4),
+        обрабатывает `start_param = ref_<code>`.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Me" }
+              example:
+                id: 1
+                first_name: Иван
+                last_name: Иванов
+                photo_url: null
+                onboarding_completed: false
+                blood: { group: "2+", kell: "K-", phenotype: CcDee, donor_code: "1234-5678" }
+                referrals_count: 3
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /me/onboarding:
+    post:
+      tags: [profile]
+      operationId: completeOnboarding
+      summary: Завершить онбординг и дать согласие на обработку ПД
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OnboardingRequest" }
+      responses:
+        "204": { description: Онбординг завершён }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /me/personal-data:
+    get:
+      tags: [profile]
+      operationId: getPersonalData
+      summary: Личные данные
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PersonalData" }
+              example:
+                last_name: Иванов
+                first_name: Иван
+                middle_name: Иванович
+                passport_series: "4510"
+                passport_number: "123456"
+                passport_issued_by: ГУ МВД России по г. Москве
+                passport_division_code: "770-001"
+                oms_number: "1234567890123456"
+                phone: "+79001234567"
+                email: ivanov@mail.ru
+                is_demo: true
+                missing_fields: []
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [profile]
+      operationId: updatePersonalData
+      summary: Сохранить личные данные
+      description: |
+        Значения передаются без маски. Ошибки валидации — 422 с `fields`,
+        тексты из `confirming.md`:
+
+        | Поле | Текст ошибки |
+        |------|--------------|
+        | last_name | Введите фамилию |
+        | first_name | Введите имя |
+        | passport_series | Серия — 4 цифры |
+        | passport_number | Номер — 6 цифр |
+        | passport_issued_by | Укажите, кем выдан паспорт |
+        | passport_division_code | Код подразделения — 6 цифр |
+        | oms_number | Номер полиса — 16 цифр |
+        | phone | Введите номер телефона полностью |
+        | email | Проверьте адрес почты |
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PersonalDataInput" }
+      responses:
+        "200":
+          description: Сохранено
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PersonalData" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "422":
+          description: Ошибки в форме
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+              example:
+                error:
+                  code: validation_error
+                  message: Проверьте данные
+                  fields:
+                    passport_series: Серия — 4 цифры
+                    phone: Введите номер телефона полностью
+
+  /me/eligibility:
+    get:
+      tags: [profile]
+      operationId: getEligibility
+      summary: Ближайшие разрешённые даты донации (§5.1)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Eligibility" }
+              example:
+                next_allowed: { whole_blood: "2026-10-12", plasma: "2026-09-26" }
+                interval_active: { whole_blood: true, plasma: false }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /me/progress:
+    get:
+      tags: [profile]
+      operationId: getProgress
+      summary: Уровень донора и путь к званию «Почётный донор России» (§5.2, §5.3)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Progress" }
+              example:
+                total: 12
+                level:
+                  code: experienced
+                  name: Опытный донор
+                  threshold: 10
+                  next: { code: mentor, name: Наставник, threshold: 20, remaining: 8 }
+                  is_max: false
+                honorary:
+                  whole: { count: 10, goal: 40 }
+                  plasma: { count: 2, goal: 60 }
+                  mixed: { count: 12, goal: 60, whole_needed_for_40: 15 }
+                  achieved: false
+                  eta: { date: "2032-04-14", years: 5, months: 6 }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /me/donations:
+    get:
+      tags: [profile]
+      operationId: getDonations
+      summary: История донаций, по годам от новых к старым
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DonationHistory" }
+              example:
+                total: 12
+                years:
+                  - year: 2026
+                    count: 2
+                    items:
+                      - { id: 12, donation_type: whole_blood, donated_on: "2026-08-12", center_name: Центр крови ФМБА России }
+                      - { id: 11, donation_type: plasma, donated_on: "2026-06-02", center_name: ГКБ им. С. П. Боткина }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /me/referrals:
+    get:
+      tags: [profile]
+      operationId: getReferrals
+      summary: Рефералы
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Referrals" }
+              example:
+                count: 3
+                link: https://max.ru/kaplya_bot?startapp=ref_aB3dE9
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  # ───────────────────────── Регионы и карта ─────────────────────────
+  /regions:
+    get:
+      tags: [regions]
+      operationId: listRegions
+      summary: Все субъекты РФ по алфавиту
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Region" }
+              example:
+                - { id: 1, code: RU-AD, name: Адыгея, has_centers: true }
+                - { id: 77, code: RU-MOW, name: Москва, has_centers: true }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /regions/locate:
+    get:
+      tags: [regions]
+      operationId: locateRegion
+      summary: Регион по координатам
+      parameters:
+        - { name: lat, in: query, required: true, schema: { type: number, format: double, minimum: -90, maximum: 90 } }
+        - { name: lon, in: query, required: true, schema: { type: number, format: double, minimum: -180, maximum: 180 } }
+      responses:
+        "200":
+          description: OK. `region = null`, если точка вне РФ
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/LocateRegionResponse" }
+              example:
+                region: { id: 77, code: RU-MOW, name: Москва, has_centers: true }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /map/status:
+    get:
+      tags: [regions]
+      operationId: getMapStatus
+      summary: Карта-светофор по регионам
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/MapStatus" }
+              example:
+                updated_at: "2026-09-24T09:00:00+03:00"
+                regions:
+                  - code: RU-MOW
+                    statuses: { "1+": urgent, "1-": low, "2+": enough, "2-": low, "3+": enough, "3-": urgent, "4+": enough, "4-": low }
+                    worst: urgent
+                  - code: RU-CHU
+                    statuses: {}
+                    worst: null
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  # ───────────────────────── Запись ─────────────────────────
+  /booking/dates:
+    get:
+      tags: [booking]
+      operationId: getBookingDates
+      summary: Календарь доступности на 2 месяца
+      description: |
+        День доступен, если в регионе есть свободный слот этого вида и день ≥ `earliest_allowed`.
+        `days` покрывает весь диапазон `from`..`to` включительно.
+      parameters:
+        - $ref: "#/components/parameters/RegionIdQuery"
+        - $ref: "#/components/parameters/DonationTypeQuery"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BookingDates" }
+              example:
+                from: "2026-09-26"
+                to: "2026-11-26"
+                earliest_allowed: "2026-10-12"
+                first_available: "2026-10-13"
+                days:
+                  - { date: "2026-09-26", available: false }
+                  - { date: "2026-10-13", available: true }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /booking/centers:
+    get:
+      tags: [booking]
+      operationId: getBookingCenters
+      summary: Центры со свободными слотами на дату
+      description: |
+        Только центры со свободными слотами. Сортировка: сначала `urgent` для группы
+        пользователя, дальше по расстоянию, без геопозиции — по алфавиту.
+        `pin_center_id` (при переносе) ставит этот центр первым.
+      parameters:
+        - $ref: "#/components/parameters/RegionIdQuery"
+        - $ref: "#/components/parameters/DonationTypeQuery"
+        - $ref: "#/components/parameters/DateQuery"
+        - { name: lat, in: query, required: false, description: Передаётся вместе с lon, schema: { type: number, format: double } }
+        - { name: lon, in: query, required: false, description: Передаётся вместе с lat, schema: { type: number, format: double } }
+        - { name: pin_center_id, in: query, required: false, schema: { type: integer } }
+      responses:
+        "200":
+          description: OK. Пустой массив — «На эту дату мест нет»
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/BookingCenter" }
+              example:
+                - id: 5
+                  name: Центр крови ФМБА России
+                  address: ул. Поликарпова, 14
+                  lat: 55.7766
+                  lon: 37.5305
+                  photo_url: null
+                  free_slots: 12
+                  distance_km: 2.3
+                  group_status: urgent
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /booking/slots:
+    get:
+      tags: [booking]
+      operationId: getBookingSlots
+      summary: Слоты центра на дату, сгруппированные по времени суток
+      description: |
+        Шаг 15 минут. Утро — до 12:00, день — 12:00–17:00, вечер — после 17:00
+        по местному времени региона. Пустые группы не отдаются.
+      parameters:
+        - { name: center_id, in: query, required: true, schema: { type: integer } }
+        - $ref: "#/components/parameters/DonationTypeQuery"
+        - $ref: "#/components/parameters/DateQuery"
+      responses:
+        "200":
+          description: OK. Все `is_free = false` — «На этот день всё занято»
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BookingSlots" }
+              example:
+                center: { id: 5, name: Центр крови ФМБА России, address: "ул. Поликарпова, 14" }
+                date: "2026-10-14"
+                groups:
+                  - period: morning
+                    slots:
+                      - { id: 1001, starts_at: "2026-10-14T08:00:00+03:00", local_time: "08:00", is_free: false }
+                      - { id: 1002, starts_at: "2026-10-14T08:15:00+03:00", local_time: "08:15", is_free: true }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /appointments/current:
+    get:
+      tags: [appointments]
+      operationId: getCurrentAppointment
+      summary: Активная запись пользователя
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AppointmentResponse" }
+              examples:
+                booked:
+                  value:
+                    appointment:
+                      id: 42
+                      donation_type: whole_blood
+                      starts_at: "2026-10-14T09:30:00+03:00"
+                      local_date: "2026-10-14"
+                      local_time: "09:30"
+                      center: { id: 5, name: Центр крови ФМБА России, address: "ул. Поликарпова, 14", region_id: 77 }
+                empty:
+                  value: { appointment: null }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /appointments:
+    post:
+      tags: [appointments]
+      operationId: createAppointment
+      summary: Записаться
+      description: После записи бот отправляет подтверждение в чат (ошибка отправки запись не отменяет).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SlotRequest" }
+      responses:
+        "201":
+          description: Запись создана
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AppointmentResponse" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/SlotNotFound" }
+        "409": { $ref: "#/components/responses/BookingConflict" }
+        "422": { $ref: "#/components/responses/BookingUnprocessable" }
+
+  /appointments/{id}/reschedule:
+    post:
+      tags: [appointments]
+      operationId: rescheduleAppointment
+      summary: Перенести запись на другой слот
+      description: |
+        В одной транзакции: старая запись → `rescheduled`, новая → `active`.
+        Возвращается новая запись (у неё другой `id`).
+      parameters:
+        - $ref: "#/components/parameters/AppointmentIdPath"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SlotRequest" }
+      responses:
+        "201":
+          description: Запись перенесена
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AppointmentResponse" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/SlotOrAppointmentNotFound" }
+        "409": { $ref: "#/components/responses/BookingConflict" }
+        "422": { $ref: "#/components/responses/BookingUnprocessable" }
+
+  /appointments/{id}/cancel:
+    post:
+      tags: [appointments]
+      operationId: cancelAppointment
+      summary: Отменить запись
+      parameters:
+        - $ref: "#/components/parameters/AppointmentIdPath"
+      responses:
+        "200":
+          description: Запись отменена, активной записи больше нет
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AppointmentResponse" }
+              example: { appointment: null }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/AppointmentNotFound" }
+        "409": { $ref: "#/components/responses/AppointmentNotActive" }
+
+  # ───────────────────────── Демо ─────────────────────────
+  /demo/reset:
+    post:
+      tags: [demo]
+      operationId: demoReset
+      summary: Вернуть профиль к демо-состоянию и отменить записи
+      responses:
+        "204": { description: Готово }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/DemoDisabled" }
+
+  /demo/appointments/{id}/remind:
+    post:
+      tags: [demo]
+      operationId: demoRemind
+      summary: Отправить напоминание по записи сразу
+      parameters:
+        - $ref: "#/components/parameters/AppointmentIdPath"
+      responses:
+        "204": { description: Напоминание отправлено }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/DemoOrAppointmentNotFound" }
+
+  /demo/appointments/{id}/complete:
+    post:
+      tags: [demo]
+      operationId: demoComplete
+      summary: Засчитать донацию по записи
+      description: Запись → `completed`, в историю добавляется донация.
+      parameters:
+        - $ref: "#/components/parameters/AppointmentIdPath"
+      responses:
+        "204": { description: Донация засчитана }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/DemoOrAppointmentNotFound" }
+        "409": { $ref: "#/components/responses/AppointmentNotActive" }
+
+  # ───────────────────────── Служебное ─────────────────────────
+  /health:
+    get:
+      tags: [service]
+      operationId: health
+      summary: Проверка живости
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status: { type: string, const: ok }
+
+components:
+  securitySchemes:
+    MaxInitData:
+      type: apiKey
+      in: header
+      name: X-Max-Init-Data
+      description: Строка `window.WebApp.initData` как есть
+    DevUserId:
+      type: apiKey
+      in: header
+      name: X-Dev-User-Id
+      description: Только при `AUTH_DEV_MODE=true`. Любой int — id пользователя MAX
+
+  parameters:
+    RegionIdQuery:
+      name: region_id
+      in: query
+      required: true
+      schema: { type: integer }
+    DonationTypeQuery:
+      name: donation_type
+      in: query
+      required: true
+      schema: { $ref: "#/components/schemas/DonationType" }
+    DateQuery:
+      name: date
+      in: query
+      required: true
+      schema: { type: string, format: date }
+    AppointmentIdPath:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer }
+
+  responses:
+    Unauthorized:
+      description: Нет или невалидна initData
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: unauthorized, message: Не удалось проверить пользователя, fields: null } }
+    NotFound:
+      description: Регион или центр не найден
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: not_found, message: Не найдено, fields: null } }
+    ValidationError:
+      description: Неверные параметры запроса
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: validation_error, message: Неверные параметры запроса, fields: null } }
+    SlotNotFound:
+      description: Слот не найден
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: slot_not_found, message: Слот не найден, fields: null } }
+    AppointmentNotFound:
+      description: Запись не найдена или принадлежит другому пользователю
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: appointment_not_found, message: Запись не найдена, fields: null } }
+    SlotOrAppointmentNotFound:
+      description: "`slot_not_found` или `appointment_not_found`"
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    AppointmentNotActive:
+      description: Запись уже отменена, перенесена или завершена
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: appointment_not_active, message: Запись уже неактивна, fields: null } }
+    BookingConflict:
+      description: |
+        - `slot_taken` — слот заняли (окно «Это время уже заняли»);
+        - `active_exists` — у пользователя уже есть активная запись.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          examples:
+            slot_taken:
+              value: { error: { code: slot_taken, message: Это время уже заняли, fields: null } }
+            active_exists:
+              value: { error: { code: active_exists, message: У вас уже есть запись, fields: null } }
+    BookingUnprocessable:
+      description: |
+        - `interval_not_passed` — дата слота раньше `next_allowed` для этого вида;
+        - `personal_data_incomplete` — не заполнены обязательные личные данные.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          examples:
+            interval_not_passed:
+              value: { error: { code: interval_not_passed, message: Интервал после прошлой донации ещё не прошёл, fields: null } }
+            personal_data_incomplete:
+              value: { error: { code: personal_data_incomplete, message: Заполните личные данные, fields: null } }
+    DemoDisabled:
+      description: DEMO_MODE выключен
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: demo_disabled, message: Демо-режим выключен, fields: null } }
+    DemoOrAppointmentNotFound:
+      description: "`demo_disabled` или `appointment_not_found`"
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    # ── Общие ──
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message, fields]
+          properties:
+            code: { $ref: "#/components/schemas/ErrorCode" }
+            message:
+              type: string
+              description: Текст для логов/отладки. Пользователю показываем тексты из md по `code`
+            fields:
+              description: Только для 422 при сохранении формы. Ключ — имя поля, значение — текст ошибки
+              oneOf:
+                - type: object
+                  additionalProperties: { type: string }
+                - type: "null"
+
+    ErrorCode:
+      type: string
+      enum:
+        - unauthorized
+        - not_found
+        - validation_error
+        - slot_not_found
+        - slot_taken
+        - active_exists
+        - interval_not_passed
+        - personal_data_incomplete
+        - appointment_not_found
+        - appointment_not_active
+        - demo_disabled
+        - internal_error
+
+    DonationType:
+      type: string
+      enum: [whole_blood, plasma]
+
+    BloodGroup:
+      type: string
+      description: "1 = O(I), 2 = A(II), 3 = B(III), 4 = AB(IV); знак — резус"
+      enum: ["1+", "1-", "2+", "2-", "3+", "3-", "4+", "4-"]
+
+    StockStatus:
+      type: string
+      enum: [urgent, low, enough]
+
+    LocalTime:
+      type: string
+      pattern: "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+      examples: ["09:30"]
+
+    # ── Профиль ──
+    Me:
+      type: object
+      required: [id, first_name, last_name, photo_url, onboarding_completed, blood, referrals_count]
+      properties:
+        id: { type: integer }
+        first_name: { type: string }
+        last_name: { type: [string, "null"] }
+        photo_url: { type: [string, "null"], format: uri }
+        onboarding_completed: { type: boolean }
+        blood: { $ref: "#/components/schemas/BloodInfo" }
+        referrals_count: { type: integer, minimum: 0 }
+
+    BloodInfo:
+      type: object
+      description: "`null` в любом поле — значение неизвестно («—» на экране)"
+      required: [group, kell, phenotype, donor_code]
+      properties:
+        group:
+          oneOf:
+            - $ref: "#/components/schemas/BloodGroup"
+            - type: "null"
+        kell:
+          type: [string, "null"]
+          enum: ["K+", "K-", null]
+        phenotype: { type: [string, "null"], examples: [CcDee] }
+        donor_code: { type: [string, "null"], pattern: "^\\d{4}-\\d{4}$" }
+
+    OnboardingRequest:
+      type: object
+      required: [consent]
+      properties:
+        consent: { type: boolean, const: true }
+
+    PersonalDataFieldName:
+      type: string
+      enum:
+        - last_name
+        - first_name
+        - middle_name
+        - passport_series
+        - passport_number
+        - passport_issued_by
+        - passport_division_code
+        - oms_number
+        - phone
+        - email
+
+    PersonalData:
+      type: object
+      description: "`null` — поле не заполнено (на экране «Не указано» красным для обязательных)"
+      required:
+        - last_name
+        - first_name
+        - middle_name
+        - passport_series
+        - passport_number
+        - passport_issued_by
+        - passport_division_code
+        - oms_number
+        - phone
+        - email
+        - is_demo
+        - missing_fields
+      properties:
+        last_name: { type: [string, "null"] }
+        first_name: { type: [string, "null"] }
+        middle_name: { type: [string, "null"] }
+        passport_series: { type: [string, "null"], pattern: "^\\d{4}$" }
+        passport_number: { type: [string, "null"], pattern: "^\\d{6}$" }
+        passport_issued_by: { type: [string, "null"] }
+        passport_division_code: { type: [string, "null"], pattern: "^\\d{3}-\\d{3}$" }
+        oms_number: { type: [string, "null"], pattern: "^\\d{16}$" }
+        phone: { type: [string, "null"], pattern: "^\\+7\\d{10}$" }
+        email: { type: [string, "null"], format: email }
+        is_demo: { type: boolean }
+        missing_fields:
+          type: array
+          description: Незаполненные обязательные поля. Пустой — можно нажимать «Далее»
+          items: { $ref: "#/components/schemas/PersonalDataFieldName" }
+
+    PersonalDataInput:
+      type: object
+      description: Значения без маски
+      required:
+        - last_name
+        - first_name
+        - passport_series
+        - passport_number
+        - passport_issued_by
+        - passport_division_code
+        - oms_number
+        - phone
+        - email
+      properties:
+        last_name: { type: string, minLength: 1, maxLength: 255, pattern: "^[A-Za-zА-Яа-яЁё-]+$" }
+        first_name: { type: string, minLength: 1, maxLength: 255, pattern: "^[A-Za-zА-Яа-яЁё-]+$" }
+        middle_name: { type: [string, "null"], maxLength: 255 }
+        passport_series: { type: string, pattern: "^\\d{4}$" }
+        passport_number: { type: string, pattern: "^\\d{6}$" }
+        passport_issued_by: { type: string, minLength: 1, maxLength: 512 }
+        passport_division_code: { type: string, pattern: "^\\d{3}-\\d{3}$" }
+        oms_number: { type: string, pattern: "^\\d{16}$" }
+        phone: { type: string, pattern: "^\\+7\\d{10}$" }
+        email: { type: string, format: email, maxLength: 254 }
+
+    Eligibility:
+      type: object
+      required: [next_allowed, interval_active]
+      properties:
+        next_allowed:
+          type: object
+          description: Ближайшая дата, с которой можно сдать (≥ сегодня)
+          required: [whole_blood, plasma]
+          properties:
+            whole_blood: { type: string, format: date }
+            plasma: { type: string, format: date }
+        interval_active:
+          type: object
+          description: "`false` — интервал прошёл, подпись «можно сдать с …» не показываем"
+          required: [whole_blood, plasma]
+          properties:
+            whole_blood: { type: boolean }
+            plasma: { type: boolean }
+
+    LevelCode:
+      type: string
+      description: |
+        future_donor (0) — Будущий донор, novice (1) — Новичок, active (5) — Активный донор,
+        experienced (10) — Опытный донор, mentor (20) — Наставник, legend (40) — Легенда донорства
+      enum: [future_donor, novice, active, experienced, mentor, legend]
+
+    Progress:
+      type: object
+      required: [total, level, honorary]
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          description: Всего донаций (кровь + плазма)
+        level:
+          type: object
+          required: [code, name, threshold, next, is_max]
+          properties:
+            code: { $ref: "#/components/schemas/LevelCode" }
+            name: { type: string }
+            threshold: { type: integer }
+            next:
+              description: "`null` на последнем уровне"
+              oneOf:
+                - type: object
+                  required: [code, name, threshold, remaining]
+                  properties:
+                    code: { $ref: "#/components/schemas/LevelCode" }
+                    name: { type: string }
+                    threshold: { type: integer }
+                    remaining: { type: integer, minimum: 1 }
+                - type: "null"
+            is_max: { type: boolean }
+        honorary:
+          type: object
+          required: [whole, plasma, mixed, achieved, eta]
+          properties:
+            whole:
+              $ref: "#/components/schemas/HonoraryCounter"
+            plasma:
+              $ref: "#/components/schemas/HonoraryCounter"
+            mixed:
+              type: object
+              required: [count, goal, whole_needed_for_40]
+              properties:
+                count: { type: integer, description: X + Y }
+                goal: { type: integer, enum: [40, 60], description: "40, если цельной крови ≥ 25, иначе 60" }
+                whole_needed_for_40:
+                  type: integer
+                  minimum: 0
+                  description: "25 − X, 0 если X ≥ 25. Подсказка «Ещё N сдач цельной крови — и цель сократится до 40» — при goal = 60"
+            achieved: { type: boolean, description: Донаций для звания достаточно }
+            eta:
+              description: Срок до звания по самому быстрому пути. `null`, если achieved
+              oneOf:
+                - type: object
+                  required: [date, years, months]
+                  properties:
+                    date: { type: string, format: date }
+                    years: { type: integer, minimum: 0 }
+                    months: { type: integer, minimum: 0, maximum: 11 }
+                - type: "null"
+
+    HonoraryCounter:
+      type: object
+      required: [count, goal]
+      properties:
+        count: { type: integer, minimum: 0 }
+        goal: { type: integer, description: "40 для крови, 60 для плазмы" }
+
+    DonationHistory:
+      type: object
+      required: [total, years]
+      properties:
+        total: { type: integer, minimum: 0 }
+        years:
+          type: array
+          description: От нового года к старому. Пустой — «Здесь появятся ваши донации»
+          items:
+            type: object
+            required: [year, count, items]
+            properties:
+              year: { type: integer }
+              count: { type: integer }
+              items:
+                type: array
+                description: От новой к старой
+                items: { $ref: "#/components/schemas/Donation" }
+
+    Donation:
+      type: object
+      required: [id, donation_type, donated_on, center_name]
+      properties:
+        id: { type: integer }
+        donation_type: { $ref: "#/components/schemas/DonationType" }
+        donated_on: { type: string, format: date }
+        center_name: { type: [string, "null"] }
+
+    Referrals:
+      type: object
+      required: [count, link]
+      properties:
+        count: { type: integer, minimum: 0 }
+        link:
+          type: string
+          format: uri
+          description: "https://max.ru/<bot>?startapp=ref_<code>"
+
+    # ── Регионы и карта ──
+    Region:
+      type: object
+      required: [id, code, name, has_centers]
+      properties:
+        id: { type: integer }
+        code: { type: string, description: "ISO 3166-2, например RU-MOW. Совпадает с `code` в topojson" }
+        name: { type: string }
+        has_centers:
+          type: boolean
+          description: "`false` — строка серая, «Нет центров для записи»"
+
+    LocateRegionResponse:
+      type: object
+      required: [region]
+      properties:
+        region:
+          oneOf:
+            - $ref: "#/components/schemas/Region"
+            - type: "null"
+
+    BloodStatuses:
+      type: object
+      description: Статус по группе. Нет ключа — нет данных по этой группе
+      additionalProperties: false
+      properties:
+        "1+": { $ref: "#/components/schemas/StockStatus" }
+        "1-": { $ref: "#/components/schemas/StockStatus" }
+        "2+": { $ref: "#/components/schemas/StockStatus" }
+        "2-": { $ref: "#/components/schemas/StockStatus" }
+        "3+": { $ref: "#/components/schemas/StockStatus" }
+        "3-": { $ref: "#/components/schemas/StockStatus" }
+        "4+": { $ref: "#/components/schemas/StockStatus" }
+        "4-": { $ref: "#/components/schemas/StockStatus" }
+
+    MapStatus:
+      type: object
+      required: [updated_at, regions]
+      properties:
+        updated_at: { type: string, format: date-time }
+        regions:
+          type: array
+          description: Все регионы. Регион без данных — `statuses = {}`, `worst = null`
+          items:
+            type: object
+            required: [code, statuses, worst]
+            properties:
+              code: { type: string }
+              statuses: { $ref: "#/components/schemas/BloodStatuses" }
+              worst:
+                description: Худший статус среди всех групп, `null` — нет данных
+                oneOf:
+                  - $ref: "#/components/schemas/StockStatus"
+                  - type: "null"
+
+    # ── Запись ──
+    BookingDates:
+      type: object
+      required: [from, to, earliest_allowed, first_available, days]
+      properties:
+        from: { type: string, format: date, description: Сегодня }
+        to: { type: string, format: date, description: Сегодня + 2 месяца }
+        earliest_allowed:
+          type: string
+          format: date
+          description: "`next_allowed` для выбранного вида. Если > from — показываем подпись про интервал"
+        first_available:
+          description: Первая доступная дата (открываем календарь на её месяце). `null` — мест нет в ближайшие 2 месяца
+          oneOf:
+            - { type: string, format: date }
+            - type: "null"
+        days:
+          type: array
+          items:
+            type: object
+            required: [date, available]
+            properties:
+              date: { type: string, format: date }
+              available: { type: boolean }
+
+    BookingCenter:
+      type: object
+      required: [id, name, address, lat, lon, photo_url, free_slots, distance_km, group_status]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        address: { type: string }
+        lat: { type: number, format: double }
+        lon: { type: number, format: double }
+        photo_url: { type: [string, "null"], format: uri }
+        free_slots: { type: integer, minimum: 1, description: Свободных мест на выбранную дату }
+        distance_km:
+          type: [number, "null"]
+          description: "`null`, если lat/lon не переданы"
+        group_status:
+          description: Статус группы пользователя в центре. `null` — группа неизвестна или нет данных (строки светофора нет)
+          oneOf:
+            - $ref: "#/components/schemas/StockStatus"
+            - type: "null"
+
+    SlotPeriod:
+      type: string
+      description: "morning — до 12:00, day — 12:00–17:00, evening — после 17:00"
+      enum: [morning, day, evening]
+
+    BookingSlots:
+      type: object
+      required: [center, date, groups]
+      properties:
+        center:
+          type: object
+          required: [id, name, address]
+          properties:
+            id: { type: integer }
+            name: { type: string }
+            address: { type: string }
+        date: { type: string, format: date }
+        groups:
+          type: array
+          description: В порядке morning → day → evening, пустые группы не отдаются
+          items:
+            type: object
+            required: [period, slots]
+            properties:
+              period: { $ref: "#/components/schemas/SlotPeriod" }
+              slots:
+                type: array
+                items: { $ref: "#/components/schemas/Slot" }
+
+    Slot:
+      type: object
+      required: [id, starts_at, local_time, is_free]
+      properties:
+        id: { type: integer }
+        starts_at: { type: string, format: date-time }
+        local_time: { $ref: "#/components/schemas/LocalTime" }
+        is_free: { type: boolean }
+
+    SlotRequest:
+      type: object
+      required: [slot_id]
+      properties:
+        slot_id: { type: integer }
+
+    Appointment:
+      type: object
+      required: [id, donation_type, starts_at, local_date, local_time, center]
+      properties:
+        id: { type: integer }
+        donation_type: { $ref: "#/components/schemas/DonationType" }
+        starts_at: { type: string, format: date-time }
+        local_date: { type: string, format: date, description: Дата по местному времени региона центра }
+        local_time: { $ref: "#/components/schemas/LocalTime" }
+        center:
+          type: object
+          required: [id, name, address, region_id]
+          properties:
+            id: { type: integer }
+            name: { type: string }
+            address: { type: string }
+            region_id: { type: integer }
+
+    AppointmentResponse:
+      type: object
+      description: Общий ответ для current / create / reschedule / cancel — можно сразу класть в кэш `/appointments/current`
+      required: [appointment]
+      properties:
+        appointment:
+          oneOf:
+            - $ref: "#/components/schemas/Appointment"
+            - type: "null"

@@ -1,14 +1,13 @@
 import { IdCard, Phone, ShieldPlus } from 'lucide-react'
 
-import type { PersonalDataFields as PersonalData } from '@/api/types'
 
 import { DataField } from '../DataField/DataField'
 import { DataSection } from '../DataSection/DataSection'
-import { FIELDS, type FieldErrors, type FieldKey } from '../fields'
+import { FIELDS, type FieldErrors, type FieldKey, type PersonalDataValues } from '../fields'
 import styles from './PersonalDataForm.module.scss'
 
 interface PersonalDataFormProps {
-  data: PersonalData
+  data: PersonalDataValues
   errors: FieldErrors
   onChange: (key: FieldKey, value: string) => void
   onBlur: (key: FieldKey) => void

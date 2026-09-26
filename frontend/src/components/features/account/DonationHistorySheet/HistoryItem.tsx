@@ -1,6 +1,6 @@
 import { Typography } from '@maxhub/max-ui'
 
-import type { DonationItem } from '@/api/types'
+import type { Donation } from '@/api/types'
 import { Card } from '@/components/shared/Card/Card'
 import { DonationIcon } from '@/components/shared/DonationIcon/DonationIcon'
 import { DONATION_TYPE_LABEL } from '@/content/donationTypes'
@@ -9,7 +9,7 @@ import { formatDayMonth, parseISODate } from '@/utils/format'
 import styles from './DonationHistorySheet.module.scss'
 
 interface HistoryItemProps {
-  donation: DonationItem
+  donation: Donation
 }
 
 /** Карточка донации. Год не пишем — он в заголовке. */
@@ -20,9 +20,11 @@ export const HistoryItem = ({ donation }: HistoryItemProps) => (
       <div className={styles['history-item__text']}>
         <Typography.Text variant="title">{DONATION_TYPE_LABEL[donation.donation_type]}</Typography.Text>
         <Typography.Text variant="body">{formatDayMonth(parseISODate(donation.donated_on))}</Typography.Text>
-        <Typography.Text variant="detail" color="tertiary" className={styles['history-item__center']}>
-          {donation.center_name}
-        </Typography.Text>
+        {donation.center_name && (
+          <Typography.Text variant="detail" color="tertiary" className={styles['history-item__center']}>
+            {donation.center_name}
+          </Typography.Text>
+        )}
       </div>
     </Card>
   </li>

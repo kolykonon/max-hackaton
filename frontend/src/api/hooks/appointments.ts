@@ -2,46 +2,48 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '../client'
 import { queryKeys } from '../queryKeys'
-import type { Appointment, CurrentAppointment } from '../types'
+import type { AppointmentResponse } from '../types'
 
 export const useCurrentAppointment = () =>
   useQuery({
     queryKey: queryKeys.currentAppointment,
-    queryFn: () => api.get<CurrentAppointment>('/appointments/current'),
+    queryFn: () => api.get<AppointmentResponse>('/appointments/current'),
   })
 
-/** После записи, переноса и отмены обновляем текущую запись и слоты. */
-const useInvalidateBooking = () => {
+/**
+ * Create / reschedule / cancel возвращают тот же AppointmentResponse, что и /appointments/current,
+ * поэтому сразу кладём ответ в кэш. Слоты и даты перезапрашиваем — занятость изменилась.
+ */
+const useUpdateAppointmentCache = () => {
   const queryClient = useQueryClient()
-  return () =>
-    Promise.all([
-      queryClient.invalidateQueries({ queryKey: queryKeys.currentAppointment }),
-      queryClient.invalidateQueries({ queryKey: ['booking'] }),
-    ])
+  return {
+    onSuccess: (data: AppointmentResponse) => {
+      queryClient.setQueryData(queryKeys.currentAppointment, data)
+      return queryClient.invalidateQueries({ queryKey: ['booking'] })
+    },
+    // 404 / 409 appointment_not_active — запись уже изменилась, показываем актуальную
+    onError: () => queryClient.invalidateQueries({ queryKey: queryKeys.currentAppointment }),
+  }
 }
 
-/** Ошибки: 409 slot_taken, 409 active_exists, 422 interval_not_passed, 422 personal_data_incomplete, 404 slot_not_found. */
-export const useCreateAppointment = () => {
-  const invalidate = useInvalidateBooking()
-  return useMutation({
-    mutationFn: (slotId: number) => api.post<Appointment>('/appointments', { slot_id: slotId }),
-    onSuccess: invalidate,
+/** Ошибки: 404 slot_not_found, 409 slot_taken / active_exists, 422 interval_not_passed / personal_data_incomplete. */
+export const useCreateAppointment = () =>
+  useMutation({
+    mutationFn: (slotId: number) => api.post<AppointmentResponse>('/appointments', { slot_id: slotId }),
+    ...useUpdateAppointmentCache(),
   })
-}
 
-export const useRescheduleAppointment = () => {
-  const invalidate = useInvalidateBooking()
-  return useMutation({
+/** Возвращается новая запись с другим id. */
+export const useRescheduleAppointment = () =>
+  useMutation({
     mutationFn: ({ appointmentId, slotId }: { appointmentId: number; slotId: number }) =>
-      api.post<Appointment>(`/appointments/${appointmentId}/reschedule`, { slot_id: slotId }),
-    onSuccess: invalidate,
+      api.post<AppointmentResponse>(`/appointments/${appointmentId}/reschedule`, { slot_id: slotId }),
+    ...useUpdateAppointmentCache(),
   })
-}
 
-export const useCancelAppointment = () => {
-  const invalidate = useInvalidateBooking()
-  return useMutation({
-    mutationFn: (appointmentId: number) => api.post<void>(`/appointments/${appointmentId}/cancel`),
-    onSuccess: invalidate,
+/** Ошибки: 404 appointment_not_found, 409 appointment_not_active. */
+export const useCancelAppointment = () =>
+  useMutation({
+    mutationFn: (appointmentId: number) => api.post<AppointmentResponse>(`/appointments/${appointmentId}/cancel`),
+    ...useUpdateAppointmentCache(),
   })
-}

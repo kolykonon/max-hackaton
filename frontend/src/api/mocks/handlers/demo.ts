@@ -3,22 +3,29 @@ import { http, HttpResponse } from 'msw'
 import { db, decodeSlot, findCenter } from '../db'
 import { apiError, BASE, latency } from '../utils'
 
+const noContent = () => new HttpResponse(null, { status: 204 })
+
 export const demoHandlers = [
   http.post(`${BASE}/demo/reset`, async () => {
     await latency()
     db.reset()
-    return HttpResponse.json({})
+    return noContent()
   }),
 
-  http.post(`${BASE}/demo/appointments/:id/remind`, async () => {
+  // Напоминание шлёт бот — в моках делать нечего
+  http.post(`${BASE}/demo/appointments/:id/remind`, async ({ params }) => {
     await latency()
-    return HttpResponse.json({})
+    if (!db.state.appointments.some((a) => a.id === Number(params.id))) {
+      return apiError(404, 'appointment_not_found', 'Запись не найдена')
+    }
+    return noContent()
   }),
 
   http.post(`${BASE}/demo/appointments/:id/complete`, async ({ params }) => {
     await latency()
-    const appointment = db.state.appointments.find((a) => a.id === Number(params.id) && a.status === 'active')
+    const appointment = db.state.appointments.find((a) => a.id === Number(params.id))
     if (!appointment) return apiError(404, 'appointment_not_found', 'Запись не найдена')
+    if (appointment.status !== 'active') return apiError(409, 'appointment_not_active', 'Запись уже неактивна')
     const { centerId, date } = decodeSlot(appointment.slotId)
     appointment.status = 'completed'
     db.state.donations.push({
@@ -28,7 +35,7 @@ export const demoHandlers = [
       centerName: findCenter(centerId)?.name ?? '',
     })
     db.save()
-    return HttpResponse.json({})
+    return noContent()
   }),
 
   http.get(`${BASE}/health`, () => HttpResponse.json({ status: 'ok' })),

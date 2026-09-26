@@ -4,9 +4,9 @@ import { addDays, startOfDay } from '@/utils/format'
 import type { Eligibility, Progress } from '../types'
 import { toISO, type MockDonation } from './db'
 
-const LEVELS = [
-  { code: 'future', name: 'Будущий донор', threshold: 0 },
-  { code: 'newbie', name: 'Новичок', threshold: 1 },
+const LEVELS: { code: Progress['level']['code']; name: string; threshold: number }[] = [
+  { code: 'future_donor', name: 'Будущий донор', threshold: 0 },
+  { code: 'novice', name: 'Новичок', threshold: 1 },
   { code: 'active', name: 'Активный донор', threshold: 5 },
   { code: 'experienced', name: 'Опытный донор', threshold: 10 },
   { code: 'mentor', name: 'Наставник', threshold: 20 },
@@ -92,7 +92,7 @@ export const getProgress = (donations: MockDonation[]): Progress => {
       code: level.code,
       name: level.name,
       threshold: level.threshold,
-      next: nextLevel ? { name: nextLevel.name, threshold: nextLevel.threshold, remaining: nextLevel.threshold - total } : null,
+      next: nextLevel ? { code: nextLevel.code, name: nextLevel.name, threshold: nextLevel.threshold, remaining: nextLevel.threshold - total } : null,
       is_max: !nextLevel,
     },
     honorary: {

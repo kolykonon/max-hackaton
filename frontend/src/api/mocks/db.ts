@@ -1,7 +1,7 @@
 import type { DonationType } from '@/content/types'
 import { toISODate } from '@/utils/format'
 
-import type { PersonalDataFields } from '../types'
+import type { PersonalDataInput } from '../types'
 import { CENTERS, DEMO_PERSONAL_DATA, DONATIONS, REGIONS } from './fixtures'
 
 export interface MockDonation {
@@ -20,14 +20,14 @@ export interface MockAppointment {
 
 interface MockState {
   onboardingCompleted: boolean
-  personalData: PersonalDataFields
+  personalData: PersonalDataInput
   isDemoData: boolean
   donations: MockDonation[]
   appointments: MockAppointment[]
   nextId: number
 }
 
-const STORAGE_KEY = 'kaplya:mock-db'
+const STORAGE_KEY = 'kaplya:mock-db:v2'
 
 export const toISO = toISODate
 

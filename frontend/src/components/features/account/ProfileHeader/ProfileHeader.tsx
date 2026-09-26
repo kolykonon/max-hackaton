@@ -25,9 +25,7 @@ export const ProfileHeader = ({ firstName, lastName, photoUrl, onAvatarClick }: 
           )}
         </Avatar.Container>
       </button>
-      <Typography.Text variant="hero">
-        {firstName} {lastName}
-      </Typography.Text>
+      <Typography.Text variant="hero">{[firstName, lastName].filter(Boolean).join(' ')}</Typography.Text>
     </div>
   )
 }

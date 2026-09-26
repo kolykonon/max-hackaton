@@ -5,8 +5,8 @@ export interface DonorLevel {
 }
 
 export const DONOR_LEVELS: DonorLevel[] = [
-  { code: 'future', name: 'Будущий донор', threshold: 0 },
-  { code: 'newbie', name: 'Новичок', threshold: 1 },
+  { code: 'future_donor', name: 'Будущий донор', threshold: 0 },
+  { code: 'novice', name: 'Новичок', threshold: 1 },
   { code: 'active', name: 'Активный донор', threshold: 5 },
   { code: 'experienced', name: 'Опытный донор', threshold: 10 },
   { code: 'mentor', name: 'Наставник', threshold: 20 },

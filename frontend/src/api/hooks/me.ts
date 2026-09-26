@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '../client'
 import { queryKeys } from '../queryKeys'
-import type { Donations, Eligibility, Me, PersonalData, PersonalDataFields, Progress, Referrals } from '../types'
+import type { DonationHistory, Eligibility, Me, PersonalData, PersonalDataInput, Progress, Referrals } from '../types'
 
 export const useMe = () => useQuery({ queryKey: queryKeys.me, queryFn: () => api.get<Me>('/me') })
 
@@ -20,7 +20,7 @@ export const usePersonalData = () =>
 export const useSavePersonalData = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: PersonalDataFields) => api.put<PersonalData>('/me/personal-data', data),
+    mutationFn: (data: PersonalDataInput) => api.put<PersonalData>('/me/personal-data', data),
     onSuccess: (data) => queryClient.setQueryData(queryKeys.personalData, data),
   })
 }
@@ -31,6 +31,6 @@ export const useEligibility = () =>
 export const useProgress = () => useQuery({ queryKey: queryKeys.progress, queryFn: () => api.get<Progress>('/me/progress') })
 
 export const useDonations = (enabled = true) =>
-  useQuery({ queryKey: queryKeys.donations, queryFn: () => api.get<Donations>('/me/donations'), enabled })
+  useQuery({ queryKey: queryKeys.donations, queryFn: () => api.get<DonationHistory>('/me/donations'), enabled })
 
 export const useReferrals = () => useQuery({ queryKey: queryKeys.referrals, queryFn: () => api.get<Referrals>('/me/referrals') })

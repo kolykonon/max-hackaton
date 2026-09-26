@@ -1,20 +1,21 @@
 import { getInitData, isInsideMax } from '@/bridge/max'
 
-import type { ApiErrorBody } from './types'
+import type { ApiErrorBody, ErrorCode } from './types'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
 
 /** Ошибка API в формате { error: { code, message, fields } } (ТЗ §6). */
 export class ApiError extends Error {
   readonly status: number
-  readonly code: string
-  readonly fields?: Record<string, string>
+  /** Код из ErrorCode либо network_error, если ответа нет. */
+  readonly code: ErrorCode | 'network_error'
+  readonly fields: Record<string, string> | null
 
   constructor(status: number, body: ApiErrorBody | null) {
     super(body?.error.message ?? `HTTP ${status}`)
     this.status = status
-    this.code = body?.error.code ?? (status === 0 ? 'network_error' : 'unknown_error')
-    this.fields = body?.error.fields
+    this.code = body?.error.code ?? (status === 0 ? 'network_error' : 'internal_error')
+    this.fields = body?.error.fields ?? null
   }
 }
 
