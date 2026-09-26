@@ -60,7 +60,7 @@ async def _send_fallback(client: MaxBotClient, user_id: int) -> None:
 
 
 async def send_appointment_confirmed(client: MaxBotClient, max_user_id: int) -> None:
-    """Вызывается после создания/переноса записи через BackgroundTasks."""
+    """Подтверждение записи — вызывается из POST /appointments."""
     try:
         await client.send_message(
             max_user_id,
@@ -73,12 +73,43 @@ async def send_appointment_confirmed(client: MaxBotClient, max_user_id: int) -> 
         log.exception("Не удалось отправить подтверждение user_id=%s", max_user_id)
 
 
-async def send_reminder(client: MaxBotClient, max_user_id: int) -> None:
+async def send_reminder_2d(client: MaxBotClient, max_user_id: int) -> None:
     try:
         await client.send_message(
             max_user_id,
-            texts.REMINDER_MESSAGE,
-            attachments=link_keyboard(texts.REMINDER_BUTTON, start_param="appointment"),
+            texts.REMINDER_2D_MESSAGE,
+            attachments=link_keyboard(
+                texts.REMINDER_2D_BUTTON, start_param="appointment"
+            ),
         )
+        log.info("Напоминание за 2 дня отправлено user_id=%s", max_user_id)
     except Exception:
-        log.exception("Не удалось отправить напоминание user_id=%s", max_user_id)
+        log.exception("Не удалось отправить напоминание за 2 дня user_id=%s", max_user_id)
+
+
+async def send_reminder_1d(client: MaxBotClient, max_user_id: int) -> None:
+    try:
+        await client.send_message(
+            max_user_id,
+            texts.REMINDER_1D_MESSAGE,
+            attachments=link_keyboard(
+                texts.REMINDER_1D_BUTTON, start_param="appointment"
+            ),
+        )
+        log.info("Напоминание за 1 день отправлено user_id=%s", max_user_id)
+    except Exception:
+        log.exception("Не удалось отправить напоминание за 1 день user_id=%s", max_user_id)
+
+
+async def send_reminder_morning(client: MaxBotClient, max_user_id: int) -> None:
+    try:
+        await client.send_message(
+            max_user_id,
+            texts.REMINDER_MORNING_MESSAGE,
+            attachments=link_keyboard(
+                texts.REMINDER_MORNING_BUTTON, start_param="appointment"
+            ),
+        )
+        log.info("Утреннее напоминание отправлено user_id=%s", max_user_id)
+    except Exception:
+        log.exception("Не удалось отправить утреннее напоминание user_id=%s", max_user_id)
