@@ -1,0 +1,3106 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Капля API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/me": {
+      "get": {
+        "tags": ["profile"],
+        "summary": "Текущий пользователь",
+        "operationId": "get_me",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/onboarding": {
+      "post": {
+        "tags": ["profile"],
+        "summary": "Завершить онбординг",
+        "operationId": "complete_onboarding",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/me/personal-data": {
+      "get": {
+        "tags": ["profile"],
+        "summary": "Личные данные",
+        "operationId": "get_personal_data",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalData"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["profile"],
+        "summary": "Сохранить личные данные",
+        "operationId": "update_personal_data",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalDataInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalData"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/me/eligibility": {
+      "get": {
+        "tags": ["profile"],
+        "summary": "Ближайшие разрешённые даты донации",
+        "operationId": "get_eligibility",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Eligibility"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/progress": {
+      "get": {
+        "tags": ["profile"],
+        "summary": "Уровень донора и путь к званию",
+        "operationId": "get_progress",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Progress"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/donations": {
+      "get": {
+        "tags": ["profile"],
+        "summary": "История донаций",
+        "operationId": "get_donations",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonationHistory"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/referrals": {
+      "get": {
+        "tags": ["profile"],
+        "summary": "Рефералы",
+        "operationId": "get_referrals",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Referrals"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/regions": {
+      "get": {
+        "tags": ["regions"],
+        "summary": "Все субъекты РФ по алфавиту",
+        "operationId": "list_regions",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Region"
+                  },
+                  "title": "Response List Regions"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/regions/locate": {
+      "get": {
+        "tags": ["regions"],
+        "summary": "Регион по координатам",
+        "operationId": "locate_region",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocateRegionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/map/status": {
+      "get": {
+        "tags": ["regions"],
+        "summary": "Карта-светофор по регионам",
+        "operationId": "get_map_status",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/dates": {
+      "get": {
+        "tags": ["booking"],
+        "summary": "Календарь доступности на 2 месяца",
+        "operationId": "get_booking_dates",
+        "parameters": [
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Region Id"
+            }
+          },
+          {
+            "name": "donation_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DonationType"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDates"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/booking/centers": {
+      "get": {
+        "tags": ["booking"],
+        "summary": "Центры со свободными слотами на дату",
+        "operationId": "get_booking_centers",
+        "parameters": [
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Region Id"
+            }
+          },
+          {
+            "name": "donation_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DonationType"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Date"
+            }
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lon"
+            }
+          },
+          {
+            "name": "pin_center_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Pin Center Id"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingCenter"
+                  },
+                  "title": "Response Get Booking Centers"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/booking/slots": {
+      "get": {
+        "tags": ["booking"],
+        "summary": "Слоты центра на дату",
+        "operationId": "get_booking_slots",
+        "parameters": [
+          {
+            "name": "center_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Center Id"
+            }
+          },
+          {
+            "name": "donation_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DonationType"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Date"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingSlots"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/appointments/current": {
+      "get": {
+        "tags": ["appointments"],
+        "summary": "Активная запись",
+        "operationId": "get_current_appointment",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppointmentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/appointments": {
+      "post": {
+        "tags": ["appointments"],
+        "summary": "Записаться",
+        "operationId": "create_appointment",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SlotRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppointmentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/appointments/{appointment_id}/reschedule": {
+      "post": {
+        "tags": ["appointments"],
+        "summary": "Перенести запись",
+        "operationId": "reschedule_appointment",
+        "parameters": [
+          {
+            "name": "appointment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Appointment Id"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SlotRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppointmentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/appointments/{appointment_id}/cancel": {
+      "post": {
+        "tags": ["appointments"],
+        "summary": "Отменить запись",
+        "operationId": "cancel_appointment",
+        "parameters": [
+          {
+            "name": "appointment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Appointment Id"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppointmentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/demo/reset": {
+      "post": {
+        "tags": ["demo"],
+        "summary": "Сбросить демо-профиль",
+        "operationId": "demo_reset",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/demo/appointments/{appointment_id}/remind": {
+      "post": {
+        "tags": ["demo"],
+        "summary": "Отправить напоминание сразу",
+        "operationId": "demo_remind",
+        "parameters": [
+          {
+            "name": "appointment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Appointment Id"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/demo/appointments/{appointment_id}/complete": {
+      "post": {
+        "tags": ["demo"],
+        "summary": "Засчитать донацию",
+        "operationId": "demo_complete",
+        "parameters": [
+          {
+            "name": "appointment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Appointment Id"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "tags": ["service"],
+        "summary": "Проверка живости",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Appointment": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "donation_type": {
+            "$ref": "#/components/schemas/DonationType"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Starts At"
+          },
+          "local_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Local Date"
+          },
+          "local_time": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+            "title": "Local Time",
+            "examples": ["09:30"]
+          },
+          "center": {
+            "$ref": "#/components/schemas/AppointmentCenter"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "donation_type",
+          "starts_at",
+          "local_date",
+          "local_time",
+          "center"
+        ],
+        "title": "Appointment"
+      },
+      "AppointmentCenter": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          }
+        },
+        "type": "object",
+        "required": ["id", "name", "address", "region_id"],
+        "title": "AppointmentCenter"
+      },
+      "AppointmentResponse": {
+        "properties": {
+          "appointment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Appointment"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["appointment"],
+        "title": "AppointmentResponse"
+      },
+      "BloodGroup": {
+        "type": "string",
+        "enum": ["1+", "1-", "2+", "2-", "3+", "3-", "4+", "4-"],
+        "title": "BloodGroup",
+        "description": "Группа крови и резус"
+      },
+      "BloodInfo": {
+        "properties": {
+          "group": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BloodGroup"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kell": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": ["K+", "K-"]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kell"
+          },
+          "phenotype": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phenotype",
+            "examples": ["CcDee"]
+          },
+          "donor_code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{4}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Donor Code",
+            "examples": ["1234-5678"]
+          }
+        },
+        "type": "object",
+        "required": ["group", "kell", "phenotype", "donor_code"],
+        "title": "BloodInfo"
+      },
+      "BookingCenter": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "photo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photo Url"
+          },
+          "free_slots": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Free Slots"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Km"
+          },
+          "group_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StockStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "address",
+          "lat",
+          "lon",
+          "photo_url",
+          "free_slots",
+          "distance_km",
+          "group_status"
+        ],
+        "title": "BookingCenter"
+      },
+      "BookingDates": {
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date",
+            "title": "From"
+          },
+          "to": {
+            "type": "string",
+            "format": "date",
+            "title": "To"
+          },
+          "earliest_allowed": {
+            "type": "string",
+            "format": "date",
+            "title": "Earliest Allowed"
+          },
+          "first_available": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Available"
+          },
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/BookingDay"
+            },
+            "type": "array",
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "earliest_allowed",
+          "first_available",
+          "days"
+        ],
+        "title": "BookingDates"
+      },
+      "BookingDay": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          }
+        },
+        "type": "object",
+        "required": ["date", "available"],
+        "title": "BookingDay"
+      },
+      "BookingSlots": {
+        "properties": {
+          "center": {
+            "$ref": "#/components/schemas/SlotsCenter"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/SlotGroup"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": ["center", "date", "groups"],
+        "title": "BookingSlots"
+      },
+      "Donation": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "donation_type": {
+            "$ref": "#/components/schemas/DonationType"
+          },
+          "donated_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Donated On"
+          },
+          "center_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Center Name"
+          }
+        },
+        "type": "object",
+        "required": ["id", "donation_type", "donated_on", "center_name"],
+        "title": "Donation"
+      },
+      "DonationHistory": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total"
+          },
+          "years": {
+            "items": {
+              "$ref": "#/components/schemas/DonationYear"
+            },
+            "type": "array",
+            "title": "Years"
+          }
+        },
+        "type": "object",
+        "required": ["total", "years"],
+        "title": "DonationHistory"
+      },
+      "DonationType": {
+        "type": "string",
+        "enum": ["whole_blood", "plasma"],
+        "title": "DonationType",
+        "description": "Вид донации: цельная кровь или плазма."
+      },
+      "DonationYear": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Donation"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": ["year", "count", "items"],
+        "title": "DonationYear"
+      },
+      "Eligibility": {
+        "properties": {
+          "next_allowed": {
+            "$ref": "#/components/schemas/NextAllowed"
+          },
+          "interval_active": {
+            "$ref": "#/components/schemas/IntervalActive"
+          }
+        },
+        "type": "object",
+        "required": ["next_allowed", "interval_active"],
+        "title": "Eligibility"
+      },
+      "ErrorBody": {
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/ErrorCode"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "fields": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fields"
+          }
+        },
+        "type": "object",
+        "required": ["code", "message", "fields"],
+        "title": "ErrorBody"
+      },
+      "ErrorCode": {
+        "type": "string",
+        "enum": [
+          "unauthorized",
+          "not_found",
+          "validation_error",
+          "slot_not_found",
+          "slot_taken",
+          "active_exists",
+          "interval_not_passed",
+          "personal_data_incomplete",
+          "appointment_not_found",
+          "appointment_not_active",
+          "demo_disabled",
+          "internal_error"
+        ],
+        "title": "ErrorCode"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorBody"
+          }
+        },
+        "type": "object",
+        "required": ["error"],
+        "title": "ErrorResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Health": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": ["status"],
+        "title": "Health"
+      },
+      "Honorary": {
+        "properties": {
+          "whole": {
+            "$ref": "#/components/schemas/HonoraryCounter"
+          },
+          "plasma": {
+            "$ref": "#/components/schemas/HonoraryCounter"
+          },
+          "mixed": {
+            "$ref": "#/components/schemas/HonoraryMixed"
+          },
+          "achieved": {
+            "type": "boolean",
+            "title": "Achieved"
+          },
+          "eta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HonoraryEta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["whole", "plasma", "mixed", "achieved", "eta"],
+        "title": "Honorary"
+      },
+      "HonoraryCounter": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Count"
+          },
+          "goal": {
+            "type": "integer",
+            "title": "Goal"
+          }
+        },
+        "type": "object",
+        "required": ["count", "goal"],
+        "title": "HonoraryCounter"
+      },
+      "HonoraryEta": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "years": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Years"
+          },
+          "months": {
+            "type": "integer",
+            "maximum": 11.0,
+            "minimum": 0.0,
+            "title": "Months"
+          }
+        },
+        "type": "object",
+        "required": ["date", "years", "months"],
+        "title": "HonoraryEta"
+      },
+      "HonoraryMixed": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Count"
+          },
+          "goal": {
+            "type": "integer",
+            "enum": [40, 60],
+            "title": "Goal"
+          },
+          "whole_needed_for_40": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Whole Needed For 40"
+          }
+        },
+        "type": "object",
+        "required": ["count", "goal", "whole_needed_for_40"],
+        "title": "HonoraryMixed"
+      },
+      "IntervalActive": {
+        "properties": {
+          "whole_blood": {
+            "type": "boolean",
+            "title": "Whole Blood"
+          },
+          "plasma": {
+            "type": "boolean",
+            "title": "Plasma"
+          }
+        },
+        "type": "object",
+        "required": ["whole_blood", "plasma"],
+        "title": "IntervalActive"
+      },
+      "Level": {
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/LevelCode"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "threshold": {
+            "type": "integer",
+            "title": "Threshold"
+          },
+          "next": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NextLevel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "is_max": {
+            "type": "boolean",
+            "title": "Is Max"
+          }
+        },
+        "type": "object",
+        "required": ["code", "name", "threshold", "next", "is_max"],
+        "title": "Level"
+      },
+      "LevelCode": {
+        "type": "string",
+        "enum": [
+          "future_donor",
+          "novice",
+          "active",
+          "experienced",
+          "mentor",
+          "legend"
+        ],
+        "title": "LevelCode"
+      },
+      "LocateRegionResponse": {
+        "properties": {
+          "region": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Region"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["region"],
+        "title": "LocateRegionResponse"
+      },
+      "MapRegion": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "statuses": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/StockStatus"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/BloodGroup"
+            },
+            "type": "object",
+            "title": "Statuses"
+          },
+          "worst": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StockStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["code", "statuses", "worst"],
+        "title": "MapRegion"
+      },
+      "MapStatus": {
+        "properties": {
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "regions": {
+            "items": {
+              "$ref": "#/components/schemas/MapRegion"
+            },
+            "type": "array",
+            "title": "Regions"
+          }
+        },
+        "type": "object",
+        "required": ["updated_at", "regions"],
+        "title": "MapStatus"
+      },
+      "Me": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "first_name": {
+            "type": "string",
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Name"
+          },
+          "photo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photo Url"
+          },
+          "onboarding_completed": {
+            "type": "boolean",
+            "title": "Onboarding Completed"
+          },
+          "blood": {
+            "$ref": "#/components/schemas/BloodInfo"
+          },
+          "referrals_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Referrals Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "first_name",
+          "last_name",
+          "photo_url",
+          "onboarding_completed",
+          "blood",
+          "referrals_count"
+        ],
+        "title": "Me"
+      },
+      "NextAllowed": {
+        "properties": {
+          "whole_blood": {
+            "type": "string",
+            "format": "date",
+            "title": "Whole Blood"
+          },
+          "plasma": {
+            "type": "string",
+            "format": "date",
+            "title": "Plasma"
+          }
+        },
+        "type": "object",
+        "required": ["whole_blood", "plasma"],
+        "title": "NextAllowed"
+      },
+      "NextLevel": {
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/LevelCode"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "threshold": {
+            "type": "integer",
+            "title": "Threshold"
+          },
+          "remaining": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Remaining"
+          }
+        },
+        "type": "object",
+        "required": ["code", "name", "threshold", "remaining"],
+        "title": "NextLevel"
+      },
+      "OnboardingRequest": {
+        "properties": {
+          "consent": {
+            "type": "boolean",
+            "const": true,
+            "title": "Consent"
+          }
+        },
+        "type": "object",
+        "required": ["consent"],
+        "title": "OnboardingRequest"
+      },
+      "PersonalData": {
+        "properties": {
+          "last_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Name"
+          },
+          "first_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Name"
+          },
+          "middle_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Middle Name"
+          },
+          "passport_series": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passport Series"
+          },
+          "passport_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passport Number"
+          },
+          "passport_issued_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passport Issued By"
+          },
+          "passport_division_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passport Division Code"
+          },
+          "oms_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oms Number"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "is_demo": {
+            "type": "boolean",
+            "title": "Is Demo"
+          },
+          "missing_fields": {
+            "items": {
+              "$ref": "#/components/schemas/PersonalDataField"
+            },
+            "type": "array",
+            "title": "Missing Fields"
+          }
+        },
+        "type": "object",
+        "required": [
+          "last_name",
+          "first_name",
+          "middle_name",
+          "passport_series",
+          "passport_number",
+          "passport_issued_by",
+          "passport_division_code",
+          "oms_number",
+          "phone",
+          "email",
+          "is_demo",
+          "missing_fields"
+        ],
+        "title": "PersonalData"
+      },
+      "PersonalDataField": {
+        "type": "string",
+        "enum": [
+          "last_name",
+          "first_name",
+          "middle_name",
+          "passport_series",
+          "passport_number",
+          "passport_issued_by",
+          "passport_division_code",
+          "oms_number",
+          "phone",
+          "email"
+        ],
+        "title": "PersonalDataField"
+      },
+      "PersonalDataInput": {
+        "properties": {
+          "last_name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[A-Za-zА-Яа-яЁё-]+$",
+            "title": "Last Name"
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[A-Za-zА-Яа-яЁё-]+$",
+            "title": "First Name"
+          },
+          "middle_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Middle Name"
+          },
+          "passport_series": {
+            "type": "string",
+            "pattern": "^\\d{4}$",
+            "title": "Passport Series",
+            "examples": ["4510"]
+          },
+          "passport_number": {
+            "type": "string",
+            "pattern": "^\\d{6}$",
+            "title": "Passport Number",
+            "examples": ["123456"]
+          },
+          "passport_issued_by": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Passport Issued By"
+          },
+          "passport_division_code": {
+            "type": "string",
+            "pattern": "^\\d{3}-\\d{3}$",
+            "title": "Passport Division Code",
+            "examples": ["770-001"]
+          },
+          "oms_number": {
+            "type": "string",
+            "pattern": "^\\d{16}$",
+            "title": "Oms Number",
+            "examples": ["1234567890123456"]
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^\\+7\\d{10}$",
+            "title": "Phone",
+            "examples": ["+79001234567"]
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+            "title": "Email",
+            "examples": ["ivanov@mail.ru"]
+          }
+        },
+        "type": "object",
+        "required": [
+          "last_name",
+          "first_name",
+          "passport_series",
+          "passport_number",
+          "passport_issued_by",
+          "passport_division_code",
+          "oms_number",
+          "phone",
+          "email"
+        ],
+        "title": "PersonalDataInput"
+      },
+      "Progress": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total"
+          },
+          "level": {
+            "$ref": "#/components/schemas/Level"
+          },
+          "honorary": {
+            "$ref": "#/components/schemas/Honorary"
+          }
+        },
+        "type": "object",
+        "required": ["total", "level", "honorary"],
+        "title": "Progress"
+      },
+      "Referrals": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Count"
+          },
+          "link": {
+            "type": "string",
+            "title": "Link"
+          }
+        },
+        "type": "object",
+        "required": ["count", "link"],
+        "title": "Referrals"
+      },
+      "Region": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "has_centers": {
+            "type": "boolean",
+            "title": "Has Centers"
+          }
+        },
+        "type": "object",
+        "required": ["id", "code", "name", "has_centers"],
+        "title": "Region"
+      },
+      "Slot": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Starts At"
+          },
+          "local_time": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+            "title": "Local Time",
+            "examples": ["09:30"]
+          },
+          "is_free": {
+            "type": "boolean",
+            "title": "Is Free"
+          }
+        },
+        "type": "object",
+        "required": ["id", "starts_at", "local_time", "is_free"],
+        "title": "Slot"
+      },
+      "SlotGroup": {
+        "properties": {
+          "period": {
+            "$ref": "#/components/schemas/SlotPeriod"
+          },
+          "slots": {
+            "items": {
+              "$ref": "#/components/schemas/Slot"
+            },
+            "type": "array",
+            "title": "Slots"
+          }
+        },
+        "type": "object",
+        "required": ["period", "slots"],
+        "title": "SlotGroup"
+      },
+      "SlotPeriod": {
+        "type": "string",
+        "enum": ["morning", "day", "evening"],
+        "title": "SlotPeriod"
+      },
+      "SlotRequest": {
+        "properties": {
+          "slot_id": {
+            "type": "integer",
+            "title": "Slot Id"
+          }
+        },
+        "type": "object",
+        "required": ["slot_id"],
+        "title": "SlotRequest"
+      },
+      "SlotsCenter": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          }
+        },
+        "type": "object",
+        "required": ["id", "name", "address"],
+        "title": "SlotsCenter"
+      },
+      "StockStatus": {
+        "type": "string",
+        "enum": ["urgent", "low", "enough"],
+        "title": "StockStatus",
+        "description": "Запас крови группы: нет строки в таблице — «нет данных»."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

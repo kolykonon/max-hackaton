@@ -10,3 +10,4 @@ __pycache__
 node_modules
 .claude
 .claude-flow
+.ruff_cache
