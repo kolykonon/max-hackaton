@@ -65,7 +65,9 @@ async def send_appointment_confirmed(client: MaxBotClient, max_user_id: int) -> 
         await client.send_message(
             max_user_id,
             texts.CONFIRMED_MESSAGE,
-            attachments=link_keyboard(texts.CONFIRMED_BUTTON, start_param="appointment"),
+            attachments=link_keyboard(
+                texts.CONFIRMED_BUTTON, start_param="appointment"
+            ),
         )
     except Exception:
         log.exception("Не удалось отправить подтверждение user_id=%s", max_user_id)

@@ -7,3 +7,5 @@ __pycache__
 .vscode
 .python-version
 .env
+node_modules
+.ruff_cache
