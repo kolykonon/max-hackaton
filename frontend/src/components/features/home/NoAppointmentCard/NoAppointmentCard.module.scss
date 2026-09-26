@@ -1,0 +1,16 @@
+.no-appointment-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  align-items: center;
+  text-align: center;
+
+  &__title {
+    display: block;
+    margin-top: $space-xs;
+  }
+
+  &__hint {
+    display: block;
+  }
+}

@@ -1,0 +1,31 @@
+.contraindications-sheet__source {
+  display: block;
+}
+
+.wait-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  &__head {
+    padding: 0 $space-xs $space-xs 0;
+    color: $color-text-tertiary;
+    font-weight: normal;
+    text-align: left;
+    @include text(description);
+
+    &:last-child {
+      width: 45%;
+    }
+  }
+
+  &__row {
+    border-top: 1px solid $color-divider;
+  }
+
+  &__cell {
+    padding: $space-s $space-xs $space-s 0;
+    color: $color-text;
+    vertical-align: top;
+    @include text(detail);
+  }
+}

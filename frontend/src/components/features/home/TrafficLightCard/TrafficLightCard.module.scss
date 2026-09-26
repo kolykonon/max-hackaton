@@ -1,0 +1,31 @@
+.traffic-light-card {
+  overflow: hidden;
+
+  &__map {
+    height: 26vh;
+    min-height: 150px;
+  }
+
+  &__badge {
+    position: absolute;
+    top: $space-s;
+    right: $space-s;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+    padding: $space-m;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__chevron {
+    color: $color-text-tertiary;
+  }
+}

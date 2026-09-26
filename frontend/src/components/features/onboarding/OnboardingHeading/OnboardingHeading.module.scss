@@ -1,0 +1,19 @@
+.onboarding-heading {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  text-align: center;
+
+  &__title {
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  &__text {
+    font-size: 17px;
+    line-height: 24px;
+    text-wrap: pretty;
+  }
+}

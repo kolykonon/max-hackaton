@@ -1,0 +1,23 @@
+.summary-card {
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2xs;
+    padding: $space-m $space-l;
+
+    & + & {
+      border-top: 1px solid $color-divider;
+    }
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__value,
+  &__caption {
+    display: block;
+  }
+}

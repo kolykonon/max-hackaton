@@ -1,0 +1,19 @@
+.appointment-summary {
+  display: flex;
+  gap: $space-m;
+  align-items: flex-start;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+
+    > * {
+      display: block;
+    }
+  }
+
+  &__center {
+    margin-top: $space-xs;
+  }
+}

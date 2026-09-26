@@ -1,0 +1,49 @@
+.card {
+  display: block;
+  width: 100%;
+  border-radius: $radius-l;
+  text-align: left;
+
+  &--pressable {
+    @include reset-button;
+    @include pressable;
+    @include focus-ring;
+    border-radius: $radius-l;
+  }
+
+  &--outlined {
+    @include card;
+  }
+
+  &--filled {
+    background: $color-bg-secondary;
+    border: 1px solid transparent;
+  }
+
+  &--selected {
+    @include card;
+    border-color: $color-accent;
+    @include soft-bg($color-tone-blue, 5%);
+  }
+
+  &--promo {
+    border: 1px solid color-mix(in srgb, #{$color-tone-yellow} 20%, transparent);
+    @include soft-bg($color-tone-yellow, 7%);
+  }
+
+  &--padding-none {
+    padding: 0;
+  }
+
+  &--padding-s {
+    padding: $space-s;
+  }
+
+  &--padding-m {
+    padding: $space-m;
+  }
+
+  &--padding-l {
+    padding: $space-l;
+  }
+}

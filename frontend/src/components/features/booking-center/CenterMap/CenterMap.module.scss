@@ -1,0 +1,43 @@
+.center-map {
+  flex: 1;
+  min-height: 300px;
+
+  &__pin {
+    @include reset-button;
+    position: absolute;
+    cursor: pointer;
+    transform: translate(-50%, -100%);
+    transition: transform $transition-fast;
+    -webkit-tap-highlight-color: transparent;
+    filter: drop-shadow(0 2px 3px rgb(0 0 0 / 25%));
+
+    &--urgent {
+      color: $color-status-urgent;
+    }
+
+    &--low {
+      color: $color-status-low;
+    }
+
+    &--enough {
+      color: $color-status-enough;
+    }
+
+    &--none {
+      color: $color-status-none;
+    }
+
+    &--selected {
+      z-index: 1;
+    }
+  }
+
+  &__locate {
+    position: absolute;
+    top: $space-s;
+    right: $space-s;
+    border-radius: $radius-round;
+    box-shadow: $shadow-floating;
+    color: $color-accent;
+  }
+}

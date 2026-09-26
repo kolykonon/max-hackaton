@@ -1,0 +1,25 @@
+.data-field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2xs;
+  min-width: 0;
+
+  &__label {
+    display: block;
+  }
+
+  &__input {
+    border: 1px solid transparent;
+    border-radius: $radius-m;
+    transition: border-color $transition-fast;
+  }
+
+  &--invalid &__input {
+    border-color: $color-negative;
+  }
+
+  &__error {
+    display: block;
+    color: $color-text-negative;
+  }
+}

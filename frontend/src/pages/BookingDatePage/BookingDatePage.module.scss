@@ -1,0 +1,16 @@
+.booking-date__hint {
+  display: flex;
+  gap: $space-s;
+  align-items: flex-start;
+  margin-top: $space-xs;
+  color: $color-text-secondary;
+}
+
+.booking-date__empty {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  align-items: center;
+  margin-top: $space-s;
+  text-align: center;
+}

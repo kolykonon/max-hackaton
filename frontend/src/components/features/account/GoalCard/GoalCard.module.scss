@@ -1,0 +1,27 @@
+.goal-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+
+  &__head {
+    display: flex;
+    gap: $space-s;
+    align-items: flex-start;
+  }
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    color: $color-text-tertiary;
+  }
+
+  &__hint {
+    display: block;
+  }
+}

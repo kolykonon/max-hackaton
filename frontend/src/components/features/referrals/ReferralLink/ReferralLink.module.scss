@@ -1,0 +1,29 @@
+.referral-link {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+  padding: $space-s $space-m;
+  border-radius: $radius-l;
+  background: $color-bg-secondary;
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+
+    > span {
+      display: block;
+    }
+  }
+
+  &__url {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__copy {
+    color: $color-accent;
+  }
+}

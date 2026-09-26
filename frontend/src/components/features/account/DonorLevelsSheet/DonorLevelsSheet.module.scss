@@ -1,0 +1,100 @@
+.donor-levels-sheet {
+  &__zero {
+    display: block;
+    margin-bottom: $space-s;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    padding-top: $space-xs;
+  }
+}
+
+.donor-level-row {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+  padding: $space-s;
+  border: 1px solid transparent;
+  border-radius: $radius-l;
+  background: $color-bg-secondary;
+
+  &--current {
+    border-color: color-mix(in srgb, #{$color-tone-blue} 30%, transparent);
+    @include soft-bg($color-tone-blue, 8%);
+  }
+
+  &__badge {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: $radius-round;
+    color: #fff;
+
+    &--0 {
+      background: #d77b5c;
+    }
+
+    &--1 {
+      background: #9aa3b2;
+    }
+
+    &--2 {
+      background: #f2b61c;
+    }
+
+    &--3 {
+      background: $color-tone-blue;
+    }
+
+    &--4 {
+      background: $color-tone-purple;
+    }
+  }
+
+  &--locked &__badge {
+    background: var(--button-secondary);
+    color: $color-text-tertiary;
+  }
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &--locked &__text {
+    opacity: 0.7;
+  }
+
+  &__status {
+    display: inline-flex;
+    flex-shrink: 0;
+    gap: $space-2xs;
+    align-items: center;
+    padding: $space-2xs $space-s;
+    border-radius: $radius-round;
+    @include text(description, description-strong);
+  }
+
+  &--done &__status {
+    color: #1f9a45;
+    @include soft-bg($color-tone-green, 12%);
+  }
+
+  &--current &__status {
+    color: $color-text-themed;
+    @include soft-bg($color-tone-blue, 12%);
+  }
+
+  &--locked &__status {
+    color: $color-text-secondary;
+    background: $color-bg-tertiary;
+  }
+}

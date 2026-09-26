@@ -1,0 +1,59 @@
+.center-card {
+  display: flex;
+  gap: $space-s;
+  align-items: flex-start;
+
+  &__info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-2xs;
+    min-width: 0;
+  }
+
+  &__name,
+  &__meta {
+    display: block;
+  }
+
+  &__address,
+  &__status {
+    display: flex;
+    gap: $space-2xs;
+    align-items: center;
+    color: $color-text-secondary;
+  }
+
+  &__status {
+    gap: $space-xs;
+
+    &--urgent {
+      color: $color-status-urgent;
+    }
+
+    &--low {
+      color: #d18b00;
+    }
+
+    &--enough {
+      color: #1f9a45;
+    }
+  }
+
+  &__radio {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: 2px solid $color-border;
+    border-radius: $radius-round;
+    color: $color-text-inverse;
+
+    &--checked {
+      border-color: $color-accent;
+      background: $color-accent;
+    }
+  }
+}

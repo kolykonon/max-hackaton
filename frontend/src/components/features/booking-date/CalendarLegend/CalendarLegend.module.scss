@@ -1,0 +1,30 @@
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-s $space-l;
+
+  &__item {
+    display: flex;
+    gap: $space-xs;
+    align-items: center;
+  }
+
+  &__swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: $radius-xs;
+
+    &--available {
+      @include soft-bg($color-tone-blue, 10%);
+    }
+
+    &--unavailable {
+      background: $color-bg-secondary;
+      box-shadow: inset 0 0 0 1px $color-divider;
+    }
+
+    &--today {
+      box-shadow: inset 0 0 0 2px $color-accent;
+    }
+  }
+}

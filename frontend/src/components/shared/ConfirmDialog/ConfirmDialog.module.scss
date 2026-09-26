@@ -1,0 +1,54 @@
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.confirm-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: $z-overlay;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-xl;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: $color-bg-overlay;
+  }
+
+  &__window {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    width: 100%;
+    max-width: 340px;
+    padding: $space-xl $space-l $space-l;
+    border-radius: $radius-xl;
+    background: $color-bg;
+    box-shadow: $shadow-floating;
+    text-align: center;
+    animation: dialog-in $transition-fast;
+  }
+
+  &__title,
+  &__text {
+    display: block;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    margin-top: $space-m;
+  }
+}

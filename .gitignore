@@ -8,4 +8,6 @@ __pycache__
 .python-version
 .env
 node_modules
+.claude
+.claude-flow
 .ruff_cache

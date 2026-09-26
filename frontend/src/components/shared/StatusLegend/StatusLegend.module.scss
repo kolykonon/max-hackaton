@@ -1,0 +1,11 @@
+.status-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-m;
+
+  &__item {
+    display: flex;
+    gap: $space-xs;
+    align-items: center;
+  }
+}

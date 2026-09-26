@@ -1,0 +1,27 @@
+.selection-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-s;
+  align-items: center;
+  padding: $space-s $space-m;
+  border-radius: $radius-l;
+  background: $color-bg-secondary;
+
+  &__item {
+    display: inline-flex;
+    white-space: nowrap;
+    gap: $space-xs;
+    align-items: center;
+
+    & + &::before {
+      content: '·';
+      margin-right: $space-2xs;
+      color: $color-text-tertiary;
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    color: $color-text-secondary;
+  }
+}

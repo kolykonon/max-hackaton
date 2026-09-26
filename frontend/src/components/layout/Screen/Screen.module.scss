@@ -1,0 +1,42 @@
+.screen {
+  // Где висят уведомления (Toast): над нижним меню, над кнопками или у края экрана
+  --toast-offset: #{$space-xl};
+
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: $color-bg;
+
+  &--with-tabbar {
+    --toast-offset: calc(#{$tabbar-height} + #{$space-xl});
+
+    padding-bottom: calc(#{$tabbar-height} + env(safe-area-inset-bottom));
+  }
+
+  &--with-footer {
+    --toast-offset: calc(#{$control-height} + #{$space-2xl} + #{$space-m});
+  }
+
+  &__header {
+    flex-shrink: 0;
+    padding-top: env(safe-area-inset-top);
+  }
+
+  &__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-s;
+    overflow-y: auto;
+    padding: $space-s $page-gutter $space-xl;
+    overscroll-behavior: contain;
+
+    &--flush {
+      padding: 0;
+    }
+
+    &--centered {
+      justify-content: center;
+    }
+  }
+}

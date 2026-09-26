@@ -1,0 +1,26 @@
+.info-row {
+  display: flex;
+  gap: $space-s;
+  align-items: flex-start;
+
+  &--single {
+    align-items: center;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+    min-width: 0;
+    padding-top: $space-3xs;
+  }
+
+  &--single &__text {
+    padding-top: 0;
+  }
+
+  &__title,
+  &__description {
+    display: block;
+  }
+}

@@ -1,0 +1,13 @@
+.restrictions-sheet {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+    padding-top: $space-xs;
+  }
+
+  &__summary {
+    display: block;
+    margin-top: $space-m;
+  }
+}

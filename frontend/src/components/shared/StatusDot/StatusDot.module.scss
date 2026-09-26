@@ -1,0 +1,36 @@
+.status-dot {
+  display: inline-block;
+  flex-shrink: 0;
+  border-radius: $radius-round;
+
+  &--s {
+    width: 12px;
+    height: 12px;
+  }
+
+  &--m {
+    width: 16px;
+    height: 16px;
+  }
+
+  &--l {
+    width: 28px;
+    height: 28px;
+  }
+
+  &--urgent {
+    background: $color-status-urgent;
+  }
+
+  &--low {
+    background: $color-status-low;
+  }
+
+  &--enough {
+    background: $color-status-enough;
+  }
+
+  &--none {
+    background: $color-status-none;
+  }
+}

@@ -1,0 +1,16 @@
+.progress-segments {
+  display: flex;
+  gap: $space-xs;
+
+  &__item {
+    flex: 1;
+    height: 5px;
+    border-radius: $radius-round;
+    background: var(--button-secondary);
+    transition: background $transition-base;
+
+    &--done {
+      background: $color-accent;
+    }
+  }
+}

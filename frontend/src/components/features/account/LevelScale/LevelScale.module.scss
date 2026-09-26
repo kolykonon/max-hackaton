@@ -1,0 +1,55 @@
+.level-scale {
+  display: flex;
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+
+    &:not(:last-child) {
+      flex: 1;
+    }
+  }
+
+  &__track {
+    display: flex;
+    align-items: center;
+    height: 20px;
+  }
+
+  &__point {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: $radius-round;
+    background: $color-status-none;
+
+    &--done {
+      background: $color-accent;
+    }
+
+    &--current {
+      width: 20px;
+      height: 20px;
+      border: 4px solid color-mix(in srgb, #{$color-tone-blue} 25%, #fff);
+    }
+  }
+
+  &__line {
+    flex: 1;
+    height: 4px;
+    margin: 0 -1px;
+    background: var(--button-secondary);
+
+    &--done {
+      background: $color-accent;
+    }
+  }
+
+  &__value {
+    width: 20px;
+    color: $color-text-secondary;
+    text-align: center;
+    @include text(detail);
+  }
+}

@@ -1,0 +1,45 @@
+.donation-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  &--framed {
+    border-radius: $radius-round;
+  }
+
+  &--whole_blood#{&}--framed {
+    @include soft-bg($color-drop-blood, 12%);
+  }
+
+  &--plasma#{&}--framed {
+    @include soft-bg($color-drop-plasma, 18%);
+  }
+
+  &--mixed#{&}--framed {
+    @include soft-bg($color-drop-plasma, 14%);
+  }
+
+  &--whole_blood &__drop {
+    fill: $color-drop-blood;
+  }
+
+  &--plasma &__drop {
+    fill: $color-drop-plasma;
+  }
+
+  &__stop-blood {
+    stop-color: $color-drop-blood;
+  }
+
+  &__stop-plasma {
+    stop-color: $color-drop-plasma;
+  }
+
+  &__shine {
+    fill: none;
+    stroke: rgb(255 255 255 / 55%);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+}

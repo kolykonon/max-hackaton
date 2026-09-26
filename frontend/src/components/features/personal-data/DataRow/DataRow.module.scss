@@ -1,0 +1,18 @@
+.data-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 42%) 1fr;
+  gap: $space-s;
+
+  &__label,
+  &__value {
+    display: block;
+  }
+
+  &__value {
+    overflow-wrap: anywhere;
+
+    &--missing {
+      color: $color-text-negative;
+    }
+  }
+}

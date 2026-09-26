@@ -1,0 +1,35 @@
+.zone-panel {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+  padding: $space-xs $page-gutter $space-xl;
+  border-radius: $radius-sheet $radius-sheet 0 0;
+  background: $color-bg;
+  box-shadow: 0 -4px 20px rgb(0 0 0 / 6%);
+
+  &__handle {
+    width: 40px;
+    height: 5px;
+    margin: 0 auto;
+    border-radius: $radius-round;
+    background: $color-border;
+  }
+
+  &__head {
+    display: flex;
+    gap: $space-s;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__titles {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2xs;
+  }
+
+  &__empty {
+    display: block;
+    text-align: center;
+  }
+}

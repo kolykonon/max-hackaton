@@ -1,0 +1,15 @@
+.error-state {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: $space-m;
+  align-items: center;
+  justify-content: center;
+  padding: $space-3xl $space-m;
+  text-align: center;
+
+  &--compact {
+    flex: none;
+    padding: $space-m 0;
+  }
+}

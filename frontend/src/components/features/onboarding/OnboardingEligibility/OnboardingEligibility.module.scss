@@ -1,0 +1,11 @@
+.onboarding-eligibility {
+  display: flex;
+  flex-direction: column;
+  gap: $space-l;
+  padding-top: $space-xs;
+
+  &__disclaimer {
+    display: block;
+    text-align: center;
+  }
+}

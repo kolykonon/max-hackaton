@@ -1,0 +1,15 @@
+.slot-group {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+
+  & + & {
+    margin-top: $space-m;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $space-xs;
+  }
+}

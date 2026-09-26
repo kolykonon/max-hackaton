@@ -1,0 +1,57 @@
+.donation-history-sheet__empty {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+  align-items: center;
+  padding: $space-3xl 0;
+}
+
+.history-year {
+  & + & {
+    margin-top: $space-l;
+  }
+
+  &__title {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: block;
+    padding: $space-xs 0;
+    background: $color-bg;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+    margin-top: $space-xs;
+  }
+}
+
+.history-item {
+  display: flex;
+  gap: $space-m;
+  align-items: flex-start;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+    min-width: 0;
+
+    > span {
+      display: block;
+    }
+  }
+
+  &__center {
+    @include line-clamp(2);
+  }
+}
+
+.donation-history-sheet__loading {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  padding-top: $space-xs;
+}

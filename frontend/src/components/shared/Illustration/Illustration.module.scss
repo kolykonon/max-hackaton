@@ -1,0 +1,28 @@
+.illustration {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  width: 100%;
+  min-height: 96px;
+
+  &__image {
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: $radius-round;
+    color: $color-drop-blood;
+    @include soft-bg($color-drop-blood, 8%);
+  }
+
+  &__icon {
+    width: 45%;
+    height: 45%;
+  }
+}

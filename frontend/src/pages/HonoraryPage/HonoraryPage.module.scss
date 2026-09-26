@@ -1,0 +1,20 @@
+.honorary-page {
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+
+    & + & {
+      margin-top: $space-l;
+    }
+
+    > span {
+      display: block;
+    }
+  }
+
+  &__footnote {
+    display: block;
+    margin-top: $space-l;
+  }
+}

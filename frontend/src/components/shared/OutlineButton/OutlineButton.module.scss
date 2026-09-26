@@ -1,0 +1,29 @@
+.outline-button {
+  --MaxUi-Button_background: transparent;
+  --MaxUi-Button_background-active: #{$color-bg-tertiary};
+
+  padding-right: $space-s;
+  padding-left: $space-s;
+  border: 1.5px solid currentcolor;
+
+  &:hover {
+    --MaxUi-Button_background: #{$color-bg-tertiary};
+  }
+
+  &--themed {
+    --MaxUi-Button_foreground: #{$color-text-themed};
+
+    color: $color-text-themed;
+  }
+
+  &--negative {
+    --MaxUi-Button_foreground: #{$color-text-negative};
+
+    color: $color-text-negative;
+    border-color: color-mix(in srgb, #{$color-text-themed} 60%, transparent);
+  }
+}
+
+.outline-button__content {
+  font-size: var(--font-size-action-medium);
+}

@@ -1,0 +1,24 @@
+.map-placeholder {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #eef1ec;
+  background-image:
+    radial-gradient(circle at 50% 50%, transparent 0 22%, rgb(247 208 102 / 55%) 22.5% 23.5%, transparent 24%),
+    radial-gradient(circle at 50% 50%, transparent 0 38%, rgb(255 255 255 / 90%) 38.5% 39.5%, transparent 40%),
+    linear-gradient(35deg, transparent 49%, rgb(255 255 255 / 85%) 49.5% 50.5%, transparent 51%),
+    linear-gradient(-40deg, transparent 49%, rgb(255 255 255 / 85%) 49.5% 50.5%, transparent 51%),
+    linear-gradient(90deg, transparent 49.4%, rgb(247 208 102 / 45%) 49.6% 50.4%, transparent 50.6%),
+    radial-gradient(ellipse at 20% 80%, rgb(170 214 160 / 55%) 0 12%, transparent 13%),
+    radial-gradient(ellipse at 80% 20%, rgb(170 214 160 / 55%) 0 10%, transparent 11%),
+    radial-gradient(ellipse at 70% 75%, rgb(160 200 240 / 60%) 0 7%, transparent 8%);
+
+  &__label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: $color-text;
+    transform: translate(-50%, -50%);
+  }
+}

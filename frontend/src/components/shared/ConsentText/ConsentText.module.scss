@@ -1,0 +1,19 @@
+.consent-text {
+  display: flex;
+  flex-direction: column;
+  gap: $space-l;
+
+  &__intro {
+    display: block;
+  }
+}
+
+.consent-section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+
+  > span {
+    display: block;
+  }
+}

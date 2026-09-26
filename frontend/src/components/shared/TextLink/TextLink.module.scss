@@ -1,0 +1,21 @@
+.text-link {
+  @include reset-button;
+  @include focus-ring;
+  display: inline-flex;
+  gap: $space-3xs;
+  align-items: center;
+  color: $color-text-themed;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  @include text(detail, detail-strong);
+
+  &--underline {
+    display: inline;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+  }
+}

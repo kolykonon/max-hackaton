@@ -1,0 +1,18 @@
+.donation-type-sheet {
+  &__header {
+    display: flex;
+    gap: $space-m;
+    align-items: center;
+  }
+
+  &__progress {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-2xs;
+
+    > span {
+      display: block;
+    }
+  }
+}

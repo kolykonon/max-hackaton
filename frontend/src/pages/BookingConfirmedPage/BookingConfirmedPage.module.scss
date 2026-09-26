@@ -1,0 +1,30 @@
+.booking-confirmed {
+  &__hero {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    align-items: center;
+    padding: $space-2xl $space-m $space-s;
+    text-align: center;
+  }
+
+  &__title {
+    display: block;
+    margin-top: $space-l;
+  }
+
+  &__prep {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+    margin-top: $space-s;
+  }
+
+  &__note {
+    display: flex;
+    gap: $space-s;
+    align-items: flex-start;
+    margin-top: $space-s;
+    color: $color-text-tertiary;
+  }
+}

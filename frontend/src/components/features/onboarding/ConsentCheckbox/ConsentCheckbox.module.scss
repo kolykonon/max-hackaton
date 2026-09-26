@@ -1,0 +1,20 @@
+.consent-checkbox {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+
+  &__link {
+    @include reset-button;
+    display: inline;
+    cursor: pointer;
+    color: $color-text-themed;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  &__hint {
+    display: block;
+    padding-left: 38px;
+    color: $color-text-negative;
+  }
+}

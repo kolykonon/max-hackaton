@@ -1,0 +1,28 @@
+.tab-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $z-tabbar;
+  display: flex;
+  height: calc(#{$tabbar-height} + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid $color-divider;
+  background: $color-bg;
+
+  &__item {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-3xs;
+    align-items: center;
+    justify-content: center;
+    color: $color-text-tertiary;
+    -webkit-tap-highlight-color: transparent;
+    @include focus-ring;
+
+    &--active {
+      color: $color-text-themed;
+    }
+  }
+}

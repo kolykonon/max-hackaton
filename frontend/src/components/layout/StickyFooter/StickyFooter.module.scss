@@ -1,0 +1,19 @@
+.sticky-footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: $space-xs;
+  padding: $space-s $page-gutter;
+  background: $color-bg;
+  @include safe-bottom($space-s);
+
+  &__actions {
+    display: flex;
+    gap: $space-s;
+    align-items: center;
+
+    > * {
+      flex: 1;
+    }
+  }
+}

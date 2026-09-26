@@ -1,0 +1,23 @@
+.sheet-section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  padding: $space-l 0;
+
+  & + & {
+    border-top: 1px solid $color-divider;
+  }
+
+  &:first-child {
+    padding-top: $space-xs;
+  }
+
+  &__title,
+  &__description {
+    display: block;
+  }
+
+  &__description {
+    margin-top: -$space-xs;
+  }
+}

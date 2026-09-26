@@ -1,0 +1,14 @@
+.account-page {
+  &__honorary {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+    margin-top: $space-s;
+  }
+
+  &__goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-s;
+  }
+}
