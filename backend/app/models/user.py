@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, DateTime, Enum, ForeignKey, String
+from sqlalchemy import BigInteger, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
-from app.models.enums import BloodGroup
+from app.models.enums import BloodGroup, blood_group_enum
 from app.models.mixins import CreatedAtMixin, IDMixin
 
 
@@ -45,11 +45,7 @@ class User(Base, IDMixin, CreatedAtMixin):
     )
 
     blood_group: Mapped[BloodGroup | None] = mapped_column(
-        Enum(
-            BloodGroup,
-            name="blood_group",
-            values_callable=lambda e: [member.value for member in e],
-        ),
+        blood_group_enum,
         nullable=True,
     )
     kell: Mapped[str | None] = mapped_column(

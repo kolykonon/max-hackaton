@@ -1,10 +1,10 @@
 from datetime import date
 
-from sqlalchemy import Boolean, Date, Enum, ForeignKey, String, false
+from sqlalchemy import Boolean, Date, ForeignKey, String, false
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
-from app.models.enums import DonationType
+from app.models.enums import DonationType, donation_type_enum
 from app.models.mixins import IDMixin
 
 
@@ -19,11 +19,7 @@ class Donation(Base, IDMixin):
         index=True,
     )
     donation_type: Mapped[DonationType] = mapped_column(
-        Enum(
-            DonationType,
-            name="donation_type",
-            values_callable=lambda e: [member.value for member in e],
-        ),
+        donation_type_enum,
         nullable=False,
     )
     donated_on: Mapped[date] = mapped_column(

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import select
 
 from app.bot.handlers import send_reminder
-from app.core.db import SessionLocal
+from app.core.db import sessionmaker
 from app.integrations.max_api import MaxBotClient
 from app.models import Appointment, User
 
@@ -19,7 +19,7 @@ async def _process_due_reminders(client: MaxBotClient) -> None:
     now = datetime.now(timezone.utc)
     horizon = now + REMINDER_WINDOW
 
-    async with SessionLocal() as session:
+    async with sessionmaker() as session:
         rows = (
             await session.execute(
                 select(Appointment, User)
