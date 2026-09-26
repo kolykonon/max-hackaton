@@ -4,19 +4,15 @@
  */
 
 export interface paths {
-    "/me": {
+    "/api/v1/me": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * Текущий пользователь
-         * @description При первом запросе бэк создаёт пользователя и демо-профиль (§5.4),
-         *     обрабатывает `start_param = ref_<code>`.
-         */
-        get: operations["getMe"];
+        /** Текущий пользователь */
+        get: operations["get_me"];
         put?: never;
         post?: never;
         delete?: never;
@@ -25,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/me/onboarding": {
+    "/api/v1/me/onboarding": {
         parameters: {
             query?: never;
             header?: never;
@@ -34,15 +30,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Завершить онбординг и дать согласие на обработку ПД */
-        post: operations["completeOnboarding"];
+        /** Завершить онбординг */
+        post: operations["complete_onboarding"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/me/personal-data": {
+    "/api/v1/me/personal-data": {
         parameters: {
             query?: never;
             header?: never;
@@ -50,25 +46,9 @@ export interface paths {
             cookie?: never;
         };
         /** Личные данные */
-        get: operations["getPersonalData"];
-        /**
-         * Сохранить личные данные
-         * @description Значения передаются без маски. Ошибки валидации — 422 с `fields`,
-         *     тексты из `confirming.md`:
-         *
-         *     | Поле | Текст ошибки |
-         *     |------|--------------|
-         *     | last_name | Введите фамилию |
-         *     | first_name | Введите имя |
-         *     | passport_series | Серия — 4 цифры |
-         *     | passport_number | Номер — 6 цифр |
-         *     | passport_issued_by | Укажите, кем выдан паспорт |
-         *     | passport_division_code | Код подразделения — 6 цифр |
-         *     | oms_number | Номер полиса — 16 цифр |
-         *     | phone | Введите номер телефона полностью |
-         *     | email | Проверьте адрес почты |
-         */
-        put: operations["updatePersonalData"];
+        get: operations["get_personal_data"];
+        /** Сохранить личные данные */
+        put: operations["update_personal_data"];
         post?: never;
         delete?: never;
         options?: never;
@@ -76,15 +56,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/me/eligibility": {
+    "/api/v1/me/eligibility": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Ближайшие разрешённые даты донации (§5.1) */
-        get: operations["getEligibility"];
+        /** Ближайшие разрешённые даты донации */
+        get: operations["get_eligibility"];
         put?: never;
         post?: never;
         delete?: never;
@@ -93,15 +73,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/me/progress": {
+    "/api/v1/me/progress": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Уровень донора и путь к званию «Почётный донор России» (§5.2, §5.3) */
-        get: operations["getProgress"];
+        /** Уровень донора и путь к званию */
+        get: operations["get_progress"];
         put?: never;
         post?: never;
         delete?: never;
@@ -110,15 +90,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/me/donations": {
+    "/api/v1/me/donations": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** История донаций, по годам от новых к старым */
-        get: operations["getDonations"];
+        /** История донаций */
+        get: operations["get_donations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -127,7 +107,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/me/referrals": {
+    "/api/v1/me/referrals": {
         parameters: {
             query?: never;
             header?: never;
@@ -135,7 +115,7 @@ export interface paths {
             cookie?: never;
         };
         /** Рефералы */
-        get: operations["getReferrals"];
+        get: operations["get_referrals"];
         put?: never;
         post?: never;
         delete?: never;
@@ -144,7 +124,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/regions": {
+    "/api/v1/regions": {
         parameters: {
             query?: never;
             header?: never;
@@ -152,7 +132,7 @@ export interface paths {
             cookie?: never;
         };
         /** Все субъекты РФ по алфавиту */
-        get: operations["listRegions"];
+        get: operations["list_regions"];
         put?: never;
         post?: never;
         delete?: never;
@@ -161,7 +141,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/regions/locate": {
+    "/api/v1/regions/locate": {
         parameters: {
             query?: never;
             header?: never;
@@ -169,7 +149,7 @@ export interface paths {
             cookie?: never;
         };
         /** Регион по координатам */
-        get: operations["locateRegion"];
+        get: operations["locate_region"];
         put?: never;
         post?: never;
         delete?: never;
@@ -178,7 +158,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/map/status": {
+    "/api/v1/map/status": {
         parameters: {
             query?: never;
             header?: never;
@@ -186,7 +166,7 @@ export interface paths {
             cookie?: never;
         };
         /** Карта-светофор по регионам */
-        get: operations["getMapStatus"];
+        get: operations["get_map_status"];
         put?: never;
         post?: never;
         delete?: never;
@@ -195,19 +175,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/booking/dates": {
+    "/api/v1/booking/dates": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * Календарь доступности на 2 месяца
-         * @description День доступен, если в регионе есть свободный слот этого вида и день ≥ `earliest_allowed`.
-         *     `days` покрывает весь диапазон `from`..`to` включительно.
-         */
-        get: operations["getBookingDates"];
+        /** Календарь доступности на 2 месяца */
+        get: operations["get_booking_dates"];
         put?: never;
         post?: never;
         delete?: never;
@@ -216,20 +192,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/booking/centers": {
+    "/api/v1/booking/centers": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * Центры со свободными слотами на дату
-         * @description Только центры со свободными слотами. Сортировка: сначала `urgent` для группы
-         *     пользователя, дальше по расстоянию, без геопозиции — по алфавиту.
-         *     `pin_center_id` (при переносе) ставит этот центр первым.
-         */
-        get: operations["getBookingCenters"];
+        /** Центры со свободными слотами на дату */
+        get: operations["get_booking_centers"];
         put?: never;
         post?: never;
         delete?: never;
@@ -238,19 +209,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/booking/slots": {
+    "/api/v1/booking/slots": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * Слоты центра на дату, сгруппированные по времени суток
-         * @description Шаг 15 минут. Утро — до 12:00, день — 12:00–17:00, вечер — после 17:00
-         *     по местному времени региона. Пустые группы не отдаются.
-         */
-        get: operations["getBookingSlots"];
+        /** Слоты центра на дату */
+        get: operations["get_booking_slots"];
         put?: never;
         post?: never;
         delete?: never;
@@ -259,15 +226,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/appointments/current": {
+    "/api/v1/appointments/current": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Активная запись пользователя */
-        get: operations["getCurrentAppointment"];
+        /** Активная запись */
+        get: operations["get_current_appointment"];
         put?: never;
         post?: never;
         delete?: never;
@@ -276,7 +243,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/appointments": {
+    "/api/v1/appointments": {
         parameters: {
             query?: never;
             header?: never;
@@ -285,18 +252,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Записаться
-         * @description После записи бот отправляет подтверждение в чат (ошибка отправки запись не отменяет).
-         */
-        post: operations["createAppointment"];
+        /** Записаться */
+        post: operations["create_appointment"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/appointments/{id}/reschedule": {
+    "/api/v1/appointments/{appointment_id}/reschedule": {
         parameters: {
             query?: never;
             header?: never;
@@ -305,19 +269,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Перенести запись на другой слот
-         * @description В одной транзакции: старая запись → `rescheduled`, новая → `active`.
-         *     Возвращается новая запись (у неё другой `id`).
-         */
-        post: operations["rescheduleAppointment"];
+        /** Перенести запись */
+        post: operations["reschedule_appointment"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/appointments/{id}/cancel": {
+    "/api/v1/appointments/{appointment_id}/cancel": {
         parameters: {
             query?: never;
             header?: never;
@@ -327,14 +287,14 @@ export interface paths {
         get?: never;
         put?: never;
         /** Отменить запись */
-        post: operations["cancelAppointment"];
+        post: operations["cancel_appointment"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/demo/reset": {
+    "/api/v1/demo/reset": {
         parameters: {
             query?: never;
             header?: never;
@@ -343,15 +303,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Вернуть профиль к демо-состоянию и отменить записи */
-        post: operations["demoReset"];
+        /** Сбросить демо-профиль */
+        post: operations["demo_reset"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/demo/appointments/{id}/remind": {
+    "/api/v1/demo/appointments/{appointment_id}/remind": {
         parameters: {
             query?: never;
             header?: never;
@@ -360,15 +320,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Отправить напоминание по записи сразу */
-        post: operations["demoRemind"];
+        /** Отправить напоминание сразу */
+        post: operations["demo_remind"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/demo/appointments/{id}/complete": {
+    "/api/v1/demo/appointments/{appointment_id}/complete": {
         parameters: {
             query?: never;
             header?: never;
@@ -377,18 +337,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Засчитать донацию по записи
-         * @description Запись → `completed`, в историю добавляется донация.
-         */
-        post: operations["demoComplete"];
+        /** Засчитать донацию */
+        post: operations["demo_complete"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/health": {
+    "/api/v1/health": {
         parameters: {
             query?: never;
             header?: never;
@@ -409,526 +366,550 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        Error: {
-            error: {
-                code: components["schemas"]["ErrorCode"];
-                /** @description Текст для логов/отладки. Пользователю показываем тексты из md по `code` */
-                message: string;
-                /** @description Только для 422 при сохранении формы. Ключ — имя поля, значение — текст ошибки */
-                fields: {
-                    [key: string]: string;
-                } | null;
-            };
-        };
-        /** @enum {string} */
-        ErrorCode: "unauthorized" | "not_found" | "validation_error" | "slot_not_found" | "slot_taken" | "active_exists" | "interval_not_passed" | "personal_data_incomplete" | "appointment_not_found" | "appointment_not_active" | "demo_disabled" | "internal_error";
-        /** @enum {string} */
-        DonationType: "whole_blood" | "plasma";
-        /**
-         * @description 1 = O(I), 2 = A(II), 3 = B(III), 4 = AB(IV); знак — резус
-         * @enum {string}
-         */
-        BloodGroup: "1+" | "1-" | "2+" | "2-" | "3+" | "3-" | "4+" | "4-";
-        /** @enum {string} */
-        StockStatus: "urgent" | "low" | "enough";
-        /** @example 09:30 */
-        LocalTime: string;
-        Me: {
-            id: number;
-            first_name: string;
-            last_name: string | null;
-            /** Format: uri */
-            photo_url: string | null;
-            onboarding_completed: boolean;
-            blood: components["schemas"]["BloodInfo"];
-            referrals_count: number;
-        };
-        /** @description `null` в любом поле — значение неизвестно («—» на экране) */
-        BloodInfo: {
-            group: components["schemas"]["BloodGroup"] | null;
-            /** @enum {string|null} */
-            kell: "K+" | "K-" | null;
-            /** @example CcDee */
-            phenotype: string | null;
-            donor_code: string | null;
-        };
-        OnboardingRequest: {
-            /** @constant */
-            consent: true;
-        };
-        /** @enum {string} */
-        PersonalDataFieldName: "last_name" | "first_name" | "middle_name" | "passport_series" | "passport_number" | "passport_issued_by" | "passport_division_code" | "oms_number" | "phone" | "email";
-        /** @description `null` — поле не заполнено (на экране «Не указано» красным для обязательных) */
-        PersonalData: {
-            last_name: string | null;
-            first_name: string | null;
-            middle_name: string | null;
-            passport_series: string | null;
-            passport_number: string | null;
-            passport_issued_by: string | null;
-            passport_division_code: string | null;
-            oms_number: string | null;
-            phone: string | null;
-            /** Format: email */
-            email: string | null;
-            is_demo: boolean;
-            /** @description Незаполненные обязательные поля. Пустой — можно нажимать «Далее» */
-            missing_fields: components["schemas"]["PersonalDataFieldName"][];
-        };
-        /** @description Значения без маски */
-        PersonalDataInput: {
-            last_name: string;
-            first_name: string;
-            middle_name?: string | null;
-            passport_series: string;
-            passport_number: string;
-            passport_issued_by: string;
-            passport_division_code: string;
-            oms_number: string;
-            phone: string;
-            /** Format: email */
-            email: string;
-        };
-        Eligibility: {
-            /** @description Ближайшая дата, с которой можно сдать (≥ сегодня) */
-            next_allowed: {
-                /** Format: date */
-                whole_blood: string;
-                /** Format: date */
-                plasma: string;
-            };
-            /** @description `false` — интервал прошёл, подпись «можно сдать с …» не показываем */
-            interval_active: {
-                whole_blood: boolean;
-                plasma: boolean;
-            };
-        };
-        /**
-         * @description future_donor (0) — Будущий донор, novice (1) — Новичок, active (5) — Активный донор,
-         *     experienced (10) — Опытный донор, mentor (20) — Наставник, legend (40) — Легенда донорства
-         * @enum {string}
-         */
-        LevelCode: "future_donor" | "novice" | "active" | "experienced" | "mentor" | "legend";
-        Progress: {
-            /** @description Всего донаций (кровь + плазма) */
-            total: number;
-            level: {
-                code: components["schemas"]["LevelCode"];
-                name: string;
-                threshold: number;
-                /** @description `null` на последнем уровне */
-                next: {
-                    code: components["schemas"]["LevelCode"];
-                    name: string;
-                    threshold: number;
-                    remaining: number;
-                } | null;
-                is_max: boolean;
-            };
-            honorary: {
-                whole: components["schemas"]["HonoraryCounter"];
-                plasma: components["schemas"]["HonoraryCounter"];
-                mixed: {
-                    /** @description X + Y */
-                    count: number;
-                    /**
-                     * @description 40, если цельной крови ≥ 25, иначе 60
-                     * @enum {integer}
-                     */
-                    goal: 40 | 60;
-                    /** @description 25 − X, 0 если X ≥ 25. Подсказка «Ещё N сдач цельной крови — и цель сократится до 40» — при goal = 60 */
-                    whole_needed_for_40: number;
-                };
-                /** @description Донаций для звания достаточно */
-                achieved: boolean;
-                /** @description Срок до звания по самому быстрому пути. `null`, если achieved */
-                eta: {
-                    /** Format: date */
-                    date: string;
-                    years: number;
-                    months: number;
-                } | null;
-            };
-        };
-        HonoraryCounter: {
-            count: number;
-            /** @description 40 для крови, 60 для плазмы */
-            goal: number;
-        };
-        DonationHistory: {
-            total: number;
-            /** @description От нового года к старому. Пустой — «Здесь появятся ваши донации» */
-            years: {
-                year: number;
-                count: number;
-                /** @description От новой к старой */
-                items: components["schemas"]["Donation"][];
-            }[];
-        };
-        Donation: {
-            id: number;
-            donation_type: components["schemas"]["DonationType"];
-            /** Format: date */
-            donated_on: string;
-            center_name: string | null;
-        };
-        Referrals: {
-            count: number;
-            /**
-             * Format: uri
-             * @description https://max.ru/<bot>?startapp=ref_<code>
-             */
-            link: string;
-        };
-        Region: {
-            id: number;
-            /** @description ISO 3166-2, например RU-MOW. Совпадает с `code` в topojson */
-            code: string;
-            name: string;
-            /** @description `false` — строка серая, «Нет центров для записи» */
-            has_centers: boolean;
-        };
-        LocateRegionResponse: {
-            region: components["schemas"]["Region"] | null;
-        };
-        /** @description Статус по группе. Нет ключа — нет данных по этой группе */
-        BloodStatuses: {
-            "1+"?: components["schemas"]["StockStatus"];
-            "1-"?: components["schemas"]["StockStatus"];
-            "2+"?: components["schemas"]["StockStatus"];
-            "2-"?: components["schemas"]["StockStatus"];
-            "3+"?: components["schemas"]["StockStatus"];
-            "3-"?: components["schemas"]["StockStatus"];
-            "4+"?: components["schemas"]["StockStatus"];
-            "4-"?: components["schemas"]["StockStatus"];
-        };
-        MapStatus: {
-            /** Format: date-time */
-            updated_at: string;
-            /** @description Все регионы. Регион без данных — `statuses = {}`, `worst = null` */
-            regions: {
-                code: string;
-                statuses: components["schemas"]["BloodStatuses"];
-                /** @description Худший статус среди всех групп, `null` — нет данных */
-                worst: components["schemas"]["StockStatus"] | null;
-            }[];
-        };
-        BookingDates: {
-            /**
-             * Format: date
-             * @description Сегодня
-             */
-            from: string;
-            /**
-             * Format: date
-             * @description Сегодня + 2 месяца
-             */
-            to: string;
-            /**
-             * Format: date
-             * @description `next_allowed` для выбранного вида. Если > from — показываем подпись про интервал
-             */
-            earliest_allowed: string;
-            /** @description Первая доступная дата (открываем календарь на её месяце). `null` — мест нет в ближайшие 2 месяца */
-            first_available: string | null;
-            days: {
-                /** Format: date */
-                date: string;
-                available: boolean;
-            }[];
-        };
-        BookingCenter: {
-            id: number;
-            name: string;
-            address: string;
-            /** Format: double */
-            lat: number;
-            /** Format: double */
-            lon: number;
-            /** Format: uri */
-            photo_url: string | null;
-            /** @description Свободных мест на выбранную дату */
-            free_slots: number;
-            /** @description `null`, если lat/lon не переданы */
-            distance_km: number | null;
-            /** @description Статус группы пользователя в центре. `null` — группа неизвестна или нет данных (строки светофора нет) */
-            group_status: components["schemas"]["StockStatus"] | null;
-        };
-        /**
-         * @description morning — до 12:00, day — 12:00–17:00, evening — после 17:00
-         * @enum {string}
-         */
-        SlotPeriod: "morning" | "day" | "evening";
-        BookingSlots: {
-            center: {
-                id: number;
-                name: string;
-                address: string;
-            };
-            /** Format: date */
-            date: string;
-            /** @description В порядке morning → day → evening, пустые группы не отдаются */
-            groups: {
-                period: components["schemas"]["SlotPeriod"];
-                slots: components["schemas"]["Slot"][];
-            }[];
-        };
-        Slot: {
-            id: number;
-            /** Format: date-time */
-            starts_at: string;
-            local_time: components["schemas"]["LocalTime"];
-            is_free: boolean;
-        };
-        SlotRequest: {
-            slot_id: number;
-        };
+        /** Appointment */
         Appointment: {
+            /** Id */
             id: number;
             donation_type: components["schemas"]["DonationType"];
-            /** Format: date-time */
+            /**
+             * Starts At
+             * Format: date-time
+             */
             starts_at: string;
             /**
+             * Local Date
              * Format: date
-             * @description Дата по местному времени региона центра
              */
             local_date: string;
-            local_time: components["schemas"]["LocalTime"];
-            center: {
-                id: number;
-                name: string;
-                address: string;
-                region_id: number;
-            };
+            /**
+             * Local Time
+             * @example 09:30
+             */
+            local_time: string;
+            center: components["schemas"]["AppointmentCenter"];
         };
-        /** @description Общий ответ для current / create / reschedule / cancel — можно сразу класть в кэш `/appointments/current` */
+        /** AppointmentCenter */
+        AppointmentCenter: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Address */
+            address: string;
+            /** Region Id */
+            region_id: number;
+        };
+        /** AppointmentResponse */
         AppointmentResponse: {
             appointment: components["schemas"]["Appointment"] | null;
         };
-    };
-    responses: {
-        /** @description Нет или невалидна initData */
-        Unauthorized: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                /**
-                 * @example {
-                 *       "error": {
-                 *         "code": "unauthorized",
-                 *         "message": "Не удалось проверить пользователя",
-                 *         "fields": null
-                 *       }
-                 *     }
-                 */
-                "application/json": components["schemas"]["Error"];
-            };
+        /**
+         * BloodGroup
+         * @description Группа крови и резус
+         * @enum {string}
+         */
+        BloodGroup: "1+" | "1-" | "2+" | "2-" | "3+" | "3-" | "4+" | "4-";
+        /** BloodInfo */
+        BloodInfo: {
+            group: components["schemas"]["BloodGroup"] | null;
+            /** Kell */
+            kell: ("K+" | "K-") | null;
+            /**
+             * Phenotype
+             * @example CcDee
+             */
+            phenotype: string | null;
+            /**
+             * Donor Code
+             * @example 1234-5678
+             */
+            donor_code: string | null;
         };
-        /** @description Регион или центр не найден */
-        NotFound: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                /**
-                 * @example {
-                 *       "error": {
-                 *         "code": "not_found",
-                 *         "message": "Не найдено",
-                 *         "fields": null
-                 *       }
-                 *     }
-                 */
-                "application/json": components["schemas"]["Error"];
-            };
+        /** BookingCenter */
+        BookingCenter: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Address */
+            address: string;
+            /** Lat */
+            lat: number;
+            /** Lon */
+            lon: number;
+            /** Photo Url */
+            photo_url: string | null;
+            /** Free Slots */
+            free_slots: number;
+            /** Distance Km */
+            distance_km: number | null;
+            group_status: components["schemas"]["StockStatus"] | null;
         };
-        /** @description Неверные параметры запроса */
+        /** BookingDates */
+        BookingDates: {
+            /**
+             * From
+             * Format: date
+             */
+            from: string;
+            /**
+             * To
+             * Format: date
+             */
+            to: string;
+            /**
+             * Earliest Allowed
+             * Format: date
+             */
+            earliest_allowed: string;
+            /** First Available */
+            first_available: string | null;
+            /** Days */
+            days: components["schemas"]["BookingDay"][];
+        };
+        /** BookingDay */
+        BookingDay: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Available */
+            available: boolean;
+        };
+        /** BookingSlots */
+        BookingSlots: {
+            center: components["schemas"]["SlotsCenter"];
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Groups */
+            groups: components["schemas"]["SlotGroup"][];
+        };
+        /** Donation */
+        Donation: {
+            /** Id */
+            id: number;
+            donation_type: components["schemas"]["DonationType"];
+            /**
+             * Donated On
+             * Format: date
+             */
+            donated_on: string;
+            /** Center Name */
+            center_name: string | null;
+        };
+        /** DonationHistory */
+        DonationHistory: {
+            /** Total */
+            total: number;
+            /** Years */
+            years: components["schemas"]["DonationYear"][];
+        };
+        /**
+         * DonationType
+         * @description Вид донации: цельная кровь или плазма.
+         * @enum {string}
+         */
+        DonationType: "whole_blood" | "plasma";
+        /** DonationYear */
+        DonationYear: {
+            /** Year */
+            year: number;
+            /** Count */
+            count: number;
+            /** Items */
+            items: components["schemas"]["Donation"][];
+        };
+        /** Eligibility */
+        Eligibility: {
+            next_allowed: components["schemas"]["NextAllowed"];
+            interval_active: components["schemas"]["IntervalActive"];
+        };
+        /** ErrorBody */
+        ErrorBody: {
+            code: components["schemas"]["ErrorCode"];
+            /** Message */
+            message: string;
+            /** Fields */
+            fields: {
+                [key: string]: string;
+            } | null;
+        };
+        /**
+         * ErrorCode
+         * @enum {string}
+         */
+        ErrorCode: "unauthorized" | "not_found" | "validation_error" | "slot_not_found" | "slot_taken" | "active_exists" | "interval_not_passed" | "personal_data_incomplete" | "appointment_not_found" | "appointment_not_active" | "demo_disabled" | "internal_error";
+        /** ErrorResponse */
+        ErrorResponse: {
+            error: components["schemas"]["ErrorBody"];
+        };
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
+        /** Health */
+        Health: {
+            /**
+             * Status
+             * @constant
+             */
+            status: "ok";
+        };
+        /** Honorary */
+        Honorary: {
+            whole: components["schemas"]["HonoraryCounter"];
+            plasma: components["schemas"]["HonoraryCounter"];
+            mixed: components["schemas"]["HonoraryMixed"];
+            /** Achieved */
+            achieved: boolean;
+            eta: components["schemas"]["HonoraryEta"] | null;
+        };
+        /** HonoraryCounter */
+        HonoraryCounter: {
+            /** Count */
+            count: number;
+            /** Goal */
+            goal: number;
+        };
+        /** HonoraryEta */
+        HonoraryEta: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Years */
+            years: number;
+            /** Months */
+            months: number;
+        };
+        /** HonoraryMixed */
+        HonoraryMixed: {
+            /** Count */
+            count: number;
+            /**
+             * Goal
+             * @enum {integer}
+             */
+            goal: 40 | 60;
+            /** Whole Needed For 40 */
+            whole_needed_for_40: number;
+        };
+        /** IntervalActive */
+        IntervalActive: {
+            /** Whole Blood */
+            whole_blood: boolean;
+            /** Plasma */
+            plasma: boolean;
+        };
+        /** Level */
+        Level: {
+            code: components["schemas"]["LevelCode"];
+            /** Name */
+            name: string;
+            /** Threshold */
+            threshold: number;
+            next: components["schemas"]["NextLevel"] | null;
+            /** Is Max */
+            is_max: boolean;
+        };
+        /**
+         * LevelCode
+         * @enum {string}
+         */
+        LevelCode: "future_donor" | "novice" | "active" | "experienced" | "mentor" | "legend";
+        /** LocateRegionResponse */
+        LocateRegionResponse: {
+            region: components["schemas"]["Region"] | null;
+        };
+        /** MapRegion */
+        MapRegion: {
+            /** Code */
+            code: string;
+            /** Statuses */
+            statuses: {
+                [key: string]: components["schemas"]["StockStatus"];
+            };
+            worst: components["schemas"]["StockStatus"] | null;
+        };
+        /** MapStatus */
+        MapStatus: {
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Regions */
+            regions: components["schemas"]["MapRegion"][];
+        };
+        /** Me */
+        Me: {
+            /** Id */
+            id: number;
+            /** First Name */
+            first_name: string;
+            /** Last Name */
+            last_name: string | null;
+            /** Photo Url */
+            photo_url: string | null;
+            /** Onboarding Completed */
+            onboarding_completed: boolean;
+            blood: components["schemas"]["BloodInfo"];
+            /** Referrals Count */
+            referrals_count: number;
+        };
+        /** NextAllowed */
+        NextAllowed: {
+            /**
+             * Whole Blood
+             * Format: date
+             */
+            whole_blood: string;
+            /**
+             * Plasma
+             * Format: date
+             */
+            plasma: string;
+        };
+        /** NextLevel */
+        NextLevel: {
+            code: components["schemas"]["LevelCode"];
+            /** Name */
+            name: string;
+            /** Threshold */
+            threshold: number;
+            /** Remaining */
+            remaining: number;
+        };
+        /** OnboardingRequest */
+        OnboardingRequest: {
+            /**
+             * Consent
+             * @constant
+             */
+            consent: true;
+        };
+        /** PersonalData */
+        PersonalData: {
+            /** Last Name */
+            last_name: string | null;
+            /** First Name */
+            first_name: string | null;
+            /** Middle Name */
+            middle_name: string | null;
+            /** Passport Series */
+            passport_series: string | null;
+            /** Passport Number */
+            passport_number: string | null;
+            /** Passport Issued By */
+            passport_issued_by: string | null;
+            /** Passport Division Code */
+            passport_division_code: string | null;
+            /** Oms Number */
+            oms_number: string | null;
+            /** Phone */
+            phone: string | null;
+            /** Email */
+            email: string | null;
+            /** Is Demo */
+            is_demo: boolean;
+            /** Missing Fields */
+            missing_fields: components["schemas"]["PersonalDataField"][];
+        };
+        /**
+         * PersonalDataField
+         * @enum {string}
+         */
+        PersonalDataField: "last_name" | "first_name" | "middle_name" | "passport_series" | "passport_number" | "passport_issued_by" | "passport_division_code" | "oms_number" | "phone" | "email";
+        /** PersonalDataInput */
+        PersonalDataInput: {
+            /** Last Name */
+            last_name: string;
+            /** First Name */
+            first_name: string;
+            /** Middle Name */
+            middle_name?: string | null;
+            /**
+             * Passport Series
+             * @example 4510
+             */
+            passport_series: string;
+            /**
+             * Passport Number
+             * @example 123456
+             */
+            passport_number: string;
+            /** Passport Issued By */
+            passport_issued_by: string;
+            /**
+             * Passport Division Code
+             * @example 770-001
+             */
+            passport_division_code: string;
+            /**
+             * Oms Number
+             * @example 1234567890123456
+             */
+            oms_number: string;
+            /**
+             * Phone
+             * @example +79001234567
+             */
+            phone: string;
+            /**
+             * Email
+             * @example ivanov@mail.ru
+             */
+            email: string;
+        };
+        /** Progress */
+        Progress: {
+            /** Total */
+            total: number;
+            level: components["schemas"]["Level"];
+            honorary: components["schemas"]["Honorary"];
+        };
+        /** Referrals */
+        Referrals: {
+            /** Count */
+            count: number;
+            /** Link */
+            link: string;
+        };
+        /** Region */
+        Region: {
+            /** Id */
+            id: number;
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Has Centers */
+            has_centers: boolean;
+        };
+        /** Slot */
+        Slot: {
+            /** Id */
+            id: number;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /**
+             * Local Time
+             * @example 09:30
+             */
+            local_time: string;
+            /** Is Free */
+            is_free: boolean;
+        };
+        /** SlotGroup */
+        SlotGroup: {
+            period: components["schemas"]["SlotPeriod"];
+            /** Slots */
+            slots: components["schemas"]["Slot"][];
+        };
+        /**
+         * SlotPeriod
+         * @enum {string}
+         */
+        SlotPeriod: "morning" | "day" | "evening";
+        /** SlotRequest */
+        SlotRequest: {
+            /** Slot Id */
+            slot_id: number;
+        };
+        /** SlotsCenter */
+        SlotsCenter: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Address */
+            address: string;
+        };
+        /**
+         * StockStatus
+         * @description Запас крови группы: нет строки в таблице — «нет данных».
+         * @enum {string}
+         */
+        StockStatus: "urgent" | "low" | "enough";
+        /** ValidationError */
         ValidationError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                /**
-                 * @example {
-                 *       "error": {
-                 *         "code": "validation_error",
-                 *         "message": "Неверные параметры запроса",
-                 *         "fields": null
-                 *       }
-                 *     }
-                 */
-                "application/json": components["schemas"]["Error"];
-            };
-        };
-        /** @description Слот не найден */
-        SlotNotFound: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                /**
-                 * @example {
-                 *       "error": {
-                 *         "code": "slot_not_found",
-                 *         "message": "Слот не найден",
-                 *         "fields": null
-                 *       }
-                 *     }
-                 */
-                "application/json": components["schemas"]["Error"];
-            };
-        };
-        /** @description Запись не найдена или принадлежит другому пользователю */
-        AppointmentNotFound: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                /**
-                 * @example {
-                 *       "error": {
-                 *         "code": "appointment_not_found",
-                 *         "message": "Запись не найдена",
-                 *         "fields": null
-                 *       }
-                 *     }
-                 */
-                "application/json": components["schemas"]["Error"];
-            };
-        };
-        /** @description `slot_not_found` или `appointment_not_found` */
-        SlotOrAppointmentNotFound: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["Error"];
-            };
-        };
-        /** @description Запись уже отменена, перенесена или завершена */
-        AppointmentNotActive: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                /**
-                 * @example {
-                 *       "error": {
-                 *         "code": "appointment_not_active",
-                 *         "message": "Запись уже неактивна",
-                 *         "fields": null
-                 *       }
-                 *     }
-                 */
-                "application/json": components["schemas"]["Error"];
-            };
-        };
-        /**
-         * @description - `slot_taken` — слот заняли (окно «Это время уже заняли»);
-         *     - `active_exists` — у пользователя уже есть активная запись.
-         */
-        BookingConflict: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["Error"];
-            };
-        };
-        /**
-         * @description - `interval_not_passed` — дата слота раньше `next_allowed` для этого вида;
-         *     - `personal_data_incomplete` — не заполнены обязательные личные данные.
-         */
-        BookingUnprocessable: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["Error"];
-            };
-        };
-        /** @description DEMO_MODE выключен */
-        DemoDisabled: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                /**
-                 * @example {
-                 *       "error": {
-                 *         "code": "demo_disabled",
-                 *         "message": "Демо-режим выключен",
-                 *         "fields": null
-                 *       }
-                 *     }
-                 */
-                "application/json": components["schemas"]["Error"];
-            };
-        };
-        /** @description `demo_disabled` или `appointment_not_found` */
-        DemoOrAppointmentNotFound: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["Error"];
-            };
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
         };
     };
-    parameters: {
-        RegionIdQuery: number;
-        DonationTypeQuery: components["schemas"]["DonationType"];
-        DateQuery: string;
-        AppointmentIdPath: number;
-    };
+    responses: never;
+    parameters: never;
     requestBodies: never;
     headers: never;
     pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    getMe: {
+    get_me: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "id": 1,
-                     *       "first_name": "Иван",
-                     *       "last_name": "Иванов",
-                     *       "photo_url": null,
-                     *       "onboarding_completed": false,
-                     *       "blood": {
-                     *         "group": "2+",
-                     *         "kell": "K-",
-                     *         "phenotype": "CcDee",
-                     *         "donor_code": "1234-5678"
-                     *       },
-                     *       "referrals_count": 3
-                     *     }
-                     */
                     "application/json": components["schemas"]["Me"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    completeOnboarding: {
+    complete_onboarding: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -938,58 +919,81 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Онбординг завершён */
+            /** @description Successful Response */
             204: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            401: components["responses"]["Unauthorized"];
-            422: components["responses"]["ValidationError"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
     };
-    getPersonalData: {
+    get_personal_data: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "last_name": "Иванов",
-                     *       "first_name": "Иван",
-                     *       "middle_name": "Иванович",
-                     *       "passport_series": "4510",
-                     *       "passport_number": "123456",
-                     *       "passport_issued_by": "ГУ МВД России по г. Москве",
-                     *       "passport_division_code": "770-001",
-                     *       "oms_number": "1234567890123456",
-                     *       "phone": "+79001234567",
-                     *       "email": "ivanov@mail.ru",
-                     *       "is_demo": true,
-                     *       "missing_fields": []
-                     *     }
-                     */
                     "application/json": components["schemas"]["PersonalData"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    updatePersonalData: {
+    update_personal_data: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -999,7 +1003,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Сохранено */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1008,471 +1012,493 @@ export interface operations {
                     "application/json": components["schemas"]["PersonalData"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
-            /** @description Ошибки в форме */
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
             422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "error": {
-                     *         "code": "validation_error",
-                     *         "message": "Проверьте данные",
-                     *         "fields": {
-                     *           "passport_series": "Серия — 4 цифры",
-                     *           "phone": "Введите номер телефона полностью"
-                     *         }
-                     *       }
-                     *     }
-                     */
-                    "application/json": components["schemas"]["Error"];
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };
     };
-    getEligibility: {
+    get_eligibility: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "next_allowed": {
-                     *         "whole_blood": "2026-10-12",
-                     *         "plasma": "2026-09-26"
-                     *       },
-                     *       "interval_active": {
-                     *         "whole_blood": true,
-                     *         "plasma": false
-                     *       }
-                     *     }
-                     */
                     "application/json": components["schemas"]["Eligibility"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    getProgress: {
+    get_progress: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "total": 12,
-                     *       "level": {
-                     *         "code": "experienced",
-                     *         "name": "Опытный донор",
-                     *         "threshold": 10,
-                     *         "next": {
-                     *           "code": "mentor",
-                     *           "name": "Наставник",
-                     *           "threshold": 20,
-                     *           "remaining": 8
-                     *         },
-                     *         "is_max": false
-                     *       },
-                     *       "honorary": {
-                     *         "whole": {
-                     *           "count": 10,
-                     *           "goal": 40
-                     *         },
-                     *         "plasma": {
-                     *           "count": 2,
-                     *           "goal": 60
-                     *         },
-                     *         "mixed": {
-                     *           "count": 12,
-                     *           "goal": 60,
-                     *           "whole_needed_for_40": 15
-                     *         },
-                     *         "achieved": false,
-                     *         "eta": {
-                     *           "date": "2032-04-14",
-                     *           "years": 5,
-                     *           "months": 6
-                     *         }
-                     *       }
-                     *     }
-                     */
                     "application/json": components["schemas"]["Progress"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    getDonations: {
+    get_donations: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "total": 12,
-                     *       "years": [
-                     *         {
-                     *           "year": 2026,
-                     *           "count": 2,
-                     *           "items": [
-                     *             {
-                     *               "id": 12,
-                     *               "donation_type": "whole_blood",
-                     *               "donated_on": "2026-08-12",
-                     *               "center_name": "Центр крови ФМБА России"
-                     *             },
-                     *             {
-                     *               "id": 11,
-                     *               "donation_type": "plasma",
-                     *               "donated_on": "2026-06-02",
-                     *               "center_name": "ГКБ им. С. П. Боткина"
-                     *             }
-                     *           ]
-                     *         }
-                     *       ]
-                     *     }
-                     */
                     "application/json": components["schemas"]["DonationHistory"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    getReferrals: {
+    get_referrals: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "count": 3,
-                     *       "link": "https://max.ru/kaplya_bot?startapp=ref_aB3dE9"
-                     *     }
-                     */
                     "application/json": components["schemas"]["Referrals"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    listRegions: {
+    list_regions: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example [
-                     *       {
-                     *         "id": 1,
-                     *         "code": "RU-AD",
-                     *         "name": "Адыгея",
-                     *         "has_centers": true
-                     *       },
-                     *       {
-                     *         "id": 77,
-                     *         "code": "RU-MOW",
-                     *         "name": "Москва",
-                     *         "has_centers": true
-                     *       }
-                     *     ]
-                     */
                     "application/json": components["schemas"]["Region"][];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    locateRegion: {
+    locate_region: {
         parameters: {
             query: {
                 lat: number;
                 lon: number;
             };
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK. `region = null`, если точка вне РФ */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "region": {
-                     *         "id": 77,
-                     *         "code": "RU-MOW",
-                     *         "name": "Москва",
-                     *         "has_centers": true
-                     *       }
-                     *     }
-                     */
                     "application/json": components["schemas"]["LocateRegionResponse"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
-            422: components["responses"]["ValidationError"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
     };
-    getMapStatus: {
+    get_map_status: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "updated_at": "2026-09-24T09:00:00+03:00",
-                     *       "regions": [
-                     *         {
-                     *           "code": "RU-MOW",
-                     *           "statuses": {
-                     *             "1+": "urgent",
-                     *             "1-": "low",
-                     *             "2+": "enough",
-                     *             "2-": "low",
-                     *             "3+": "enough",
-                     *             "3-": "urgent",
-                     *             "4+": "enough",
-                     *             "4-": "low"
-                     *           },
-                     *           "worst": "urgent"
-                     *         },
-                     *         {
-                     *           "code": "RU-CHU",
-                     *           "statuses": {},
-                     *           "worst": null
-                     *         }
-                     *       ]
-                     *     }
-                     */
                     "application/json": components["schemas"]["MapStatus"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    getBookingDates: {
+    get_booking_dates: {
         parameters: {
             query: {
-                region_id: components["parameters"]["RegionIdQuery"];
-                donation_type: components["parameters"]["DonationTypeQuery"];
+                region_id: number;
+                donation_type: components["schemas"]["DonationType"];
             };
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "from": "2026-09-26",
-                     *       "to": "2026-11-26",
-                     *       "earliest_allowed": "2026-10-12",
-                     *       "first_available": "2026-10-13",
-                     *       "days": [
-                     *         {
-                     *           "date": "2026-09-26",
-                     *           "available": false
-                     *         },
-                     *         {
-                     *           "date": "2026-10-13",
-                     *           "available": true
-                     *         }
-                     *       ]
-                     *     }
-                     */
                     "application/json": components["schemas"]["BookingDates"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["NotFound"];
-            422: components["responses"]["ValidationError"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
     };
-    getBookingCenters: {
+    get_booking_centers: {
         parameters: {
             query: {
-                region_id: components["parameters"]["RegionIdQuery"];
-                donation_type: components["parameters"]["DonationTypeQuery"];
-                date: components["parameters"]["DateQuery"];
-                /** @description Передаётся вместе с lon */
-                lat?: number;
-                /** @description Передаётся вместе с lat */
-                lon?: number;
-                pin_center_id?: number;
+                region_id: number;
+                donation_type: components["schemas"]["DonationType"];
+                date: string;
+                lat?: number | null;
+                lon?: number | null;
+                pin_center_id?: number | null;
             };
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK. Пустой массив — «На эту дату мест нет» */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example [
-                     *       {
-                     *         "id": 5,
-                     *         "name": "Центр крови ФМБА России",
-                     *         "address": "ул. Поликарпова, 14",
-                     *         "lat": 55.7766,
-                     *         "lon": 37.5305,
-                     *         "photo_url": null,
-                     *         "free_slots": 12,
-                     *         "distance_km": 2.3,
-                     *         "group_status": "urgent"
-                     *       }
-                     *     ]
-                     */
                     "application/json": components["schemas"]["BookingCenter"][];
                 };
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["NotFound"];
-            422: components["responses"]["ValidationError"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
     };
-    getBookingSlots: {
+    get_booking_slots: {
         parameters: {
             query: {
                 center_id: number;
-                donation_type: components["parameters"]["DonationTypeQuery"];
-                date: components["parameters"]["DateQuery"];
+                donation_type: components["schemas"]["DonationType"];
+                date: string;
             };
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK. Все `is_free = false` — «На этот день всё занято» */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "center": {
-                     *         "id": 5,
-                     *         "name": "Центр крови ФМБА России",
-                     *         "address": "ул. Поликарпова, 14"
-                     *       },
-                     *       "date": "2026-10-14",
-                     *       "groups": [
-                     *         {
-                     *           "period": "morning",
-                     *           "slots": [
-                     *             {
-                     *               "id": 1001,
-                     *               "starts_at": "2026-10-14T08:00:00+03:00",
-                     *               "local_time": "08:00",
-                     *               "is_free": false
-                     *             },
-                     *             {
-                     *               "id": 1002,
-                     *               "starts_at": "2026-10-14T08:15:00+03:00",
-                     *               "local_time": "08:15",
-                     *               "is_free": true
-                     *             }
-                     *           ]
-                     *         }
-                     *       ]
-                     *     }
-                     */
                     "application/json": components["schemas"]["BookingSlots"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["NotFound"];
-            422: components["responses"]["ValidationError"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
     };
-    getCurrentAppointment: {
+    get_current_appointment: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1481,13 +1507,33 @@ export interface operations {
                     "application/json": components["schemas"]["AppointmentResponse"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    createAppointment: {
+    create_appointment: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -1497,7 +1543,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Запись создана */
+            /** @description Successful Response */
             201: {
                 headers: {
                     [name: string]: unknown;
@@ -1506,18 +1552,53 @@ export interface operations {
                     "application/json": components["schemas"]["AppointmentResponse"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["SlotNotFound"];
-            409: components["responses"]["BookingConflict"];
-            422: components["responses"]["BookingUnprocessable"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
     };
-    rescheduleAppointment: {
+    reschedule_appointment: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path: {
-                id: components["parameters"]["AppointmentIdPath"];
+                appointment_id: number;
             };
             cookie?: never;
         };
@@ -1527,7 +1608,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Запись перенесена */
+            /** @description Successful Response */
             201: {
                 headers: {
                     [name: string]: unknown;
@@ -1536,105 +1617,260 @@ export interface operations {
                     "application/json": components["schemas"]["AppointmentResponse"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["SlotOrAppointmentNotFound"];
-            409: components["responses"]["BookingConflict"];
-            422: components["responses"]["BookingUnprocessable"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
     };
-    cancelAppointment: {
+    cancel_appointment: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path: {
-                id: components["parameters"]["AppointmentIdPath"];
+                appointment_id: number;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Запись отменена, активной записи больше нет */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    /**
-                     * @example {
-                     *       "appointment": null
-                     *     }
-                     */
                     "application/json": components["schemas"]["AppointmentResponse"];
                 };
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["AppointmentNotFound"];
-            409: components["responses"]["AppointmentNotActive"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    demoReset: {
+    demo_reset: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Готово */
+            /** @description Successful Response */
             204: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["DemoDisabled"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    demoRemind: {
+    demo_remind: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path: {
-                id: components["parameters"]["AppointmentIdPath"];
+                appointment_id: number;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Напоминание отправлено */
+            /** @description Successful Response */
             204: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["DemoOrAppointmentNotFound"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
-    demoComplete: {
+    demo_complete: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
             path: {
-                id: components["parameters"]["AppointmentIdPath"];
+                appointment_id: number;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Донация засчитана */
+            /** @description Successful Response */
             204: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            401: components["responses"]["Unauthorized"];
-            404: components["responses"]["DemoOrAppointmentNotFound"];
-            409: components["responses"]["AppointmentNotActive"];
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
     health: {
@@ -1646,16 +1882,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        /** @constant */
-                        status: "ok";
-                    };
+                    "application/json": components["schemas"]["Health"];
                 };
             };
         };

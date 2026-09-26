@@ -4,13 +4,13 @@ type Schemas = components['schemas']
 
 export type ISODate = string
 
-export type ApiErrorBody = Schemas['Error']
+export type ApiErrorBody = Schemas['ErrorResponse']
 export type ErrorCode = Schemas['ErrorCode']
 
 export type Me = Schemas['Me']
 export type PersonalData = Schemas['PersonalData']
 export type PersonalDataInput = Schemas['PersonalDataInput']
-export type PersonalDataFieldName = Schemas['PersonalDataFieldName']
+export type PersonalDataFieldName = Schemas['PersonalDataField']
 export type Eligibility = Schemas['Eligibility']
 export type Progress = Schemas['Progress']
 export type DonationHistory = Schemas['DonationHistory']

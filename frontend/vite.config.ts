@@ -11,6 +11,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  // Без моков (VITE_USE_MOCKS=false) запросы /api идут в локальный бэк
+  server: {
+    proxy: {
+      '/api': process.env.API_PROXY_TARGET ?? 'http://localhost:8000',
+    },
+  },
   css: {
     preprocessorOptions: {
       scss: {
