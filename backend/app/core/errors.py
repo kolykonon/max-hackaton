@@ -57,7 +57,9 @@ def register_errors(app: FastAPI) -> None:
         for err in e.errors():
             loc = err.get("loc", ())
             if len(loc) >= 2 and loc[0] == "body" and isinstance(loc[1], str):
-                fields.setdefault(loc[1], PERSONAL_DATA_ERRORS[loc[1]])
+                fields.setdefault(
+                    loc[1], PERSONAL_DATA_ERRORS.get(loc[1], "Проверьте значение")
+                )
         return error_json(
             422, ErrorCode.VALIDATION_ERROR, "Проверьте данные", fields or None
         )
