@@ -1,0 +1,12 @@
+.regions-map {
+  height: 100%;
+
+  &__me {
+    width: 16px;
+    height: 16px;
+    border: 3px solid #fff;
+    border-radius: $radius-round;
+    background: $color-accent;
+    box-shadow: 0 0 0 8px color-mix(in srgb, #{$color-tone-blue} 25%, transparent);
+  }
+}

@@ -8,6 +8,9 @@
   }
 
   &__legend {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
     padding: $space-s $page-gutter;
   }
 }

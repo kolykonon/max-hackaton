@@ -13,7 +13,12 @@ import App from './App.tsx'
 
 const enableMocking = async () => {
   if (import.meta.env.VITE_USE_MOCKS !== 'true') return
-  const { worker } = await import('@/api/mocks/browser')
+  const [{ worker }, { loadRegionCentroids }, { setRegionCentroids }] = await Promise.all([
+    import('@/api/mocks/browser'),
+    import('@/api/mocks/centroids'),
+    import('@/api/mocks/db'),
+  ])
+  setRegionCentroids(await loadRegionCentroids())
   await worker.start({ onUnhandledRequest: 'bypass', quiet: true })
 }
 

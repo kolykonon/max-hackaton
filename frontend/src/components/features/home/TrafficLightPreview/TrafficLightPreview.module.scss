@@ -1,0 +1,13 @@
+.traffic-light-preview {
+  height: 100%;
+  background: $color-bg-secondary;
+
+  &__fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: $color-bg-secondary;
+    color: $color-text-tertiary;
+  }
+}

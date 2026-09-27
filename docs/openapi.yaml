@@ -285,6 +285,34 @@ paths:
                     worst: null
         "401": { $ref: "#/components/responses/Unauthorized" }
 
+  /map/centers:
+    get:
+      tags: [regions]
+      operationId: getMapCenters
+      summary: Все центры крови для карты-светофора
+      description: |
+        Центры со статусами запаса по группам крови — метки на экране «Карта» при приближении.
+        Без даты и вида донации, в отличие от `/booking/centers`. Центров около 110, отдаются все сразу.
+        Статусы — из `center_blood_status`, формат как у регионов в `/map/status`.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/MapCenter" }
+              example:
+                - id: 5
+                  name: Центр крови ФМБА России
+                  address: ул. Поликарпова, 14
+                  lat: 55.7766
+                  lon: 37.5305
+                  region_id: 77
+                  statuses: { "1+": urgent, "1-": low, "2+": enough, "2-": low, "3+": enough, "3-": urgent, "4+": enough, "4-": low }
+                  worst: urgent
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
   # ───────────────────────── Запись ─────────────────────────
   /booking/dates:
     get:
@@ -985,6 +1013,23 @@ components:
                 oneOf:
                   - $ref: "#/components/schemas/StockStatus"
                   - type: "null"
+
+    MapCenter:
+      type: object
+      required: [id, name, address, lat, lon, region_id, statuses, worst]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        address: { type: string }
+        lat: { type: number, format: double }
+        lon: { type: number, format: double }
+        region_id: { type: integer }
+        statuses: { $ref: "#/components/schemas/BloodStatuses" }
+        worst:
+          description: Худший статус среди всех групп, `null` — нет данных
+          oneOf:
+            - $ref: "#/components/schemas/StockStatus"
+            - type: "null"
 
     # ── Запись ──
     BookingDates:
