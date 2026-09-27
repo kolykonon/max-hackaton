@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Self
+import os
 
 from pydantic import Field, PostgresDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -67,12 +68,13 @@ class BotSettings(SettingsConfigDictMixin, BaseSettings):
     max_webhook_url: str = ""
     max_mode: str = "polling"
 
-    ssl_certs_dir: Path = BASE_DIR / "certs"
+    ssl_certs_dir: Path = Path(os.getenv("SSL_CERTS_DIR", str(BASE_DIR / "certs")))
 
-    @field_validator("ssl_certs_dir")
+    @field_validator("ssl_certs_dir", mode="before")
     @classmethod
-    def resolve_ssl_certs_dir(cls, value: Path) -> Path:
-        return value if value.is_absolute() else BASE_DIR / value
+    def resolve_ssl_certs_dir(cls, value):
+        p = Path(value)
+        return p if p.is_absolute() else BASE_DIR / p
 
 
 class DevSettings(SettingsConfigDictMixin, BaseSettings):

@@ -1,7 +1,7 @@
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.bot.handlers import send_reminder
+from app.bot.handlers import send_reminder_1d
 from app.core.errors import AppError
 from app.core.utils.dates import now_msk, today_msk
 from app.integrations.max_api import MaxBotClient
@@ -32,7 +32,7 @@ class DemoService:
 
     async def remind(self, user: User, appointment_id: int) -> None:
         appointment = await self._get_active(user, appointment_id)
-        await send_reminder(self.bot, user.max_user_id)
+        await send_reminder_1d(self.bot, user.max_user_id)
         appointment.reminder_sent_at = now_msk()
         await self.session.commit()
 
