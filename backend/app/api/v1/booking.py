@@ -2,8 +2,7 @@ import datetime as dt
 
 from fastapi import APIRouter
 
-from app.api.stub.auth import CurrentUser
-from app.api.stub.services import booking_service
+from app.api.deps import BookingServiceDep, CurrentUser
 from app.models.enums import DonationType
 from app.schemas.booking import BookingCenter, BookingDates, BookingSlots
 from app.schemas.common import error_responses
@@ -17,14 +16,18 @@ router = APIRouter(
 
 @router.get("/dates", summary="Календарь доступности на 2 месяца")
 async def get_booking_dates(
-    user: CurrentUser, region_id: int, donation_type: DonationType
+    user: CurrentUser,
+    service: BookingServiceDep,
+    region_id: int,
+    donation_type: DonationType,
 ) -> BookingDates:
-    return await booking_service.get_dates(user, region_id, donation_type)
+    return await service.get_dates(user, region_id, donation_type)
 
 
 @router.get("/centers", summary="Центры со свободными слотами на дату")
 async def get_booking_centers(
     user: CurrentUser,
+    service: BookingServiceDep,
     region_id: int,
     donation_type: DonationType,
     date: dt.date,
@@ -32,13 +35,17 @@ async def get_booking_centers(
     lon: float | None = None,
     pin_center_id: int | None = None,
 ) -> list[BookingCenter]:
-    return await booking_service.get_centers(
+    return await service.get_centers(
         user, region_id, donation_type, date, lat, lon, pin_center_id
     )
 
 
 @router.get("/slots", summary="Слоты центра на дату")
 async def get_booking_slots(
-    user: CurrentUser, center_id: int, donation_type: DonationType, date: dt.date
+    user: CurrentUser,
+    service: BookingServiceDep,
+    center_id: int,
+    donation_type: DonationType,
+    date: dt.date,
 ) -> BookingSlots:
-    return await booking_service.get_slots(user, center_id, donation_type, date)
+    return await service.get_slots(user, center_id, donation_type, date)

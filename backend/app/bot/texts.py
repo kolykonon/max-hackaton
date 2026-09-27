@@ -3,7 +3,6 @@
 TODO: заменить заглушки на реальные тексты из:
   - docs/0.bot/start_message.md
   - docs/appointment_confirmed.md
-  - docs/main_screen.md
 """
 
 # docs/0.bot/start_message.md
@@ -44,7 +43,7 @@ REMINDER_1D_MESSAGE = (
 )
 REMINDER_1D_BUTTON = "Открыть запись"
 
-# В 5 утра дня записи
+# В 5 утра по местному времени региона
 REMINDER_MORNING_MESSAGE = (
     "Сегодня день донации 🩸\n\n"
     "Позавтракайте лёгкой пищей:\n"

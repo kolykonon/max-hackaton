@@ -110,3 +110,66 @@ async def get_demo_service(request: Request, session: SessionDep) -> DemoService
 
 ProfileServiceDep = Annotated[ProfileService, Depends(get_profile_service)]
 DemoServiceDep = Annotated[DemoService, Depends(get_demo_service)]
+
+from app.services.booking import BookingService
+
+
+async def get_booking_service(session: SessionDep) -> BookingService:
+    return BookingService(session)
+
+
+BookingServiceDep = Annotated[BookingService, Depends(get_booking_service)]
+
+from app.services.appointments import AppointmentService
+from app.services.booking import BookingService
+from app.services.map import MapService
+from app.services.regions import RegionService
+
+
+async def get_booking_service(session: SessionDep) -> BookingService:
+    return BookingService(session)
+
+
+async def get_appointment_service(session: SessionDep) -> AppointmentService:
+    return AppointmentService(session)
+
+
+async def get_region_service(session: SessionDep) -> RegionService:
+    return RegionService(session)
+
+
+async def get_map_service(session: SessionDep) -> MapService:
+    return MapService(session)
+
+
+BookingServiceDep = Annotated[BookingService, Depends(get_booking_service)]
+AppointmentServiceDep = Annotated[AppointmentService, Depends(get_appointment_service)]
+RegionServiceDep = Annotated[RegionService, Depends(get_region_service)]
+MapServiceDep = Annotated[MapService, Depends(get_map_service)]
+
+from app.services.appointments import AppointmentService
+from app.services.booking import BookingService
+from app.services.map import MapService
+from app.services.regions import RegionService
+
+
+async def get_booking_service(session: SessionDep) -> BookingService:
+    return BookingService(session)
+
+
+async def get_appointment_service(session: SessionDep) -> AppointmentService:
+    return AppointmentService(session)
+
+
+async def get_region_service(session: SessionDep) -> RegionService:
+    return RegionService(session)
+
+
+async def get_map_service(session: SessionDep) -> MapService:
+    return MapService(session)
+
+
+BookingServiceDep = Annotated[BookingService, Depends(get_booking_service)]
+AppointmentServiceDep = Annotated[AppointmentService, Depends(get_appointment_service)]
+RegionServiceDep = Annotated[RegionService, Depends(get_region_service)]
+MapServiceDep = Annotated[MapService, Depends(get_map_service)]
