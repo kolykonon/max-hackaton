@@ -20,13 +20,13 @@ async def lifespan(app: FastAPI):
     app.state.max = MaxBotClient()
     log.info("MaxBotClient создан, base_url=%s", app.state.max.base_url)
 
-    # Scheduler для отложенных напоминаний
+    # APScheduler для отложенных напоминаний
     scheduler = AsyncIOScheduler(timezone="UTC")
     scheduler.start()
     app.state.scheduler = scheduler
     log.info("APScheduler запущен")
 
-    # Восстановить задачи из БД (если бэкенд перезапустили)
+    # Восстанавливаем задачи из БД (после перезапуска бэкенда)
     try:
         await restore_reminders(scheduler, app.state.max)
     except Exception:

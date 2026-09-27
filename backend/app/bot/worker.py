@@ -11,6 +11,7 @@ log = logging.getLogger(__name__)
 
 
 async def poll_loop(client: MaxBotClient) -> None:
+    """Long Polling — для локальной разработки, когда нет публичного HTTPS."""
     marker: int | None = None
     while True:
         try:
