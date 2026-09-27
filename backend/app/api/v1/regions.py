@@ -14,9 +14,7 @@ async def list_regions(user: CurrentUser, service: RegionServiceDep) -> list[Reg
     return await service.list_regions()
 
 
-@router.get(
-    "/locate", summary="Регион по координатам", responses=error_responses(422)
-)
+@router.get("/locate", summary="Регион по координатам", responses=error_responses(422))
 async def locate_region(
     user: CurrentUser,
     service: RegionServiceDep,

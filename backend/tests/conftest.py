@@ -3,6 +3,7 @@
 Каждый тест получает свою транзакцию и откатывает её в конце.
 Это быстрее, чем чистить БД, и не мешает параллельным тестам.
 """
+
 import asyncio
 import os
 from datetime import date, datetime, time, timedelta, timezone

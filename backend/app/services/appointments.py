@@ -4,6 +4,7 @@
 partial unique index (uq_active_slot), гонка за активную запись
 пользователя — uq_active_user. Оба → IntegrityError → 409.
 """
+
 import logging
 from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
@@ -26,7 +27,9 @@ from app.services.eligibility import get_next_allowed
 log = logging.getLogger(__name__)
 
 
-def _to_schema(appointment: Appointment, center: Center, tz_name: str) -> AppointmentSchema:
+def _to_schema(
+    appointment: Appointment, center: Center, tz_name: str
+) -> AppointmentSchema:
     tz = ZoneInfo(tz_name)
     local_dt = appointment.starts_at.astimezone(tz)
     return AppointmentSchema(
@@ -80,7 +83,12 @@ class AppointmentService:
         await self._commit_or_slot_taken()
 
         center, tz = await self._center_and_tz(slot.center_id)
-        log.info("Создана запись id=%s user_id=%s slot_id=%s", appointment.id, user.id, slot.id)
+        log.info(
+            "Создана запись id=%s user_id=%s slot_id=%s",
+            appointment.id,
+            user.id,
+            slot.id,
+        )
         return _to_schema(appointment, center, tz), appointment, tz
 
     async def reschedule(
@@ -149,7 +157,9 @@ class AppointmentService:
             )
         )
         if exists is not None:
-            raise AppError(409, ErrorCode.ACTIVE_EXISTS, "У вас уже есть активная запись")
+            raise AppError(
+                409, ErrorCode.ACTIVE_EXISTS, "У вас уже есть активная запись"
+            )
 
     async def _check_personal_data(self, user: User) -> None:
         pd = await self.session.get(PersonalData, user.id)
@@ -204,5 +214,7 @@ class AppointmentService:
             await self.session.rollback()
             text = str(e.orig).lower()
             if "uq_active_user" in text:
-                raise AppError(409, ErrorCode.ACTIVE_EXISTS, "У вас уже есть активная запись")
+                raise AppError(
+                    409, ErrorCode.ACTIVE_EXISTS, "У вас уже есть активная запись"
+                )
             raise AppError(409, ErrorCode.SLOT_TAKEN, "Слот уже занят")

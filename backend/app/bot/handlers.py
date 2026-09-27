@@ -1,4 +1,5 @@
 import logging
+from enum import StrEnum
 
 from app.bot import texts
 from app.integrations.max_api import MaxBotClient, link_keyboard
@@ -6,28 +7,38 @@ from app.integrations.max_api import MaxBotClient, link_keyboard
 log = logging.getLogger(__name__)
 
 
+class UpdateType(StrEnum):
+    """Енум для обработки типов обновлений"""
+
+    BOT_STARTED = "bot_started"
+    MESSAGE_CREATED = "message_created"
+
+
 async def handle_update(client: MaxBotClient, update: dict) -> None:
+    """Главная функция обработки обновления"""
+
     update_type = update.get("update_type")
 
-    if update_type == "bot_started":
-        user_id = _user_id(update)
-        if user_id is not None:
-            await _send_start(client, user_id)
-        return
-
-    if update_type == "message_created":
-        message = update.get("message", {})
-        sender = message.get("sender", {})
-        user_id = sender.get("user_id")
-        if user_id is None:
+    match update_type:  # можно было ифом, но матчем прикольнее
+        case UpdateType.BOT_STARTED:
+            user_id = _user_id(update)
+            if user_id is not None:
+                await _send_start(client, user_id)
             return
 
-        text = (message.get("body") or {}).get("text", "").strip()
-        if text.startswith("/start"):
-            await _send_start(client, user_id)
-        else:
-            await _send_fallback(client, user_id)
-        return
+        case UpdateType.MESSAGE_CREATED:
+            message = update.get("message", {})
+            sender = message.get("sender", {})
+            user_id = sender.get("user_id")
+            if user_id is None:
+                return
+
+            text = (message.get("body") or {}).get("text", "").strip()
+            if text.startswith("/start"):
+                await _send_start(client, user_id)
+            else:
+                await _send_fallback(client, user_id)
+            return
 
 
 def _user_id(update: dict) -> int | None:
@@ -84,7 +95,9 @@ async def send_reminder_2d(client: MaxBotClient, max_user_id: int) -> None:
         )
         log.info("Напоминание за 2 дня отправлено user_id=%s", max_user_id)
     except Exception:
-        log.exception("Не удалось отправить напоминание за 2 дня user_id=%s", max_user_id)
+        log.exception(
+            "Не удалось отправить напоминание за 2 дня user_id=%s", max_user_id
+        )
 
 
 async def send_reminder_1d(client: MaxBotClient, max_user_id: int) -> None:
@@ -98,7 +111,9 @@ async def send_reminder_1d(client: MaxBotClient, max_user_id: int) -> None:
         )
         log.info("Напоминание за 1 день отправлено user_id=%s", max_user_id)
     except Exception:
-        log.exception("Не удалось отправить напоминание за 1 день user_id=%s", max_user_id)
+        log.exception(
+            "Не удалось отправить напоминание за 1 день user_id=%s", max_user_id
+        )
 
 
 async def send_reminder_morning(client: MaxBotClient, max_user_id: int) -> None:
@@ -112,4 +127,6 @@ async def send_reminder_morning(client: MaxBotClient, max_user_id: int) -> None:
         )
         log.info("Утреннее напоминание отправлено user_id=%s", max_user_id)
     except Exception:
-        log.exception("Не удалось отправить утреннее напоминание user_id=%s", max_user_id)
+        log.exception(
+            "Не удалось отправить утреннее напоминание user_id=%s", max_user_id
+        )

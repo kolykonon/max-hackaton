@@ -1,4 +1,5 @@
 """Тесты записи: 409 на двойную запись, 422 на интервал, атомарный перенос."""
+
 from datetime import date, datetime, timedelta, timezone
 
 import pytest

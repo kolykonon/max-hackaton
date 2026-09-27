@@ -11,11 +11,13 @@ log = logging.getLogger(__name__)
 
 
 async def poll_loop(client: MaxBotClient) -> None:
-    """Long Polling — для локальной разработки, когда нет публичного HTTPS."""
+    """Пока на задеплоим на HTTPS - в лонг полинге"""
     marker: int | None = None
     while True:
         try:
-            data = await client.get_updates(marker=marker, timeout=30, limit=100)
+            data = await client.get_updates(
+                marker=marker, timeout=30, limit=100
+            )  # получаем обновления
         except Exception:
             log.exception("Ошибка long polling, повтор через 5 сек")
             await asyncio.sleep(5)
@@ -24,20 +26,22 @@ async def poll_loop(client: MaxBotClient) -> None:
         updates = data.get("updates") or []
         for update in updates:
             try:
-                await handle_update(client, update)
+                await handle_update(client, update)  # обработка обновления
             except Exception:
                 log.exception("Ошибка обработки update: %s", update)
 
         if updates:
-            marker = updates[-1].get("marker") or marker
+            marker = updates[-1].get("marker") or marker  # обновляем маркер
 
 
 async def run_polling() -> None:
+    """Запуск long polling для получения обновлений от бота."""
+
     if not settings.bot_settings.max_bot_token:
-        log.error("MAX_BOT_TOKEN не задан — заполни .env")
+        log.error("Не задан токен для бота")
         return
     client = MaxBotClient()
-    log.info("Бот запущен в режиме Long Polling на %s", client.base_url)
+    log.info("Бот запущен в режиме long-polling на %s", client.base_url)
     try:
         await poll_loop(client)
     finally:
@@ -45,6 +49,8 @@ async def run_polling() -> None:
 
 
 def run_webhook() -> None:
+    """Запуск webhook-сервера после деплоя."""
+
     log.info("Запуск webhook-сервера на 0.0.0.0:8000")
     uvicorn.run(
         "app.main:app",
