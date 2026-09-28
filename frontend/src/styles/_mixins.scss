@@ -51,6 +51,11 @@
   }
 }
 
+// Боковой отступ, который на широком экране центрирует содержимое колонкой $max
+@mixin page-gutter($max: $content-max-width) {
+  padding-inline: max(#{$page-gutter}, calc((100% - #{$max}) / 2));
+}
+
 @mixin safe-bottom($extra: 0px) {
   padding-bottom: calc(#{$extra} + env(safe-area-inset-bottom));
 }

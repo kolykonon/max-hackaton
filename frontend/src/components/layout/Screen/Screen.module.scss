@@ -29,6 +29,7 @@
     gap: $space-s;
     overflow-y: auto;
     padding: $space-s $page-gutter $space-xl;
+    @include page-gutter;
     overscroll-behavior: contain;
 
     &--flush {

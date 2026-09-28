@@ -1,9 +1,32 @@
 .account-page {
+  // На ПК две колонки: профиль и кровь слева, путь к званию справа
+  @media (min-width: $desktop) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-xl;
+    align-content: start;
+    @include page-gutter(1040px);
+  }
+
+  &__column {
+    display: contents;
+
+    @media (min-width: $desktop) {
+      display: flex;
+      flex-direction: column;
+      gap: $space-s;
+    }
+  }
+
   &__honorary {
     display: flex;
     flex-direction: column;
     gap: $space-s;
     margin-top: $space-s;
+
+    @media (min-width: $desktop) {
+      margin-top: 0;
+    }
   }
 
   &__goals {

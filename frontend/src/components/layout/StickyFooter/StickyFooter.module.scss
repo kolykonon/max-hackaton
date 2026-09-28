@@ -4,6 +4,7 @@
   flex-direction: column;
   gap: $space-xs;
   padding: $space-s $page-gutter;
+  @include page-gutter;
   background: $color-bg;
   @include safe-bottom($space-s);
 

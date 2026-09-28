@@ -51,6 +51,9 @@ $space-2xl: 32px;
 $space-3xl: 40px;
 
 $page-gutter: $space-m;
+// Ширина колонки на ПК (MAX разворачивается на весь экран)
+$content-max-width: 640px;
+$desktop: 960px;
 
 // Скругления
 $radius-xs: 8px;

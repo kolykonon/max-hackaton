@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: $space-m;
   padding: $space-xs $page-gutter $space-xl;
+  @include page-gutter;
   border-radius: $radius-sheet $radius-sheet 0 0;
   background: $color-bg;
   box-shadow: 0 -4px 20px rgb(0 0 0 / 6%);

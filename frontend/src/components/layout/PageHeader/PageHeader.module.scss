@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: $space-m;
   padding: $space-s $page-gutter $space-xs;
+  @include page-gutter;
   background: $color-bg;
 
   &__row {

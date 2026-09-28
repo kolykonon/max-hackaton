@@ -115,50 +115,53 @@ export const AccountPage = () => {
   const closeSheet = () => setSheet(null)
 
   return (
-    <Screen withTabBar>
-      <ProfileHeader
-        firstName={me.data.first_name}
-        lastName={me.data.last_name ?? ''}
-        photoUrl={me.data.photo_url ?? undefined}
-        onAvatarClick={onAvatarClick}
-      />
-      <LevelCard total={total} onOpen={() => setSheet('levels')} />
-      <ReferralBanner count={me.data.referrals_count} onOpen={() => navigate('/referrals')} />
-      <BloodCard footer={blood.donor_code && <DonorCode code={blood.donor_code} onCopy={copyCode} />}>
-        <BloodStat label="Группа крови" value={blood.group ? getAbo(blood.group) : undefined} />
-        <BloodStat label="Резус-фактор" value={blood.group ? getRhesus(blood.group) : undefined} />
-        <BloodStat label="Kell" value={blood.kell?.replace('-', '−') ?? undefined} />
-        <BloodStat label="Фенотип" value={blood.phenotype ?? undefined} />
-      </BloodCard>
+    <Screen withTabBar contentClassName={styles['account-page']}>
+      <div className={styles['account-page__column']}>
+        <ProfileHeader
+          firstName={me.data.first_name}
+          lastName={me.data.last_name ?? ''}
+          photoUrl={me.data.photo_url ?? undefined}
+          onAvatarClick={onAvatarClick}
+        />
+        <LevelCard total={total} onOpen={() => setSheet('levels')} />
+        <ReferralBanner count={me.data.referrals_count} onOpen={() => navigate('/referrals')} />
+        <BloodCard footer={blood.donor_code && <DonorCode code={blood.donor_code} onCopy={copyCode} />}>
+          <BloodStat label="Группа крови" value={blood.group ? getAbo(blood.group) : undefined} />
+          <BloodStat label="Резус-фактор" value={blood.group ? getRhesus(blood.group) : undefined} />
+          <BloodStat label="Kell" value={blood.kell?.replace('-', '−') ?? undefined} />
+          <BloodStat label="Фенотип" value={blood.phenotype ?? undefined} />
+        </BloodCard>
+      </div>
+      <div className={styles['account-page__column']}>
+        <section className={styles['account-page__honorary']}>
+          <Typography.Text variant="subheader">Путь к званию «Почётный донор России»</Typography.Text>
+          {honorary.achieved ? (
+            <HonoraryAchievedCard onMore={() => navigate('/honorary')} />
+          ) : (
+            <>
+              <div className={styles['account-page__goals']}>
+                <GoalCard kind="whole_blood" {...goals.whole_blood} onOpen={() => setTypeSheet('whole_blood')} />
+                <GoalCard kind="plasma" {...goals.plasma} onOpen={() => setTypeSheet('plasma')} />
+              </div>
+              <GoalCard
+                kind="mixed"
+                {...goals.mixed}
+                hint={
+                  honorary.mixed.goal === 60
+                    ? `Ещё ${honorary.mixed.whole_needed_for_40} сдач цельной крови — и цель сократится до 40`
+                    : undefined
+                }
+                onOpen={() => setTypeSheet('mixed')}
+              />
+              {honorary.eta && (
+                <HonoraryEta eta={formatYearsMonths(honorary.eta.years, honorary.eta.months)} onMore={() => navigate('/honorary')} />
+              )}
+            </>
+          )}
+        </section>
 
-      <section className={styles['account-page__honorary']}>
-        <Typography.Text variant="subheader">Путь к званию «Почётный донор России»</Typography.Text>
-        {honorary.achieved ? (
-          <HonoraryAchievedCard onMore={() => navigate('/honorary')} />
-        ) : (
-          <>
-            <div className={styles['account-page__goals']}>
-              <GoalCard kind="whole_blood" {...goals.whole_blood} onOpen={() => setTypeSheet('whole_blood')} />
-              <GoalCard kind="plasma" {...goals.plasma} onOpen={() => setTypeSheet('plasma')} />
-            </div>
-            <GoalCard
-              kind="mixed"
-              {...goals.mixed}
-              hint={
-                honorary.mixed.goal === 60
-                  ? `Ещё ${honorary.mixed.whole_needed_for_40} сдач цельной крови — и цель сократится до 40`
-                  : undefined
-              }
-              onOpen={() => setTypeSheet('mixed')}
-            />
-            {honorary.eta && (
-              <HonoraryEta eta={formatYearsMonths(honorary.eta.years, honorary.eta.months)} onMore={() => navigate('/honorary')} />
-            )}
-          </>
-        )}
-      </section>
-
-      <HistoryButton onOpen={() => setSheet('history')} />
+        <HistoryButton onOpen={() => setSheet('history')} />
+      </div>
 
       <DonorLevelsSheet open={sheet === 'levels'} total={total} onClose={closeSheet} />
       <DonationHistorySheet open={sheet === 'history'} onClose={closeSheet} />

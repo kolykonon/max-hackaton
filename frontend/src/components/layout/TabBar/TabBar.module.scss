@@ -9,6 +9,7 @@
   padding-bottom: env(safe-area-inset-bottom);
   border-top: 1px solid $color-divider;
   background: $color-bg;
+  @include page-gutter;
 
   &__item {
     display: flex;
