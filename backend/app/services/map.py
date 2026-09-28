@@ -1,14 +1,14 @@
-"""Сервис карты-светофора: статусы групп крови по регионам."""
-
 import logging
+from collections.abc import Mapping
 from datetime import datetime, timezone
+from typing import Any
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Region, RegionBloodStatus
-from app.models.enums import StockStatus
-from app.schemas.map import MapRegion, MapStatus
+from app.models import Center, CenterBloodStatus, Region, RegionBloodStatus
+from app.models.enums import BloodGroup, StockStatus
+from app.schemas.map import MapCenter, MapRegion, MapStatus
 
 log = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ class MapService:
             )
         ).all()
 
-        by_region: dict[str, dict[str, str]] = {}
+        by_region: dict[str, dict[BloodGroup, StockStatus]] = {}
         for code, group, status in rows:
             by_region.setdefault(code, {})
             if group is not None and status is not None:
@@ -63,8 +63,48 @@ class MapService:
 
         return MapStatus(updated_at=updated_at, regions=regions)
 
+    async def centers(self) -> list[MapCenter]:
+        """Все центры со статусами по всем группам крови"""
+        rows = (
+            await self.session.execute(
+                select(
+                    Center,
+                    CenterBloodStatus.blood_group,
+                    CenterBloodStatus.status,
+                )
+                .join(
+                    CenterBloodStatus,
+                    CenterBloodStatus.center_id == Center.id,
+                    isouter=True,
+                )
+                .order_by(Center.id)
+            )
+        ).all()
+
+        centers: dict[int, Center] = {}
+        statuses: dict[int, dict[BloodGroup, StockStatus]] = {}
+        for center, group, status in rows:
+            centers[center.id] = center
+            statuses.setdefault(center.id, {})
+            if group is not None and status is not None:
+                statuses[center.id][group] = status
+
+        return [
+            MapCenter(
+                id=center.id,
+                name=center.name,
+                address=center.address,
+                lat=center.lat,
+                lon=center.lon,
+                region_id=center.region_id,
+                statuses=statuses[center_id],
+                worst=self._worst(statuses[center_id]),
+            )
+            for center_id, center in centers.items()
+        ]
+
     @staticmethod
-    def _worst(statuses: dict[str, str]) -> StockStatus | None:
+    def _worst(statuses: Mapping[Any, str]) -> StockStatus | None:
         if not statuses:
             return None
         worst = max(
