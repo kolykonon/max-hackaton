@@ -1,6 +1,14 @@
 .traffic-light-preview {
+  display: flex;
   height: 100%;
   background: $color-bg-secondary;
+  // Превью не перехватывает жесты: тап открывает экран «Карта»
+  pointer-events: none;
+
+  // У BaseMap min-height 300px — в карточке ниже
+  & > * {
+    min-height: 0;
+  }
 
   &__fallback {
     display: flex;

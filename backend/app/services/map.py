@@ -6,6 +6,7 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.center import DETAIL_FIELDS
 from app.models import Center, CenterBloodStatus, Region, RegionBloodStatus
 from app.models.enums import BloodGroup, StockStatus
 from app.schemas.map import MapCenter, MapRegion, MapStatus
@@ -97,6 +98,7 @@ class MapService:
                 lat=center.lat,
                 lon=center.lon,
                 region_id=center.region_id,
+                **{k: getattr(center, k) for k in DETAIL_FIELDS},
                 statuses=statuses[center_id],
                 worst=self._worst(statuses[center_id]),
             )
