@@ -1,0 +1,633 @@
+// Десктопный дашборд: 12 колонок, hero на всю ширину
+// ponytail: приглушённые тона вместо чистого $color-drop-blood — тот слишком яркий для фона на всю ширину
+$blood: #b3383f;
+$blood-deep: #6b2a30;
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+.desk {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: $space-xl;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-block: $space-xl $space-3xl;
+  font-family: var(--family-base);
+  color: $color-text;
+
+  p {
+    margin: 0;
+  }
+}
+
+// Появление блоков лесенкой
+.appear {
+  animation: appear 0.6s $ease-out both;
+
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * 70}ms;
+    }
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@mixin lift {
+  transition:
+    transform $transition-base,
+    box-shadow $transition-base;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 10%);
+  }
+}
+
+@mixin plain-button {
+  @include reset-button;
+  @include focus-ring;
+  cursor: pointer;
+}
+
+// ——— Hero ———
+.hero {
+  position: relative;
+  grid-column: 1 / -1;
+  overflow: hidden;
+  padding: $space-2xl 40px $space-xl;
+  border-radius: 28px;
+  color: #fff;
+  background: linear-gradient(125deg, $blood 0%, $blood 35%, $blood-deep 100%);
+  box-shadow: 0 20px 48px color-mix(in srgb, #{$blood} 30%, transparent);
+
+  &__glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        circle at 88% 20%,
+        rgb(255 255 255 / 18%) 0,
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 10% 120%,
+        rgb(255 255 255 / 10%) 0,
+        transparent 45%
+      );
+  }
+
+  &__top {
+    position: relative;
+    display: flex;
+    gap: $space-xl;
+    align-items: center;
+  }
+
+  &__avatar {
+    @include plain-button;
+    flex-shrink: 0;
+    padding: 4px;
+    border-radius: $radius-round;
+    background: rgb(255 255 255 / 25%);
+  }
+
+  &__who {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-xs;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 36px;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  &__level {
+    @include plain-button;
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 6px 10px 6px 12px;
+    border-radius: $radius-round;
+    background: rgb(255 255 255 / 18%);
+    backdrop-filter: blur(8px);
+    font-size: 15px;
+    font-weight: 600;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: rgb(255 255 255 / 28%);
+    }
+  }
+
+  &__total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1;
+  }
+
+  &__total-value {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__total-label {
+    margin-top: $space-2xs;
+    font-size: 16px;
+    opacity: 0.8;
+  }
+
+  &__caption {
+    position: relative;
+    margin-top: $space-s !important;
+    font-size: 14px;
+    opacity: 0.85;
+  }
+}
+
+// Шкала уровней внутри hero
+.scale {
+  @include plain-button;
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-top: $space-2xl;
+
+  &__track {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    left: 7px;
+    height: 6px;
+    border-radius: $radius-round;
+    background: rgb(255 255 255 / 22%);
+  }
+
+  &__fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #fff;
+    box-shadow: 0 0 12px rgb(255 255 255 / 60%);
+    animation: fill 1.2s $ease-out 0.3s both;
+  }
+
+  &__points {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__point {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    width: 20px;
+    opacity: 0.6;
+
+    &:first-child {
+      align-items: flex-start;
+    }
+
+    &:last-child {
+      align-items: flex-end;
+    }
+
+    &--done {
+      opacity: 1;
+    }
+  }
+
+  &__dot {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgb(255 255 255 / 40%);
+    border-radius: $radius-round;
+    background: $blood-deep;
+
+    .scale__point--done & {
+      border-color: #fff;
+      background: #fff;
+    }
+  }
+
+  &__num {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  &__name {
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0.85;
+  }
+}
+
+@keyframes fill {
+  from {
+    width: 0;
+  }
+}
+
+// ——— Путь к званию ———
+.panel {
+  @include card;
+  border-radius: 24px;
+  padding: $space-xl 28px;
+
+  &__head {
+    margin-bottom: $space-l;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+}
+
+.honorary {
+  grid-column: span 8;
+  display: flex;
+  flex-direction: column;
+}
+
+.rings {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-m;
+}
+
+.ring {
+  @include plain-button;
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  align-items: center;
+  padding: $space-m $space-s;
+  border-radius: 20px;
+  text-align: center;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $color-bg-secondary;
+
+    .ring__chart {
+      transform: scale(1.04);
+    }
+  }
+
+  &__chart {
+    position: relative;
+    width: 148px;
+    height: 148px;
+    transition: transform $transition-base;
+
+    > svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+  }
+
+  &__bg,
+  &__bar {
+    fill: none;
+    stroke-width: 12;
+  }
+
+  &__bg {
+    stroke: var(--button-secondary);
+  }
+
+  &__bar {
+    stroke-linecap: round;
+    animation: ring 1.4s $ease-out 0.35s both;
+
+    &--whole_blood {
+      stroke: $color-drop-blood;
+    }
+
+    &--plasma {
+      stroke: $color-drop-plasma;
+    }
+
+    &--mixed {
+      stroke: url("#ring-mixed");
+    }
+  }
+
+  &__center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    b {
+      margin-top: 4px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    small {
+      margin-top: 2px;
+      color: $color-text-tertiary;
+      font-size: 13px;
+    }
+  }
+
+  &__title {
+    display: inline-flex;
+    gap: 2px;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+
+    > svg {
+      color: $color-text-tertiary;
+    }
+  }
+
+  &__hint {
+    color: $color-text-tertiary;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+}
+
+@keyframes ring {
+  from {
+    stroke-dashoffset: var(--ring-len);
+  }
+}
+
+.eta {
+  display: flex;
+  gap: $space-xl;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $space-l;
+  padding: $space-l $space-xl;
+  border-radius: 20px;
+  @include soft-bg($color-tone-blue, 7%);
+
+  &__label {
+    color: $color-text-secondary;
+    font-size: 14px;
+  }
+
+  &__value {
+    margin-top: 2px !important;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  &__note {
+    margin-top: 4px !important;
+    color: $color-text-tertiary;
+    font-size: 13px;
+  }
+}
+
+.cta {
+  @include plain-button;
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: $space-xs;
+  align-items: center;
+  height: 48px;
+  padding: 0 $space-xl;
+  border-radius: $radius-round;
+  color: #fff;
+  background: $color-accent;
+  font-size: 16px;
+  font-weight: 600;
+  transition:
+    transform $transition-fast,
+    filter $transition-fast;
+
+  &:hover {
+    filter: brightness(1.08);
+    transform: translateX(2px);
+  }
+}
+
+.achieved {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: $space-m;
+  align-items: flex-start;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+
+  &__medal {
+    font-size: 56px;
+  }
+}
+
+// ——— Карта донора ———
+.donor {
+  position: relative;
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: $space-xl;
+  border-radius: 24px;
+  color: #fff;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in srgb, #{$blood} 55%, transparent) 0,
+      transparent 55%
+    ),
+    linear-gradient(160deg, #2a2b35 0%, #15161c 100%);
+  box-shadow: 0 16px 40px rgb(0 0 0 / 18%);
+  @include lift;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  &__demo {
+    padding: 3px 10px;
+    border-radius: $radius-round;
+    background: rgb(255 255 255 / 14%);
+    font-size: 11px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  &__group {
+    display: flex;
+    gap: $space-s;
+    align-items: baseline;
+    margin-top: auto;
+    padding-top: $space-2xl;
+  }
+
+  &__group-value {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  &__group-rh {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ff6b73;
+  }
+
+  &__stats {
+    display: flex;
+    gap: $space-2xl;
+    margin: $space-l 0 0;
+
+    dt {
+      font-size: 12px;
+      opacity: 0.6;
+    }
+
+    dd {
+      margin: 2px 0 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+  }
+
+  &__code {
+    @include plain-button;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: $space-l;
+    padding: $space-s $space-m;
+    border-radius: $radius-l;
+    background: rgb(255 255 255 / 8%);
+    transition: background $transition-fast;
+
+    &:hover {
+      background: rgb(255 255 255 / 16%);
+    }
+
+    span {
+      display: flex;
+      flex-direction: column;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    small {
+      font-family: var(--family-base);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0;
+      opacity: 0.6;
+    }
+  }
+}
+
+// ——— Плитки ———
+.tile {
+  @include plain-button;
+  @include card;
+  @include lift;
+  grid-column: span 6;
+  display: flex;
+  gap: $space-m;
+  align-items: center;
+  padding: $space-l $space-xl;
+  border-radius: 24px;
+
+  &__icon {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+
+    &--blue {
+      color: $color-tone-blue;
+      @include soft-bg($color-tone-blue, 12%);
+    }
+
+    &--red {
+      color: $color-tone-red;
+      @include soft-bg($color-tone-red, 12%);
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+
+    b {
+      font-size: 18px;
+    }
+
+    small {
+      color: $color-text-tertiary;
+      font-size: 14px;
+    }
+  }
+
+  &__arrow {
+    color: $color-text-tertiary;
+    transition:
+      transform $transition-fast,
+      color $transition-fast;
+  }
+
+  &:hover &__arrow {
+    color: $color-accent;
+    transform: translateX(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appear,
+  .scale__fill,
+  .ring__bar {
+    animation: none;
+  }
+}
