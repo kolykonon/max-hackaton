@@ -7,7 +7,9 @@
   "paths": {
     "/api/v1/me": {
       "get": {
-        "tags": ["profile"],
+        "tags": [
+          "profile"
+        ],
         "summary": "Текущий пользователь",
         "operationId": "get_me",
         "parameters": [
@@ -56,14 +58,14 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -80,7 +82,9 @@
     },
     "/api/v1/me/onboarding": {
       "post": {
-        "tags": ["profile"],
+        "tags": [
+          "profile"
+        ],
         "summary": "Завершить онбординг",
         "operationId": "complete_onboarding",
         "parameters": [
@@ -132,31 +136,33 @@
             "description": "Successful Response"
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
+            "description": "Ошибка валидации",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unprocessable Content"
+            }
           }
         }
       }
     },
     "/api/v1/me/personal-data": {
       "get": {
-        "tags": ["profile"],
+        "tags": [
+          "profile"
+        ],
         "summary": "Личные данные",
         "operationId": "get_personal_data",
         "parameters": [
@@ -205,14 +211,14 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -227,7 +233,9 @@
         }
       },
       "put": {
-        "tags": ["profile"],
+        "tags": [
+          "profile"
+        ],
         "summary": "Сохранить личные данные",
         "operationId": "update_personal_data",
         "parameters": [
@@ -286,31 +294,33 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
+            "description": "Ошибка валидации",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unprocessable Content"
+            }
           }
         }
       }
     },
     "/api/v1/me/eligibility": {
       "get": {
-        "tags": ["profile"],
+        "tags": [
+          "profile"
+        ],
         "summary": "Ближайшие разрешённые даты донации",
         "operationId": "get_eligibility",
         "parameters": [
@@ -359,14 +369,14 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -383,7 +393,9 @@
     },
     "/api/v1/me/progress": {
       "get": {
-        "tags": ["profile"],
+        "tags": [
+          "profile"
+        ],
         "summary": "Уровень донора и путь к званию",
         "operationId": "get_progress",
         "parameters": [
@@ -432,14 +444,14 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -456,7 +468,9 @@
     },
     "/api/v1/me/donations": {
       "get": {
-        "tags": ["profile"],
+        "tags": [
+          "profile"
+        ],
         "summary": "История донаций",
         "operationId": "get_donations",
         "parameters": [
@@ -505,14 +519,14 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -529,7 +543,9 @@
     },
     "/api/v1/me/referrals": {
       "get": {
-        "tags": ["profile"],
+        "tags": [
+          "profile"
+        ],
         "summary": "Рефералы",
         "operationId": "get_referrals",
         "parameters": [
@@ -578,14 +594,14 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -602,7 +618,9 @@
     },
     "/api/v1/regions": {
       "get": {
-        "tags": ["regions"],
+        "tags": [
+          "regions"
+        ],
         "summary": "Все субъекты РФ по алфавиту",
         "operationId": "list_regions",
         "parameters": [
@@ -655,14 +673,14 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -679,7 +697,9 @@
     },
     "/api/v1/regions/locate": {
       "get": {
-        "tags": ["regions"],
+        "tags": [
+          "regions"
+        ],
         "summary": "Регион по координатам",
         "operationId": "locate_region",
         "parameters": [
@@ -750,31 +770,33 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
+            "description": "Ошибка валидации",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unprocessable Content"
+            }
           }
         }
       }
     },
     "/api/v1/map/status": {
       "get": {
-        "tags": ["regions"],
+        "tags": [
+          "regions"
+        ],
         "summary": "Карта-светофор по регионам",
         "operationId": "get_map_status",
         "parameters": [
@@ -823,14 +845,93 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/map/centers": {
+      "get": {
+        "tags": [
+          "regions"
+        ],
+        "summary": "Все центры крови для карты-светофора",
+        "operationId": "get_map_centers",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MapCenter"
+                  },
+                  "title": "Response Get Map Centers"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -847,7 +948,9 @@
     },
     "/api/v1/booking/dates": {
       "get": {
-        "tags": ["booking"],
+        "tags": [
+          "booking"
+        ],
         "summary": "Календарь доступности на 2 месяца",
         "operationId": "get_booking_dates",
         "parameters": [
@@ -913,41 +1016,43 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
           },
           "422": {
+            "description": "Ошибка валидации",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unprocessable Content"
+            }
           }
         }
       }
     },
     "/api/v1/booking/centers": {
       "get": {
-        "tags": ["booking"],
+        "tags": [
+          "booking"
+        ],
         "summary": "Центры со свободными слотами на дату",
         "operationId": "get_booking_centers",
         "parameters": [
@@ -1075,41 +1180,43 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
           },
           "422": {
+            "description": "Ошибка валидации",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unprocessable Content"
+            }
           }
         }
       }
     },
     "/api/v1/booking/slots": {
       "get": {
-        "tags": ["booking"],
+        "tags": [
+          "booking"
+        ],
         "summary": "Слоты центра на дату",
         "operationId": "get_booking_slots",
         "parameters": [
@@ -1185,41 +1292,43 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
           },
           "422": {
+            "description": "Ошибка валидации",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unprocessable Content"
+            }
           }
         }
       }
     },
     "/api/v1/appointments/current": {
       "get": {
-        "tags": ["appointments"],
+        "tags": [
+          "appointments"
+        ],
         "summary": "Активная запись",
         "operationId": "get_current_appointment",
         "parameters": [
@@ -1268,14 +1377,14 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -1292,7 +1401,9 @@
     },
     "/api/v1/appointments": {
       "post": {
-        "tags": ["appointments"],
+        "tags": [
+          "appointments"
+        ],
         "summary": "Записаться",
         "operationId": "create_appointment",
         "parameters": [
@@ -1351,51 +1462,53 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
           },
           "409": {
+            "description": "Конфликт",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Conflict"
+            }
           },
           "422": {
+            "description": "Ошибка валидации",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unprocessable Content"
+            }
           }
         }
       }
     },
     "/api/v1/appointments/{appointment_id}/reschedule": {
       "post": {
-        "tags": ["appointments"],
+        "tags": [
+          "appointments"
+        ],
         "summary": "Перенести запись",
         "operationId": "reschedule_appointment",
         "parameters": [
@@ -1463,51 +1576,53 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
           },
           "409": {
+            "description": "Конфликт",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Conflict"
+            }
           },
           "422": {
+            "description": "Ошибка валидации",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unprocessable Content"
+            }
           }
         }
       }
     },
     "/api/v1/appointments/{appointment_id}/cancel": {
       "post": {
-        "tags": ["appointments"],
+        "tags": [
+          "appointments"
+        ],
         "summary": "Отменить запись",
         "operationId": "cancel_appointment",
         "parameters": [
@@ -1565,34 +1680,34 @@
             }
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
           },
           "409": {
+            "description": "Конфликт",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Conflict"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -1609,7 +1724,9 @@
     },
     "/api/v1/demo/reset": {
       "post": {
-        "tags": ["demo"],
+        "tags": [
+          "demo"
+        ],
         "summary": "Сбросить демо-профиль",
         "operationId": "demo_reset",
         "parameters": [
@@ -1651,24 +1768,24 @@
             "description": "Successful Response"
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -1685,7 +1802,9 @@
     },
     "/api/v1/demo/appointments/{appointment_id}/remind": {
       "post": {
-        "tags": ["demo"],
+        "tags": [
+          "demo"
+        ],
         "summary": "Отправить напоминание сразу",
         "operationId": "demo_remind",
         "parameters": [
@@ -1736,24 +1855,34 @@
             "description": "Successful Response"
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
+          },
+          "409": {
+            "description": "Конфликт",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -1770,7 +1899,9 @@
     },
     "/api/v1/demo/appointments/{appointment_id}/complete": {
       "post": {
-        "tags": ["demo"],
+        "tags": [
+          "demo"
+        ],
         "summary": "Засчитать донацию",
         "operationId": "demo_complete",
         "parameters": [
@@ -1821,34 +1952,34 @@
             "description": "Successful Response"
           },
           "401": {
+            "description": "Нет или невалидна initData",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Unauthorized"
+            }
           },
           "404": {
+            "description": "Не найдено",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Not Found"
+            }
           },
           "409": {
+            "description": "Конфликт",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            },
-            "description": "Conflict"
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -1865,7 +1996,9 @@
     },
     "/api/v1/health": {
       "get": {
-        "tags": ["service"],
+        "tags": [
+          "service"
+        ],
         "summary": "Проверка живости",
         "operationId": "health",
         "responses": {
@@ -1908,7 +2041,9 @@
             "type": "string",
             "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
             "title": "Local Time",
-            "examples": ["09:30"]
+            "examples": [
+              "09:30"
+            ]
           },
           "center": {
             "$ref": "#/components/schemas/AppointmentCenter"
@@ -1945,7 +2080,12 @@
           }
         },
         "type": "object",
-        "required": ["id", "name", "address", "region_id"],
+        "required": [
+          "id",
+          "name",
+          "address",
+          "region_id"
+        ],
         "title": "AppointmentCenter"
       },
       "AppointmentResponse": {
@@ -1962,12 +2102,23 @@
           }
         },
         "type": "object",
-        "required": ["appointment"],
+        "required": [
+          "appointment"
+        ],
         "title": "AppointmentResponse"
       },
       "BloodGroup": {
         "type": "string",
-        "enum": ["1+", "1-", "2+", "2-", "3+", "3-", "4+", "4-"],
+        "enum": [
+          "1+",
+          "1-",
+          "2+",
+          "2-",
+          "3+",
+          "3-",
+          "4+",
+          "4-"
+        ],
         "title": "BloodGroup",
         "description": "Группа крови и резус"
       },
@@ -1987,7 +2138,10 @@
             "anyOf": [
               {
                 "type": "string",
-                "enum": ["K+", "K-"]
+                "enum": [
+                  "K+",
+                  "K-"
+                ]
               },
               {
                 "type": "null"
@@ -2004,8 +2158,7 @@
                 "type": "null"
               }
             ],
-            "title": "Phenotype",
-            "examples": ["CcDee"]
+            "title": "Phenotype"
           },
           "donor_code": {
             "anyOf": [
@@ -2017,12 +2170,16 @@
                 "type": "null"
               }
             ],
-            "title": "Donor Code",
-            "examples": ["1234-5678"]
+            "title": "Donor Code"
           }
         },
         "type": "object",
-        "required": ["group", "kell", "phenotype", "donor_code"],
+        "required": [
+          "group",
+          "kell",
+          "phenotype",
+          "donor_code"
+        ],
         "title": "BloodInfo"
       },
       "BookingCenter": {
@@ -2159,7 +2316,10 @@
           }
         },
         "type": "object",
-        "required": ["date", "available"],
+        "required": [
+          "date",
+          "available"
+        ],
         "title": "BookingDay"
       },
       "BookingSlots": {
@@ -2181,7 +2341,11 @@
           }
         },
         "type": "object",
-        "required": ["center", "date", "groups"],
+        "required": [
+          "center",
+          "date",
+          "groups"
+        ],
         "title": "BookingSlots"
       },
       "Donation": {
@@ -2211,7 +2375,12 @@
           }
         },
         "type": "object",
-        "required": ["id", "donation_type", "donated_on", "center_name"],
+        "required": [
+          "id",
+          "donation_type",
+          "donated_on",
+          "center_name"
+        ],
         "title": "Donation"
       },
       "DonationHistory": {
@@ -2230,12 +2399,18 @@
           }
         },
         "type": "object",
-        "required": ["total", "years"],
+        "required": [
+          "total",
+          "years"
+        ],
         "title": "DonationHistory"
       },
       "DonationType": {
         "type": "string",
-        "enum": ["whole_blood", "plasma"],
+        "enum": [
+          "whole_blood",
+          "plasma"
+        ],
         "title": "DonationType",
         "description": "Вид донации: цельная кровь или плазма."
       },
@@ -2258,7 +2433,11 @@
           }
         },
         "type": "object",
-        "required": ["year", "count", "items"],
+        "required": [
+          "year",
+          "count",
+          "items"
+        ],
         "title": "DonationYear"
       },
       "Eligibility": {
@@ -2271,7 +2450,10 @@
           }
         },
         "type": "object",
-        "required": ["next_allowed", "interval_active"],
+        "required": [
+          "next_allowed",
+          "interval_active"
+        ],
         "title": "Eligibility"
       },
       "ErrorBody": {
@@ -2299,7 +2481,11 @@
           }
         },
         "type": "object",
-        "required": ["code", "message", "fields"],
+        "required": [
+          "code",
+          "message",
+          "fields"
+        ],
         "title": "ErrorBody"
       },
       "ErrorCode": {
@@ -2327,7 +2513,9 @@
           }
         },
         "type": "object",
-        "required": ["error"],
+        "required": [
+          "error"
+        ],
         "title": "ErrorResponse"
       },
       "HTTPValidationError": {
@@ -2352,7 +2540,9 @@
           }
         },
         "type": "object",
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "title": "Health"
       },
       "Honorary": {
@@ -2382,7 +2572,13 @@
           }
         },
         "type": "object",
-        "required": ["whole", "plasma", "mixed", "achieved", "eta"],
+        "required": [
+          "whole",
+          "plasma",
+          "mixed",
+          "achieved",
+          "eta"
+        ],
         "title": "Honorary"
       },
       "HonoraryCounter": {
@@ -2394,11 +2590,15 @@
           },
           "goal": {
             "type": "integer",
-            "title": "Goal"
+            "title": "Goal",
+            "description": "40 для крови, 60 для плазмы"
           }
         },
         "type": "object",
-        "required": ["count", "goal"],
+        "required": [
+          "count",
+          "goal"
+        ],
         "title": "HonoraryCounter"
       },
       "HonoraryEta": {
@@ -2421,7 +2621,11 @@
           }
         },
         "type": "object",
-        "required": ["date", "years", "months"],
+        "required": [
+          "date",
+          "years",
+          "months"
+        ],
         "title": "HonoraryEta"
       },
       "HonoraryMixed": {
@@ -2433,7 +2637,10 @@
           },
           "goal": {
             "type": "integer",
-            "enum": [40, 60],
+            "enum": [
+              40,
+              60
+            ],
             "title": "Goal"
           },
           "whole_needed_for_40": {
@@ -2443,7 +2650,11 @@
           }
         },
         "type": "object",
-        "required": ["count", "goal", "whole_needed_for_40"],
+        "required": [
+          "count",
+          "goal",
+          "whole_needed_for_40"
+        ],
         "title": "HonoraryMixed"
       },
       "IntervalActive": {
@@ -2458,7 +2669,10 @@
           }
         },
         "type": "object",
-        "required": ["whole_blood", "plasma"],
+        "required": [
+          "whole_blood",
+          "plasma"
+        ],
         "title": "IntervalActive"
       },
       "Level": {
@@ -2490,7 +2704,13 @@
           }
         },
         "type": "object",
-        "required": ["code", "name", "threshold", "next", "is_max"],
+        "required": [
+          "code",
+          "name",
+          "threshold",
+          "next",
+          "is_max"
+        ],
         "title": "Level"
       },
       "LevelCode": {
@@ -2503,7 +2723,8 @@
           "mentor",
           "legend"
         ],
-        "title": "LevelCode"
+        "title": "LevelCode",
+        "description": "0 — Будущий донор, 1 — Новичок, 5 — Активный, 10 — Опытный, 20 — Наставник, 40 — Легенда."
       },
       "LocateRegionResponse": {
         "properties": {
@@ -2519,8 +2740,71 @@
           }
         },
         "type": "object",
-        "required": ["region"],
+        "required": [
+          "region"
+        ],
         "title": "LocateRegionResponse"
+      },
+      "MapCenter": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          },
+          "statuses": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/StockStatus"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/BloodGroup"
+            },
+            "type": "object",
+            "title": "Statuses"
+          },
+          "worst": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StockStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "address",
+          "lat",
+          "lon",
+          "region_id",
+          "statuses",
+          "worst"
+        ],
+        "title": "MapCenter",
+        "description": "Центр крови для карты-светофора: метка со статусами по группам, формат как у MapRegion"
       },
       "MapRegion": {
         "properties": {
@@ -2550,7 +2834,11 @@
           }
         },
         "type": "object",
-        "required": ["code", "statuses", "worst"],
+        "required": [
+          "code",
+          "statuses",
+          "worst"
+        ],
         "title": "MapRegion"
       },
       "MapStatus": {
@@ -2569,7 +2857,10 @@
           }
         },
         "type": "object",
-        "required": ["updated_at", "regions"],
+        "required": [
+          "updated_at",
+          "regions"
+        ],
         "title": "MapStatus"
       },
       "Me": {
@@ -2643,7 +2934,10 @@
           }
         },
         "type": "object",
-        "required": ["whole_blood", "plasma"],
+        "required": [
+          "whole_blood",
+          "plasma"
+        ],
         "title": "NextAllowed"
       },
       "NextLevel": {
@@ -2666,7 +2960,12 @@
           }
         },
         "type": "object",
-        "required": ["code", "name", "threshold", "remaining"],
+        "required": [
+          "code",
+          "name",
+          "threshold",
+          "remaining"
+        ],
         "title": "NextLevel"
       },
       "OnboardingRequest": {
@@ -2678,7 +2977,9 @@
           }
         },
         "type": "object",
-        "required": ["consent"],
+        "required": [
+          "consent"
+        ],
         "title": "OnboardingRequest"
       },
       "PersonalData": {
@@ -2870,13 +3171,17 @@
             "type": "string",
             "pattern": "^\\d{4}$",
             "title": "Passport Series",
-            "examples": ["4510"]
+            "examples": [
+              "4510"
+            ]
           },
           "passport_number": {
             "type": "string",
             "pattern": "^\\d{6}$",
             "title": "Passport Number",
-            "examples": ["123456"]
+            "examples": [
+              "123456"
+            ]
           },
           "passport_issued_by": {
             "type": "string",
@@ -2888,26 +3193,34 @@
             "type": "string",
             "pattern": "^\\d{3}-\\d{3}$",
             "title": "Passport Division Code",
-            "examples": ["770-001"]
+            "examples": [
+              "770-001"
+            ]
           },
           "oms_number": {
             "type": "string",
             "pattern": "^\\d{16}$",
             "title": "Oms Number",
-            "examples": ["1234567890123456"]
+            "examples": [
+              "1234567890123456"
+            ]
           },
           "phone": {
             "type": "string",
             "pattern": "^\\+7\\d{10}$",
             "title": "Phone",
-            "examples": ["+79001234567"]
+            "examples": [
+              "+79001234567"
+            ]
           },
           "email": {
             "type": "string",
             "maxLength": 254,
             "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
             "title": "Email",
-            "examples": ["ivanov@mail.ru"]
+            "examples": [
+              "ivanov@mail.ru"
+            ]
           }
         },
         "type": "object",
@@ -2939,7 +3252,11 @@
           }
         },
         "type": "object",
-        "required": ["total", "level", "honorary"],
+        "required": [
+          "total",
+          "level",
+          "honorary"
+        ],
         "title": "Progress"
       },
       "Referrals": {
@@ -2955,7 +3272,10 @@
           }
         },
         "type": "object",
-        "required": ["count", "link"],
+        "required": [
+          "count",
+          "link"
+        ],
         "title": "Referrals"
       },
       "Region": {
@@ -2978,7 +3298,12 @@
           }
         },
         "type": "object",
-        "required": ["id", "code", "name", "has_centers"],
+        "required": [
+          "id",
+          "code",
+          "name",
+          "has_centers"
+        ],
         "title": "Region"
       },
       "Slot": {
@@ -2996,7 +3321,9 @@
             "type": "string",
             "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
             "title": "Local Time",
-            "examples": ["09:30"]
+            "examples": [
+              "09:30"
+            ]
           },
           "is_free": {
             "type": "boolean",
@@ -3004,7 +3331,12 @@
           }
         },
         "type": "object",
-        "required": ["id", "starts_at", "local_time", "is_free"],
+        "required": [
+          "id",
+          "starts_at",
+          "local_time",
+          "is_free"
+        ],
         "title": "Slot"
       },
       "SlotGroup": {
@@ -3021,12 +3353,19 @@
           }
         },
         "type": "object",
-        "required": ["period", "slots"],
+        "required": [
+          "period",
+          "slots"
+        ],
         "title": "SlotGroup"
       },
       "SlotPeriod": {
         "type": "string",
-        "enum": ["morning", "day", "evening"],
+        "enum": [
+          "morning",
+          "day",
+          "evening"
+        ],
         "title": "SlotPeriod"
       },
       "SlotRequest": {
@@ -3037,7 +3376,9 @@
           }
         },
         "type": "object",
-        "required": ["slot_id"],
+        "required": [
+          "slot_id"
+        ],
         "title": "SlotRequest"
       },
       "SlotsCenter": {
@@ -3056,12 +3397,20 @@
           }
         },
         "type": "object",
-        "required": ["id", "name", "address"],
+        "required": [
+          "id",
+          "name",
+          "address"
+        ],
         "title": "SlotsCenter"
       },
       "StockStatus": {
         "type": "string",
-        "enum": ["urgent", "low", "enough"],
+        "enum": [
+          "urgent",
+          "low",
+          "enough"
+        ],
         "title": "StockStatus",
         "description": "Запас крови группы: нет строки в таблице — «нет данных»."
       },
@@ -3098,7 +3447,11 @@
           }
         },
         "type": "object",
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "title": "ValidationError"
       }
     }

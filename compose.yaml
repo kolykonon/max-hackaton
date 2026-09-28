@@ -34,6 +34,7 @@ services:
       context: ./frontend
       args:
         VITE_USE_MOCKS: ${VITE_USE_MOCKS:-false}
+        VITE_DEV_USER_ID: ${VITE_DEV_USER_ID:-}
     restart: unless-stopped
     ports:
       - "${WEB_HTTP_PORT:-80}:80"

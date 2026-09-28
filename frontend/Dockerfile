@@ -11,8 +11,11 @@ COPY . .
 # Моки MSW можно включить на деплое, пока нет бэка: docker compose build --build-arg VITE_USE_MOCKS=true web
 ARG VITE_API_BASE_URL=/api/v1
 ARG VITE_USE_MOCKS=false
+# Только для локального запуска вне MAX (бэк с AUTH_DEV_MODE=true). На проде пусто
+ARG VITE_DEV_USER_ID=
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL \
-    VITE_USE_MOCKS=$VITE_USE_MOCKS
+    VITE_USE_MOCKS=$VITE_USE_MOCKS \
+    VITE_DEV_USER_ID=$VITE_DEV_USER_ID
 
 RUN npm run build
 

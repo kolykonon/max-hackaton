@@ -1,12 +1,12 @@
 import datetime as dt
 from typing import ClassVar
 
-from app.api.stub.data import MOSCOW, REGIONS
+from app.api.stub.data import CENTERS, MOSCOW, REGIONS, DemoCenter
 from app.core.errors import AppError
 from app.core.utils.dates import MSK, today_msk
 from app.models.enums import BloodGroup, StockStatus
 from app.schemas.common import ErrorCode
-from app.schemas.regions import MapRegion, MapStatus, Region
+from app.schemas.regions import MapCenter, MapRegion, MapStatus, Region
 
 
 class StubRegionService:
@@ -49,3 +49,37 @@ class StubRegionService:
         }
         worst = min(statuses.values(), key=self.SEVERITY.__getitem__)
         return MapRegion(code=region.code, statuses=statuses, worst=worst)
+
+    async def get_map_centers(self) -> list[MapCenter]:
+        return [self._map_center(center) for center in CENTERS]
+
+    def _map_center(self, center: DemoCenter) -> MapCenter:
+        # Все демо-центры в Москве (как в /booking/centers). Без group_status — нет данных
+        if center.group_status is None:
+            return MapCenter(
+                id=center.id,
+                name=center.name,
+                address=center.address,
+                lat=center.lat,
+                lon=center.lon,
+                region_id=MOSCOW.id,
+                statuses={},
+                worst=None,
+            )
+        statuses = {
+            group: self.STATUS_CYCLE[(center.id + i) % len(self.STATUS_CYCLE)]
+            for i, group in enumerate(BloodGroup)
+        }
+        # Группа демо-пользователя — тот же статус, что центр отдаёт в /booking/centers
+        statuses[BloodGroup.A_POS] = center.group_status
+        worst = min(statuses.values(), key=self.SEVERITY.__getitem__)
+        return MapCenter(
+            id=center.id,
+            name=center.name,
+            address=center.address,
+            lat=center.lat,
+            lon=center.lon,
+            region_id=MOSCOW.id,
+            statuses=statuses,
+            worst=worst,
+        )
