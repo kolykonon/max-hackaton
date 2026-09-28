@@ -11,16 +11,18 @@ import random
 import zlib
 from pathlib import Path
 
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from app.core.db import sessionmaker
 from app.models import (
+    Appointment,
     Center,
     CenterBloodStatus,
     Region,
     RegionBloodStatus,
 )
+from app.models.center import DETAIL_FIELDS
 from app.models.enums import BloodGroup, StockStatus
 from app.seeds.slots import generate_slots
 
@@ -82,27 +84,37 @@ async def seed_centers(session, region_ids: dict[str, int]) -> None:
     data = _load_json("centers.json")
     log.info("Центров во входных данных: %s", len(data))
 
-    existing = {
-        (region_id, name): center_id
-        for center_id, region_id, name in (
-            await session.execute(select(Center.id, Center.region_id, Center.name))
-        ).all()
-    }
+    rows = (
+        await session.execute(
+            select(Center.id, Center.region_id, Center.name, Center.external_id)
+        )
+    ).all()
+    by_ext = {ext: cid for cid, _, _, ext in rows if ext}
+    by_name = {(rid, name): cid for cid, rid, name, _ in rows}
 
     to_insert = []
+    adopted: set[int] = set()
     updated = 0
     for c in data:
         region_id = region_ids.get(c["region_code"])
         if region_id is None:
             log.warning("Пропускаем центр — нет региона %s", c["region_code"])
             continue
-        fields = {"address": c["address"], "lat": c["lat"], "lon": c["lon"]}
-        center_id = existing.get((region_id, c["name"]))
+        fields = {k: c.get(k) or None for k in DETAIL_FIELDS}
+        fields.update(name=c["name"], address=c["address"], lat=c["lat"], lon=c["lon"])
+        # Ищем строку: по external_id, затем по старому имени (адопт легаси-центра
+        # вместе с его записями), затем по (регион, имя).
+        center_id = (
+            by_ext.get(c.get("external_id"))
+            or by_name.get((region_id, c.get("legacy_name")))
+            or by_name.get((region_id, c["name"]))
+        )
+        if center_id in adopted:  # legacy_name совпал у двух строк CSV — вторая новая
+            center_id = None
         if center_id is None:
-            to_insert.append(
-                {"region_id": region_id, "name": c["name"], "photo_url": None, **fields}
-            )
+            to_insert.append({"region_id": region_id, "photo_url": None, **fields})
         else:
+            adopted.add(center_id)
             await session.execute(
                 update(Center).where(Center.id == center_id).values(**fields)
             )
@@ -110,7 +122,16 @@ async def seed_centers(session, region_ids: dict[str, int]) -> None:
 
     if to_insert:
         await session.execute(pg_insert(Center).values(to_insert))
+    # Легаси-центры (без external_id), не попавшие в реестр, убираем с карты.
+    # Те, на которые есть записи доноров, оставляем — FK без каскада.
+    removed = await session.execute(
+        delete(Center).where(
+            Center.external_id.is_(None),
+            Center.id.not_in(select(Appointment.center_id)),
+        )
+    )
     await session.commit()
+    log.info("Легаси-центров удалено: %s", removed.rowcount)
     log.info("Центров добавлено: %s, обновлено: %s", len(to_insert), updated)
 
     with_centers = {region_ids.get(c["region_code"]) for c in data}

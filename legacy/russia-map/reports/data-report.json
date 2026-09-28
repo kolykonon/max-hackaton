@@ -1,0 +1,25 @@
+{
+  "imported": 405,
+  "uniqueIds": 405,
+  "sourceRegions": 84,
+  "boundaryRegions": 85,
+  "exact": 189,
+  "approximate": 14,
+  "unresolved": 202,
+  "unmappedRegions": [],
+  "regionsWithoutCenters": [
+    "Камчатский край"
+  ],
+  "crossRegion": [
+    {
+      "id": "BS-0028",
+      "name": "ГБУЗ МО «Московский областной центр крови»",
+      "sourceRegion": "Московская область",
+      "geographicRegions": [
+        "г. Москва"
+      ],
+      "quality": "exact"
+    }
+  ],
+  "outsideGeometry": []
+}

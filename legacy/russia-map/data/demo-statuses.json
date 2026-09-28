@@ -1,0 +1,4067 @@
+{
+  "kind": "demo",
+  "seed": "kaplya-russia-demo-v1",
+  "algorithm": "SHA-256(seed:id:group), first uint32 big endian modulo 100",
+  "groups": [
+    "O(I) Rh+",
+    "O(I) Rh−",
+    "A(II) Rh+",
+    "A(II) Rh−",
+    "B(III) Rh+",
+    "B(III) Rh−",
+    "AB(IV) Rh+",
+    "AB(IV) Rh−"
+  ],
+  "statuses": {
+    "BS-0001": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0002": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0003": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0004": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0005": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0006": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0007": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0008": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0009": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0010": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0011": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0012": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0013": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0014": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0015": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0016": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0017": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0018": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0019": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0020": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0021": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0022": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0023": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0024": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0025": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0026": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0027": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0028": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0029": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0030": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0031": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0032": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0033": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0034": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0035": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0036": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0037": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0038": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0039": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0040": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0041": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0042": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0043": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0044": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0045": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0046": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0047": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0048": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0049": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0050": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0051": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0052": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0053": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0054": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0055": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0056": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0057": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0058": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0059": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0060": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0061": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0062": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0063": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0064": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0065": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0066": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0067": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0068": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0069": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0070": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0071": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0072": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0073": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0074": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0075": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0076": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0077": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0078": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0079": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0080": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0081": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0082": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0083": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0084": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0085": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0086": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0087": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0088": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0089": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0090": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0091": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0092": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0093": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0094": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0095": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0096": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0097": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0098": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0099": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0100": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0101": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0102": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0103": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0104": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0105": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0106": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0107": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0108": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0109": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0110": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0111": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0112": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0113": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0114": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0115": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0116": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0117": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0118": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0119": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0120": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0121": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0122": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0123": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0124": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0125": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0126": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0127": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0128": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0129": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0130": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0131": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0132": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0133": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0134": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0135": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0136": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0137": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0138": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0139": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0140": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0141": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0142": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0143": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0144": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0145": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0146": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0147": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0148": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0149": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0150": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0151": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0152": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0153": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0154": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0155": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0156": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0157": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0158": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0159": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0160": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0161": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0162": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0163": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0164": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0165": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0166": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0167": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0168": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0169": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0170": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0171": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0172": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0173": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0174": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0175": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0176": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0177": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0178": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0179": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0180": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0181": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0182": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0183": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0184": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0185": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0186": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0187": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0188": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0189": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0190": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0191": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0192": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0193": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0194": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0195": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0196": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0197": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0198": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0199": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0200": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0201": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0202": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0203": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0204": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0205": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0206": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0207": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0208": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0209": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0210": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0211": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0212": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0213": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0214": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0215": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0216": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0217": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0218": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0219": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0220": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0221": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0222": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0223": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0224": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0225": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0226": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0227": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0228": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0229": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0230": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0231": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0232": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0233": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0234": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0235": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0236": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0237": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0238": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0239": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0240": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0241": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0242": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0243": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0244": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0245": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0246": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0247": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0248": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0249": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0250": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0251": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0252": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0253": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0254": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0255": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0256": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0257": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0258": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0259": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0260": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0261": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0262": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0263": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0264": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0265": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0266": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0267": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0268": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0269": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0270": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0271": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0272": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0273": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0274": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0275": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0276": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0277": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0278": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0279": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0280": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0281": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0282": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0283": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0284": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0285": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0286": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0287": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0288": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0289": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0290": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0291": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0292": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0293": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0294": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0295": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0296": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0297": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0298": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0299": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0300": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0301": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0302": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0303": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0304": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0305": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0306": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0307": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0308": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0309": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0310": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0311": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0312": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0313": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0314": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0315": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0316": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0317": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0318": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0319": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0320": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0321": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0322": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0323": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0324": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0325": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0326": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0327": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0328": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0329": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0330": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0331": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0332": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0333": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0334": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0335": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0336": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0337": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0338": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0339": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0340": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0341": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0342": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0343": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0344": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0345": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0346": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0347": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0348": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0349": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0350": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0351": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0352": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0353": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0354": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0355": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0356": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0357": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0358": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0359": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0360": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0361": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0362": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0363": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0364": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0365": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0366": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0367": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0368": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0369": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0370": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0371": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0372": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0373": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0374": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0375": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0376": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0377": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0378": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0379": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0380": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0381": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0382": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0383": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0384": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0385": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0386": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0387": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0388": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0389": {
+      "O(I) Rh+": "urgent",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0390": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0391": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0392": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0393": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0394": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "unknown",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0395": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0396": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0397": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "needed",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0398": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    },
+    "BS-0399": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "unknown",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0400": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "unknown",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0401": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0402": {
+      "O(I) Rh+": "unknown",
+      "O(I) Rh−": "urgent",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "urgent",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "enough",
+      "AB(IV) Rh+": "urgent",
+      "AB(IV) Rh−": "enough"
+    },
+    "BS-0403": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "enough",
+      "A(II) Rh+": "needed",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "enough",
+      "B(III) Rh−": "unknown",
+      "AB(IV) Rh+": "needed",
+      "AB(IV) Rh−": "urgent"
+    },
+    "BS-0404": {
+      "O(I) Rh+": "needed",
+      "O(I) Rh−": "needed",
+      "A(II) Rh+": "enough",
+      "A(II) Rh−": "needed",
+      "B(III) Rh+": "unknown",
+      "B(III) Rh−": "urgent",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "needed"
+    },
+    "BS-0405": {
+      "O(I) Rh+": "enough",
+      "O(I) Rh−": "unknown",
+      "A(II) Rh+": "urgent",
+      "A(II) Rh−": "enough",
+      "B(III) Rh+": "urgent",
+      "B(III) Rh−": "needed",
+      "AB(IV) Rh+": "enough",
+      "AB(IV) Rh−": "unknown"
+    }
+  }
+}

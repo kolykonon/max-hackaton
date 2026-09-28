@@ -24,6 +24,7 @@
   z-index: $z-overlay;
   display: flex;
   align-items: flex-end;
+  justify-content: center;
 
   &__overlay {
     position: absolute;
@@ -37,6 +38,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: $content-max-width;
     border-radius: $radius-sheet $radius-sheet 0 0;
     background: $color-bg;
     animation: sheet-in $transition-base;

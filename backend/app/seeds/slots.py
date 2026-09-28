@@ -79,7 +79,11 @@ async def generate_slots(reset: bool = True) -> None:
             await session.commit()
         else:
             latest = await session.scalar(select(func.max(Slot.starts_at)))
-            if latest is not None and latest.date() >= today + timedelta(days=DAYS_AHEAD - 2):
+            # Новые центры из сида тоже должны получить слоты, иначе на карте их нет
+            without_slots = await session.scalar(
+                select(func.count(Center.id)).where(Center.id.not_in(select(Slot.center_id)))
+            )
+            if not without_slots and latest is not None and latest.date() >= today + timedelta(days=DAYS_AHEAD - 2):
                 log.info("Слоты уже сгенерированы до %s, пропускаем", latest.date())
                 return
 

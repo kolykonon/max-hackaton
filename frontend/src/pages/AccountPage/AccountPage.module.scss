@@ -1,4 +1,10 @@
 .account-page {
+  // :is(main) — чтобы перебить колонку 640px из Screen
+  &--desktop:is(main) {
+    padding-inline: 40px;
+    background: $color-bg-secondary;
+  }
+
   &__honorary {
     display: flex;
     flex-direction: column;
