@@ -1,0 +1,23 @@
+{
+  "retrievedAt": "2026-09-27T14:01:01.489264+00:00",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/russia.geojson",
+      "file": "russia.geojson",
+      "sourceDate": "2013-12-04 (feature metadata)",
+      "sha256": "c55b928c4ec0637d3c485e970c3d1f319244cbaa23694a676f09eb78284d92d2"
+    },
+    {
+      "url": "https://www.openstreetmap.org/api/0.6/relation/72639/full.json",
+      "file": "osm-72639.json",
+      "sourceDate": "2025-12-29T22:00:19Z",
+      "sha256": "2c95854c5b870c40dbd1c1f46d7ef1cd0aa02b7e9b32c51f2a16237b0710e56b"
+    },
+    {
+      "url": "https://www.openstreetmap.org/api/0.6/relation/1574364/full.json",
+      "file": "osm-1574364.json",
+      "sourceDate": "2025-06-17T10:55:02Z",
+      "sha256": "e4b3bfb27f85d075dd6b129db42c9752b2d9f5d85531d34bb942d8308fd4498c"
+    }
+  ]
+}
