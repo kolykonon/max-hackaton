@@ -10,6 +10,7 @@ export const queryKeys = {
   regions: ['regions'] as const,
   locate: (lat: number, lon: number) => ['regions', 'locate', lat, lon] as const,
   mapStatus: ['map', 'status'] as const,
+  mapCenters: ['map', 'centers'] as const,
   bookingDates: (regionId: number, type: DonationType) => ['booking', 'dates', regionId, type] as const,
   bookingCenters: (params: object) => ['booking', 'centers', params] as const,
   bookingSlots: (centerId: number, type: DonationType, date: string) => ['booking', 'slots', centerId, type, date] as const,

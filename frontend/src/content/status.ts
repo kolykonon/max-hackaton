@@ -21,3 +21,14 @@ export const GROUP_STATUS_TEXT: Record<StockStatus, string> = {
   enough: 'Вашей группы достаточно',
   none: 'Нет данных по вашей группе',
 }
+
+/**
+ * Цвета светофора для карт MapLibre: WebGL не читает CSS-переменные, поэтому HEX.
+ * Должны совпадать с $color-status-* в styles/_variables.scss.
+ */
+export const STATUS_COLORS: Record<StockStatus, string> = {
+  urgent: '#ef3e46',
+  low: '#f7b52c',
+  enough: '#34b75a',
+  none: '#c7c9cf',
+}

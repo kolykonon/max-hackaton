@@ -24,3 +24,16 @@ class MapRegion(Schema):
 class MapStatus(Schema):
     updated_at: dt.datetime
     regions: list[MapRegion]
+
+
+class MapCenter(Schema):
+    """Центр крови для карты-светофора: метка со статусами по группам, формат как у MapRegion"""
+
+    id: int
+    name: str
+    address: str
+    lat: float
+    lon: float
+    region_id: int
+    statuses: dict[BloodGroup, StockStatus]
+    worst: StockStatus | None

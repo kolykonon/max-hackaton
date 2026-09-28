@@ -1,0 +1,33 @@
+.center-info-card {
+  position: absolute;
+  right: $space-s;
+  // Над строкой атрибуции карты
+  bottom: $space-2xl + $space-xs;
+  left: $space-s;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  padding: $space-m;
+  border-radius: $radius-l;
+  background: $color-bg;
+  box-shadow: $shadow-floating;
+
+  &__head {
+    display: flex;
+    gap: $space-s;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__name {
+    display: block;
+  }
+
+  &__row {
+    display: flex;
+    gap: $space-xs;
+    align-items: center;
+    color: $color-text-secondary;
+  }
+}

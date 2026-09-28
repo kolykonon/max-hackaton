@@ -1,0 +1,12 @@
+.base-map {
+  position: relative;
+  flex: 1;
+  min-height: 300px;
+  overflow: hidden;
+  background: #f2f3f0;
+
+  &__canvas {
+    position: absolute;
+    inset: 0;
+  }
+}

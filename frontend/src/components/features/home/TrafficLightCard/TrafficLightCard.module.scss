@@ -2,6 +2,7 @@
   overflow: hidden;
 
   &__map {
+    position: relative;
     height: 26vh;
     min-height: 150px;
   }

@@ -11,9 +11,13 @@
   &__map-card {
     position: absolute;
     right: $space-s;
-    bottom: $space-s;
+    // Над строкой атрибуции карты
+    bottom: $space-2xl + $space-xs;
     left: $space-s;
+    z-index: 1;
     border-radius: $radius-l;
+    // Карточка «выбран» полупрозрачная — подкладываем фон, чтобы карта не просвечивала
+    background: $color-bg;
     box-shadow: $shadow-floating;
   }
 }

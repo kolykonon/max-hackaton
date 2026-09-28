@@ -175,6 +175,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/map/centers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Все центры крови для карты-светофора */
+        get: operations["get_map_centers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/booking/dates": {
         parameters: {
             query?: never;
@@ -414,15 +431,9 @@ export interface components {
             group: components["schemas"]["BloodGroup"] | null;
             /** Kell */
             kell: ("K+" | "K-") | null;
-            /**
-             * Phenotype
-             * @example CcDee
-             */
+            /** Phenotype */
             phenotype: string | null;
-            /**
-             * Donor Code
-             * @example 1234-5678
-             */
+            /** Donor Code */
             donor_code: string | null;
         };
         /** BookingCenter */
@@ -573,7 +584,10 @@ export interface components {
         HonoraryCounter: {
             /** Count */
             count: number;
-            /** Goal */
+            /**
+             * Goal
+             * @description 40 для крови, 60 для плазмы
+             */
             goal: number;
         };
         /** HonoraryEta */
@@ -620,12 +634,36 @@ export interface components {
         };
         /**
          * LevelCode
+         * @description 0 — Будущий донор, 1 — Новичок, 5 — Активный, 10 — Опытный, 20 — Наставник, 40 — Легенда.
          * @enum {string}
          */
         LevelCode: "future_donor" | "novice" | "active" | "experienced" | "mentor" | "legend";
         /** LocateRegionResponse */
         LocateRegionResponse: {
             region: components["schemas"]["Region"] | null;
+        };
+        /**
+         * MapCenter
+         * @description Центр крови для карты-светофора: метка со статусами по группам, формат как у MapRegion
+         */
+        MapCenter: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Address */
+            address: string;
+            /** Lat */
+            lat: number;
+            /** Lon */
+            lon: number;
+            /** Region Id */
+            region_id: number;
+            /** Statuses */
+            statuses: {
+                [key: string]: components["schemas"]["StockStatus"];
+            };
+            worst: components["schemas"]["StockStatus"] | null;
         };
         /** MapRegion */
         MapRegion: {
@@ -883,7 +921,7 @@ export interface operations {
                     "application/json": components["schemas"]["Me"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -926,7 +964,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -935,7 +973,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Ошибка валидации */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -967,7 +1005,7 @@ export interface operations {
                     "application/json": components["schemas"]["PersonalData"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1012,7 +1050,7 @@ export interface operations {
                     "application/json": components["schemas"]["PersonalData"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1021,7 +1059,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Ошибка валидации */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1053,7 +1091,7 @@ export interface operations {
                     "application/json": components["schemas"]["Eligibility"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1094,7 +1132,7 @@ export interface operations {
                     "application/json": components["schemas"]["Progress"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1135,7 +1173,7 @@ export interface operations {
                     "application/json": components["schemas"]["DonationHistory"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1176,7 +1214,7 @@ export interface operations {
                     "application/json": components["schemas"]["Referrals"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1217,7 +1255,7 @@ export interface operations {
                     "application/json": components["schemas"]["Region"][];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1261,7 +1299,7 @@ export interface operations {
                     "application/json": components["schemas"]["LocateRegionResponse"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1270,7 +1308,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Ошибка валидации */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1302,7 +1340,48 @@ export interface operations {
                     "application/json": components["schemas"]["MapStatus"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_map_centers: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapCenter"][];
+                };
+            };
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1346,7 +1425,7 @@ export interface operations {
                     "application/json": components["schemas"]["BookingDates"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1355,7 +1434,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1364,7 +1443,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Ошибка валидации */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1403,7 +1482,7 @@ export interface operations {
                     "application/json": components["schemas"]["BookingCenter"][];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1412,7 +1491,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1421,7 +1500,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Ошибка валидации */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1457,7 +1536,7 @@ export interface operations {
                     "application/json": components["schemas"]["BookingSlots"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1466,7 +1545,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1475,7 +1554,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Ошибка валидации */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1507,7 +1586,7 @@ export interface operations {
                     "application/json": components["schemas"]["AppointmentResponse"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1552,7 +1631,7 @@ export interface operations {
                     "application/json": components["schemas"]["AppointmentResponse"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1561,7 +1640,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1570,7 +1649,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Conflict */
+            /** @description Конфликт */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1579,7 +1658,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Ошибка валидации */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1617,7 +1696,7 @@ export interface operations {
                     "application/json": components["schemas"]["AppointmentResponse"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1626,7 +1705,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1635,7 +1714,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Conflict */
+            /** @description Конфликт */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1644,7 +1723,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Ошибка валидации */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1678,7 +1757,7 @@ export interface operations {
                     "application/json": components["schemas"]["AppointmentResponse"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1687,7 +1766,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1696,7 +1775,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Conflict */
+            /** @description Конфликт */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1735,7 +1814,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1744,7 +1823,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1785,7 +1864,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1794,8 +1873,17 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Конфликт */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1835,7 +1923,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized */
+            /** @description Нет или невалидна initData */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1844,7 +1932,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not Found */
+            /** @description Не найдено */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1853,7 +1941,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Conflict */
+            /** @description Конфликт */
             409: {
                 headers: {
                     [name: string]: unknown;

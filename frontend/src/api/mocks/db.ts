@@ -69,11 +69,14 @@ export const db = {
   },
 }
 
-export const REGION_CODES: Record<string, string> = { Москва: 'RU-MOW', 'Московская область': 'RU-MOS', 'Санкт-Петербург': 'RU-SPE' }
-
-export const regionCode = (id: number, name: string) => REGION_CODES[name] ?? `RU-${String(id).padStart(2, '0')}`
 
 export const MOSCOW_ID = REGIONS.find((r) => r.name === 'Москва')!.id
+
+const regionCentroids = new Map<string, [number, number]>()
+
+export const setRegionCentroids = (centroids: Map<string, [number, number]>) => {
+  centroids.forEach((point, code) => regionCentroids.set(code, point))
+}
 
 export interface MockCenter {
   id: number
@@ -89,27 +92,29 @@ export interface MockCenter {
 /** В Москве — центры из демо, в остальных регионах с центрами — одна областная станция. */
 export const centersOf = (regionId: number): MockCenter[] => {
   if (regionId === MOSCOW_ID) {
-    return CENTERS.map((c, i) => ({
+    return CENTERS.map((c) => ({
       id: c.id,
       regionId,
       name: c.name,
       address: c.address,
-      lat: 55.75 + i * 0.02,
-      lon: 37.6 + i * 0.03,
+      lat: c.lat,
+      lon: c.lon,
       distanceKm: c.distanceKm,
       groupStatus: c.groupStatus,
     }))
   }
   const region = REGIONS.find((r) => r.id === regionId)
   if (!region?.hasCenters) return []
+  // Станция стоит в центре региона — центры посчитаны по файлу карты при запуске моков
+  const [lon, lat] = regionCentroids.get(region.code) ?? [40, 55]
   return [
     {
       id: 100 + regionId,
       regionId,
       name: 'Областная станция переливания крови',
       address: 'ул. Ленина, 1',
-      lat: 55,
-      lon: 40,
+      lat,
+      lon,
       distanceKm: 3.5,
       groupStatus: (['urgent', 'low', 'enough'] as const)[regionId % 3],
     },

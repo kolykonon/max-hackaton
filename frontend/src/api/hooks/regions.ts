@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { api } from '../client'
 import { queryKeys } from '../queryKeys'
-import type { LocateRegionResponse, MapStatus, Region } from '../types'
+import type { LocateRegionResponse, MapCenter, MapStatus, Region } from '../types'
 
 export const useRegions = () =>
   useQuery({ queryKey: queryKeys.regions, queryFn: () => api.get<Region[]>('/regions'), staleTime: Infinity })
@@ -16,3 +16,7 @@ export const useLocateRegion = (coords: { lat: number; lon: number } | null) =>
 
 export const useMapStatus = () =>
   useQuery({ queryKey: queryKeys.mapStatus, queryFn: () => api.get<MapStatus>('/map/status') })
+
+/** Все центры со статусами — метки на экране «Карта». */
+export const useMapCenters = () =>
+  useQuery({ queryKey: queryKeys.mapCenters, queryFn: () => api.get<MapCenter[]>('/map/centers') })

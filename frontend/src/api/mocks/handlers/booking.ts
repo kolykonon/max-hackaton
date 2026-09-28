@@ -4,9 +4,19 @@ import { BLOOD_GROUPS } from '@/content/bloodGroups'
 import type { BloodGroup, DonationType } from '@/content/types'
 import { addDays, parseISODate, startOfDay, toISODate } from '@/utils/format'
 
-import type { Appointment, AppointmentResponse, BookingCenter, BookingDates, BookingSlots, MapStatus, Region, SlotPeriod } from '../../types'
+import type {
+  Appointment,
+  AppointmentResponse,
+  BookingCenter,
+  BookingDates,
+  BookingSlots,
+  MapCenter,
+  MapStatus,
+  Region,
+  SlotPeriod,
+} from '../../types'
 import { REGIONS } from '../fixtures'
-import { centersOf, db, decodeSlot, encodeSlot, findCenter, MOSCOW_ID, regionCode } from '../db'
+import { centersOf, db, decodeSlot, encodeSlot, findCenter, MOSCOW_ID } from '../db'
 import { getNextAllowed } from '../logic'
 import { apiError, BASE, latency } from '../utils'
 
@@ -15,7 +25,7 @@ const STATUSES = ['urgent', 'low', 'enough'] as const
 
 const toRegion = (r: (typeof REGIONS)[number]): Region => ({
   id: r.id,
-  code: regionCode(r.id, r.name),
+  code: r.code,
   name: r.name,
   has_centers: r.hasCenters,
 })
@@ -101,14 +111,37 @@ export const bookingHandlers = [
     await latency()
     const regions: MapStatus['regions'] = REGIONS.map((r) => {
       // ~10% регионов без данных
-      if (r.id % 10 === 3) return { code: regionCode(r.id, r.name), statuses: {}, worst: null }
+      if (r.id % 10 === 3) return { code: r.code, statuses: {}, worst: null }
       const statuses = Object.fromEntries(
         BLOOD_GROUPS.map((group, i) => [group, STATUSES[(r.id + i * 2) % 3]]),
       ) as Record<BloodGroup, (typeof STATUSES)[number]>
       const worst = STATUSES.find((s) => Object.values(statuses).includes(s)) ?? null
-      return { code: regionCode(r.id, r.name), statuses, worst }
+      return { code: r.code, statuses, worst }
     })
     return HttpResponse.json({ updated_at: addDays(new Date(), -1).toISOString(), regions })
+  }),
+
+  http.get(`${BASE}/map/centers`, async () => {
+    await latency()
+    const centers: MapCenter[] = REGIONS.flatMap((region) => centersOf(region.id)).map((center) => {
+      // Статусы центра детерминированно «плавают» вокруг статуса его группы пользователя
+      const statuses = Object.fromEntries(
+        BLOOD_GROUPS.map((group, i) => [group, STATUSES[(center.id + i) % 3]]),
+      ) as Record<BloodGroup, (typeof STATUSES)[number]>
+      statuses['2+'] = center.groupStatus
+      const worst = STATUSES.find((s) => Object.values(statuses).includes(s)) ?? null
+      return {
+        id: center.id,
+        name: center.name,
+        address: center.address,
+        lat: center.lat,
+        lon: center.lon,
+        region_id: center.regionId,
+        statuses,
+        worst,
+      }
+    })
+    return HttpResponse.json(centers)
   }),
 
   http.get(`${BASE}/booking/dates`, async ({ request }) => {

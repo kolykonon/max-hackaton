@@ -3,8 +3,9 @@ import { ChevronRight } from 'lucide-react'
 
 import { Card } from '@/components/shared/Card/Card'
 import { DemoBadge } from '@/components/shared/DemoBadge/DemoBadge'
-import { MapPlaceholder } from '@/components/shared/MapPlaceholder/MapPlaceholder'
 import { StatusLegend } from '@/components/shared/StatusLegend/StatusLegend'
+
+import { TrafficLightPreview } from '../TrafficLightPreview/TrafficLightPreview'
 
 import styles from './TrafficLightCard.module.scss'
 
@@ -15,9 +16,10 @@ interface TrafficLightCardProps {
 /** Карточка «Донорский светофор» с превью карты. Нажимается целиком. */
 export const TrafficLightCard = ({ onOpen }: TrafficLightCardProps) => (
   <Card padding="none" onClick={onOpen} className={styles['traffic-light-card']}>
-    <MapPlaceholder label="Москва" alt="Карта станций переливания крови" className={styles['traffic-light-card__map']}>
+    <div className={styles['traffic-light-card__map']}>
+      <TrafficLightPreview />
       <DemoBadge variant="overlay" className={styles['traffic-light-card__badge']} />
-    </MapPlaceholder>
+    </div>
     <div className={styles['traffic-light-card__body']}>
       <div className={styles['traffic-light-card__title-row']}>
         <Typography.Text variant="subheader">Донорский светофор</Typography.Text>
