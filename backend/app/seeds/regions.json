@@ -1,90 +1,367 @@
 [
-  {"code": "RU-AD", "name": "Республика Адыгея", "timezone": "Europe/Moscow"},
-  {"code": "RU-AL", "name": "Республика Алтай", "timezone": "Asia/Novosibirsk"},
-  {"code": "RU-BA", "name": "Республика Башкортостан", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-BU", "name": "Республика Бурятия", "timezone": "Asia/Irkutsk"},
-  {"code": "RU-DA", "name": "Республика Дагестан", "timezone": "Europe/Moscow"},
-  {"code": "RU-IN", "name": "Республика Ингушетия", "timezone": "Europe/Moscow"},
-  {"code": "RU-KB", "name": "Кабардино-Балкарская Республика", "timezone": "Europe/Moscow"},
-  {"code": "RU-KL", "name": "Республика Калмыкия", "timezone": "Europe/Moscow"},
-  {"code": "RU-KC", "name": "Карачаево-Черкесская Республика", "timezone": "Europe/Moscow"},
-  {"code": "RU-KR", "name": "Республика Карелия", "timezone": "Europe/Moscow"},
-  {"code": "RU-KO", "name": "Республика Коми", "timezone": "Europe/Moscow"},
-  {"code": "RU-CR", "name": "Республика Крым", "timezone": "Europe/Moscow"},
-  {"code": "RU-ME", "name": "Республика Марий Эл", "timezone": "Europe/Moscow"},
-  {"code": "RU-MO", "name": "Республика Мордовия", "timezone": "Europe/Moscow"},
-  {"code": "RU-SE", "name": "Республика Северная Осетия — Алания", "timezone": "Europe/Moscow"},
-  {"code": "RU-TA", "name": "Республика Татарстан", "timezone": "Europe/Moscow"},
-  {"code": "RU-CE", "name": "Чеченская Республика", "timezone": "Europe/Moscow"},
-  {"code": "RU-CU", "name": "Чувашская Республика", "timezone": "Europe/Moscow"},
-  {"code": "RU-ALT", "name": "Алтайский край", "timezone": "Asia/Barnaul"},
-  {"code": "RU-KDA", "name": "Краснодарский край", "timezone": "Europe/Moscow"},
-  {"code": "RU-KYA", "name": "Красноярский край", "timezone": "Asia/Krasnoyarsk"},
-  {"code": "RU-PRI", "name": "Приморский край", "timezone": "Asia/Vladivostok"},
-  {"code": "RU-STA", "name": "Ставропольский край", "timezone": "Europe/Moscow"},
-  {"code": "RU-KHA", "name": "Хабаровский край", "timezone": "Asia/Vladivostok"},
-  {"code": "RU-AMU", "name": "Амурская область", "timezone": "Asia/Yakutsk"},
-  {"code": "RU-ARK", "name": "Архангельская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-AST", "name": "Астраханская область", "timezone": "Europe/Samara"},
-  {"code": "RU-BEL", "name": "Белгородская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-BRY", "name": "Брянская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-VLA", "name": "Владимирская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-VGG", "name": "Волгоградская область", "timezone": "Europe/Volgograd"},
-  {"code": "RU-VLG", "name": "Вологодская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-VOR", "name": "Воронежская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-IVA", "name": "Ивановская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-IRK", "name": "Иркутская область", "timezone": "Asia/Irkutsk"},
-  {"code": "RU-KGD", "name": "Калининградская область", "timezone": "Europe/Kaliningrad"},
-  {"code": "RU-KLU", "name": "Калужская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-KAM", "name": "Камчатский край", "timezone": "Asia/Kamchatka"},
-  {"code": "RU-KEM", "name": "Кемеровская область — Кузбасс", "timezone": "Asia/Novokuznetsk"},
-  {"code": "RU-KIR", "name": "Кировская область", "timezone": "Europe/Kirov"},
-  {"code": "RU-KOS", "name": "Костромская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-KGN", "name": "Курганская область", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-KRS", "name": "Курская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-LEN", "name": "Ленинградская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-LIP", "name": "Липецкая область", "timezone": "Europe/Moscow"},
-  {"code": "RU-MAG", "name": "Магаданская область", "timezone": "Asia/Magadan"},
-  {"code": "RU-MOS", "name": "Московская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-MUR", "name": "Мурманская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-NEN", "name": "Ненецкий автономный округ", "timezone": "Europe/Moscow"},
-  {"code": "RU-NIZ", "name": "Нижегородская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-NGR", "name": "Новгородская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-NVS", "name": "Новосибирская область", "timezone": "Asia/Novosibirsk"},
-  {"code": "RU-OMS", "name": "Омская область", "timezone": "Asia/Omsk"},
-  {"code": "RU-ORE", "name": "Оренбургская область", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-ORL", "name": "Орловская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-PNZ", "name": "Пензенская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-PER", "name": "Пермский край", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-PSK", "name": "Псковская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-ROS", "name": "Ростовская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-RYA", "name": "Рязанская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-SAM", "name": "Самарская область", "timezone": "Europe/Samara"},
-  {"code": "RU-SAR", "name": "Саратовская область", "timezone": "Europe/Saratov"},
-  {"code": "RU-SAK", "name": "Сахалинская область", "timezone": "Asia/Sakhalin"},
-  {"code": "RU-SVE", "name": "Свердловская область", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-SMO", "name": "Смоленская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-TAM", "name": "Тамбовская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-TVE", "name": "Тверская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-TOM", "name": "Томская область", "timezone": "Asia/Tomsk"},
-  {"code": "RU-TUL", "name": "Тульская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-TYU", "name": "Тюменская область", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-ULY", "name": "Ульяновская область", "timezone": "Europe/Ulyanovsk"},
-  {"code": "RU-CHE", "name": "Челябинская область", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-ZAB", "name": "Забайкальский край", "timezone": "Asia/Chita"},
-  {"code": "RU-YAR", "name": "Ярославская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-MOW", "name": "Москва", "timezone": "Europe/Moscow"},
-  {"code": "RU-SPE", "name": "Санкт-Петербург", "timezone": "Europe/Moscow"},
-  {"code": "RU-SEV", "name": "Севастополь", "timezone": "Europe/Moscow"},
-  {"code": "RU-YEV", "name": "Еврейская автономная область", "timezone": "Asia/Vladivostok"},
-  {"code": "RU-CHU", "name": "Чукотский автономный округ", "timezone": "Asia/Anadyr"},
-  {"code": "RU-KHM", "name": "Ханты-Мансийский автономный округ — Югра", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-YAN", "name": "Ямало-Ненецкий автономный округ", "timezone": "Asia/Yekaterinburg"},
-  {"code": "RU-TY", "name": "Республика Тыва", "timezone": "Asia/Krasnoyarsk"},
-  {"code": "RU-KK", "name": "Республика Хакасия", "timezone": "Asia/Krasnoyarsk"},
-  {"code": "RU-UD", "name": "Удмуртская Республика", "timezone": "Europe/Samara"},
-  {"code": "RU-DON", "name": "Донецкая Народная Республика", "timezone": "Europe/Moscow"},
-  {"code": "RU-LUG", "name": "Луганская Народная Республика", "timezone": "Europe/Moscow"},
-  {"code": "RU-ZAP", "name": "Запорожская область", "timezone": "Europe/Moscow"},
-  {"code": "RU-KHE", "name": "Херсонская область", "timezone": "Europe/Moscow"}
+  { "code": "RU-AD", "name": "Республика Адыгея", "timezone": "Europe/Moscow" },
+  {
+    "code": "RU-AL",
+    "name": "Республика Алтай",
+    "timezone": "Asia/Novosibirsk"
+  },
+  {
+    "code": "RU-BA",
+    "name": "Республика Башкортостан",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  { "code": "RU-BU", "name": "Республика Бурятия", "timezone": "Asia/Irkutsk" },
+  {
+    "code": "RU-DA",
+    "name": "Республика Дагестан",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-IN",
+    "name": "Республика Ингушетия",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-KB",
+    "name": "Кабардино-Балкарская Республика",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-KL",
+    "name": "Республика Калмыкия",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-KC",
+    "name": "Карачаево-Черкесская Республика",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-KR",
+    "name": "Республика Карелия",
+    "timezone": "Europe/Moscow"
+  },
+  { "code": "RU-KO", "name": "Республика Коми", "timezone": "Europe/Moscow" },
+  { "code": "RU-CR", "name": "Республика Крым", "timezone": "Europe/Moscow" },
+  {
+    "code": "RU-ME",
+    "name": "Республика Марий Эл",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-MO",
+    "name": "Республика Мордовия",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-SE",
+    "name": "Республика Северная Осетия — Алания",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-TA",
+    "name": "Республика Татарстан",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-CE",
+    "name": "Чеченская Республика",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-CU",
+    "name": "Чувашская Республика",
+    "timezone": "Europe/Moscow"
+  },
+  { "code": "RU-ALT", "name": "Алтайский край", "timezone": "Asia/Barnaul" },
+  {
+    "code": "RU-KDA",
+    "name": "Краснодарский край",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-KYA",
+    "name": "Красноярский край",
+    "timezone": "Asia/Krasnoyarsk"
+  },
+  {
+    "code": "RU-PRI",
+    "name": "Приморский край",
+    "timezone": "Asia/Vladivostok"
+  },
+  {
+    "code": "RU-STA",
+    "name": "Ставропольский край",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-KHA",
+    "name": "Хабаровский край",
+    "timezone": "Asia/Vladivostok"
+  },
+  { "code": "RU-AMU", "name": "Амурская область", "timezone": "Asia/Yakutsk" },
+  {
+    "code": "RU-ARK",
+    "name": "Архангельская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-AST",
+    "name": "Астраханская область",
+    "timezone": "Europe/Samara"
+  },
+  {
+    "code": "RU-BEL",
+    "name": "Белгородская область",
+    "timezone": "Europe/Moscow"
+  },
+  { "code": "RU-BRY", "name": "Брянская область", "timezone": "Europe/Moscow" },
+  {
+    "code": "RU-VLA",
+    "name": "Владимирская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-VGG",
+    "name": "Волгоградская область",
+    "timezone": "Europe/Volgograd"
+  },
+  {
+    "code": "RU-VLG",
+    "name": "Вологодская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-VOR",
+    "name": "Воронежская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-IVA",
+    "name": "Ивановская область",
+    "timezone": "Europe/Moscow"
+  },
+  { "code": "RU-IRK", "name": "Иркутская область", "timezone": "Asia/Irkutsk" },
+  {
+    "code": "RU-KGD",
+    "name": "Калининградская область",
+    "timezone": "Europe/Kaliningrad"
+  },
+  {
+    "code": "RU-KLU",
+    "name": "Калужская область",
+    "timezone": "Europe/Moscow"
+  },
+  { "code": "RU-KAM", "name": "Камчатский край", "timezone": "Asia/Kamchatka" },
+  {
+    "code": "RU-KEM",
+    "name": "Кемеровская область — Кузбасс",
+    "timezone": "Asia/Novokuznetsk"
+  },
+  { "code": "RU-KIR", "name": "Кировская область", "timezone": "Europe/Kirov" },
+  {
+    "code": "RU-KOS",
+    "name": "Костромская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-KGN",
+    "name": "Курганская область",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  { "code": "RU-KRS", "name": "Курская область", "timezone": "Europe/Moscow" },
+  {
+    "code": "RU-LEN",
+    "name": "Ленинградская область",
+    "timezone": "Europe/Moscow"
+  },
+  { "code": "RU-LIP", "name": "Липецкая область", "timezone": "Europe/Moscow" },
+  {
+    "code": "RU-MAG",
+    "name": "Магаданская область",
+    "timezone": "Asia/Magadan"
+  },
+  {
+    "code": "RU-MOS",
+    "name": "Московская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-MUR",
+    "name": "Мурманская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-NEN",
+    "name": "Ненецкий автономный округ",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-NIZ",
+    "name": "Нижегородская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-NGR",
+    "name": "Новгородская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-NVS",
+    "name": "Новосибирская область",
+    "timezone": "Asia/Novosibirsk"
+  },
+  { "code": "RU-OMS", "name": "Омская область", "timezone": "Asia/Omsk" },
+  {
+    "code": "RU-ORE",
+    "name": "Оренбургская область",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  {
+    "code": "RU-ORL",
+    "name": "Орловская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-PNZ",
+    "name": "Пензенская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-PER",
+    "name": "Пермский край",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  {
+    "code": "RU-PSK",
+    "name": "Псковская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-ROS",
+    "name": "Ростовская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-RYA",
+    "name": "Рязанская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-SA",
+    "name": "Республика Саха (Якутия)",
+    "timezone": "Asia/Yakutsk"
+  },
+  {
+    "code": "RU-SAM",
+    "name": "Самарская область",
+    "timezone": "Europe/Samara"
+  },
+  {
+    "code": "RU-SAR",
+    "name": "Саратовская область",
+    "timezone": "Europe/Saratov"
+  },
+  {
+    "code": "RU-SAK",
+    "name": "Сахалинская область",
+    "timezone": "Asia/Sakhalin"
+  },
+  {
+    "code": "RU-SVE",
+    "name": "Свердловская область",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  {
+    "code": "RU-SMO",
+    "name": "Смоленская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-TAM",
+    "name": "Тамбовская область",
+    "timezone": "Europe/Moscow"
+  },
+  { "code": "RU-TVE", "name": "Тверская область", "timezone": "Europe/Moscow" },
+  { "code": "RU-TOM", "name": "Томская область", "timezone": "Asia/Tomsk" },
+  { "code": "RU-TUL", "name": "Тульская область", "timezone": "Europe/Moscow" },
+  {
+    "code": "RU-TYU",
+    "name": "Тюменская область",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  {
+    "code": "RU-ULY",
+    "name": "Ульяновская область",
+    "timezone": "Europe/Ulyanovsk"
+  },
+  {
+    "code": "RU-CHE",
+    "name": "Челябинская область",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  { "code": "RU-ZAB", "name": "Забайкальский край", "timezone": "Asia/Chita" },
+  {
+    "code": "RU-YAR",
+    "name": "Ярославская область",
+    "timezone": "Europe/Moscow"
+  },
+  { "code": "RU-MOW", "name": "Москва", "timezone": "Europe/Moscow" },
+  { "code": "RU-SPE", "name": "Санкт-Петербург", "timezone": "Europe/Moscow" },
+  { "code": "RU-SEV", "name": "Севастополь", "timezone": "Europe/Moscow" },
+  {
+    "code": "RU-YEV",
+    "name": "Еврейская автономная область",
+    "timezone": "Asia/Vladivostok"
+  },
+  {
+    "code": "RU-CHU",
+    "name": "Чукотский автономный округ",
+    "timezone": "Asia/Anadyr"
+  },
+  {
+    "code": "RU-KHM",
+    "name": "Ханты-Мансийский автономный округ — Югра",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  {
+    "code": "RU-YAN",
+    "name": "Ямало-Ненецкий автономный округ",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  {
+    "code": "RU-TY",
+    "name": "Республика Тыва",
+    "timezone": "Asia/Krasnoyarsk"
+  },
+  {
+    "code": "RU-KK",
+    "name": "Республика Хакасия",
+    "timezone": "Asia/Krasnoyarsk"
+  },
+  {
+    "code": "RU-UD",
+    "name": "Удмуртская Республика",
+    "timezone": "Europe/Samara"
+  },
+  {
+    "code": "RU-DPR",
+    "name": "Донецкая Народная Республика",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-LPR",
+    "name": "Луганская Народная Республика",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-ZAP",
+    "name": "Запорожская область",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "code": "RU-KHE",
+    "name": "Херсонская область",
+    "timezone": "Europe/Moscow"
+  }
 ]

@@ -1,6 +1,7 @@
 """Идемпотентный сид: регионы, центры, статусы светофора.
 
-Запуск: python -m app.seeds.seed
+Запуск: python -m app.seeds.seed (выполняется при старте backend).
+Слоты только дополняются; полностью пересоздать их — python -m app.seeds.slots
 """
 
 import asyncio
@@ -10,7 +11,7 @@ import random
 import zlib
 from pathlib import Path
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from app.core.db import sessionmaker
@@ -21,6 +22,7 @@ from app.models import (
     RegionBloodStatus,
 )
 from app.models.enums import BloodGroup, StockStatus
+from app.seeds.slots import generate_slots
 
 log = logging.getLogger(__name__)
 
@@ -74,53 +76,49 @@ async def seed_regions(session) -> dict[str, int]:
 
 
 async def seed_centers(session, region_ids: dict[str, int]) -> None:
-    """Upsert центров. Реальные из centers.json + по одной заглушке на регион."""
+    """Upsert центров из centers.json по паре (регион, название).
+
+    Уникального индекса на centers нет, поэтому сначала читаем, что уже есть:
+    существующие центры обновляем, новые вставляем. Повторный запуск дублей не создаёт.
+    """
     data = _load_json("centers.json")
     log.info("Центров во входных данных: %s", len(data))
 
-    existing_names: set[tuple[int, str]] = set()
-    values = []
+    existing = {
+        (region_id, name): center_id
+        for center_id, region_id, name in (
+            await session.execute(select(Center.id, Center.region_id, Center.name))
+        ).all()
+    }
 
+    to_insert = []
+    updated = 0
     for c in data:
         region_id = region_ids.get(c["region_code"])
         if region_id is None:
             log.warning("Пропускаем центр — нет региона %s", c["region_code"])
             continue
-        values.append(
-            {
-                "region_id": region_id,
-                "name": c["name"],
-                "address": c["address"],
-                "lat": c["lat"],
-                "lon": c["lon"],
-                "photo_url": None,
-            }
-        )
-        existing_names.add((region_id, c["name"]))
-
-    # Заглушки для регионов без реальных центров
-    regions_with_centers = {rid for rid, _ in existing_names}
-    all_region_ids = set(region_ids.values())
-    missing = all_region_ids - regions_with_centers
-    if missing:
-        name_by_id = {v: k for k, v in region_ids.items()}
-        for rid in sorted(missing):
-            values.append(
-                {
-                    "region_id": rid,
-                    "name": f"Станция переливания крови ({name_by_id[rid]})",
-                    "address": "адрес уточняется",
-                    "lat": 0.0,
-                    "lon": 0.0,
-                    "photo_url": None,
-                }
+        fields = {"address": c["address"], "lat": c["lat"], "lon": c["lon"]}
+        center_id = existing.get((region_id, c["name"]))
+        if center_id is None:
+            to_insert.append(
+                {"region_id": region_id, "name": c["name"], "photo_url": None, **fields}
             )
+        else:
+            await session.execute(
+                update(Center).where(Center.id == center_id).values(**fields)
+            )
+            updated += 1
 
-    if values:
-        stmt = pg_insert(Center).values(values)
-        stmt = stmt.on_conflict_do_nothing()
-        await session.execute(stmt)
-        await session.commit()
+    if to_insert:
+        await session.execute(pg_insert(Center).values(to_insert))
+    await session.commit()
+    log.info("Центров добавлено: %s, обновлено: %s", len(to_insert), updated)
+
+    with_centers = {region_ids.get(c["region_code"]) for c in data}
+    missing = sorted(code for code, rid in region_ids.items() if rid not in with_centers)
+    if missing:
+        log.warning("Регионы без центров крови: %s", ", ".join(missing))
 
 
 async def seed_blood_statuses(session, region_ids: dict[str, int]) -> None:
@@ -174,6 +172,7 @@ async def main() -> None:
         region_ids = await seed_regions(session)
         await seed_centers(session, region_ids)
         await seed_blood_statuses(session, region_ids)
+    await generate_slots(reset=False)
     log.info("Сиды применены.")
 
 
