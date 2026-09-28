@@ -7,6 +7,7 @@
 - 1–2 дня в каждом центре заняты полностью;
 - шаг между слотами — 15 минут (из §5.5).
 """
+
 import asyncio
 import logging
 import random

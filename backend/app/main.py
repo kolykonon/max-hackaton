@@ -7,6 +7,7 @@ from fastapi.routing import APIRoute
 
 from app.api.v1 import api_router
 from app.bot import webhook
+from app.core.config import settings
 from app.core.errors import register_errors
 from app.integrations.max_api import MaxBotClient
 from app.services.reminders import restore_reminders
@@ -16,29 +17,26 @@ log = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # MAX client
     app.state.max = MaxBotClient()
-    log.info("MaxBotClient создан, base_url=%s", app.state.max.base_url)
+    log.info("Клиент макса создан, ссылка на апи=%s", app.state.max.base_url)
 
-    # APScheduler для отложенных напоминаний
     scheduler = AsyncIOScheduler(timezone="UTC")
     scheduler.start()
     app.state.scheduler = scheduler
-    log.info("APScheduler запущен")
+    log.info("Планировщик запущен")
 
-    # Восстанавливаем задачи из БД (после перезапуска бэкенда)
     try:
         await restore_reminders(scheduler, app.state.max)
     except Exception:
-        log.exception("Не удалось восстановить напоминания при старте")
+        log.exception("Не удалось восстановить напоминания")
 
     try:
         yield
     finally:
         scheduler.shutdown(wait=False)
-        log.info("APScheduler остановлен")
+        log.info("Планировщик остановлен")
         await app.state.max.aclose()
-        log.info("MaxBotClient закрыт")
+        log.info("Клиент макса закрыт")
 
 
 def operation_id(route: APIRoute) -> str:
@@ -50,11 +48,13 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
     openapi_url="/api/openapi.json",
-    docs_url="/api/docs",
+    docs_url="/api/docs", # сваггер переехал с /docs на /api/docs
     redoc_url=None,
     generate_unique_id_function=operation_id,
 )
 register_errors(app)
 
-app.include_router(api_router, prefix="/api/v1")
-app.include_router(webhook.router, prefix="/api/v1", include_in_schema=False)
+app.include_router(api_router, prefix=settings.dev_settings.api_v1_prefix)
+app.include_router(
+    webhook.router, prefix=settings.dev_settings.api_v1_prefix, include_in_schema=False
+)

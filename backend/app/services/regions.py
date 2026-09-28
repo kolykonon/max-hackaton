@@ -3,6 +3,7 @@
 Пока нет russia.topo.json от Андрея — locate всегда возвращает None.
 Когда файл появится, добавим shapely-проверку: point in polygon.
 """
+
 import logging
 
 from sqlalchemy import exists, select
@@ -27,9 +28,7 @@ class RegionService:
                     Region.id,
                     Region.code,
                     Region.name,
-                    exists()
-                    .where(Center.region_id == Region.id)
-                    .label("has_centers"),
+                    exists().where(Center.region_id == Region.id).label("has_centers"),
                 ).order_by(Region.name)
             )
         ).all()

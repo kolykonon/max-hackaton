@@ -5,6 +5,7 @@
 
 Свободен = не is_blocked и на него нет active-записи.
 """
+
 import logging
 from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -55,7 +56,9 @@ def _day_bounds_utc(target: date, tz: ZoneInfo) -> tuple[datetime, datetime]:
     """Границы дня в таймзоне региона, приведённые к UTC."""
     day_start_local = datetime.combine(target, time.min, tzinfo=tz)
     day_end_local = datetime.combine(target, time.max, tzinfo=tz)
-    return day_start_local.astimezone(timezone.utc), day_end_local.astimezone(timezone.utc)
+    return day_start_local.astimezone(timezone.utc), day_end_local.astimezone(
+        timezone.utc
+    )
 
 
 def _taken_slot_exists():
@@ -183,8 +186,9 @@ class BookingService:
         if group:
             status_rows = (
                 await self.session.execute(
-                    select(CenterBloodStatus.center_id, CenterBloodStatus.status)
-                    .where(CenterBloodStatus.blood_group == group)
+                    select(CenterBloodStatus.center_id, CenterBloodStatus.status).where(
+                        CenterBloodStatus.blood_group == group
+                    )
                 )
             ).all()
             center_status = {cid: StockStatus(s) for cid, s in status_rows}

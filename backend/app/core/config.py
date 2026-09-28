@@ -1,20 +1,18 @@
+import os
 from pathlib import Path
 from typing import Self
-import os
 
 from pydantic import Field, PostgresDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
-# backend/app/core/config.py -> backend/app/core -> backend/app -> backend
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
-ENV_FILE = BASE_DIR / ".env"
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent  # резолвим корень
+ENV_FILE = BASE_DIR / ".env"  # путь к env-файлу
 
 _ENV_CONFIG = SettingsConfigDict(
     env_file=str(ENV_FILE),
     extra="ignore",
     case_sensitive=False,
-)
+)  # конфиг для pydantic-settings
 
 
 class SettingsConfigDictMixin:
@@ -91,11 +89,13 @@ class DevSettings(SettingsConfigDictMixin, BaseSettings):
 
     @property
     def cors_origins_list(self) -> list[str]:
-        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+        return [
+            o.strip() for o in self.cors_origins.split(",") if o.strip()
+        ]  # разделяем по запятым и убираем пробелы
 
 
 class Settings(SettingsConfigDictMixin, BaseSettings):
-    """Общий класс настроек,"""
+    """Общий класс настроек"""
 
     model_config = _ENV_CONFIG
 

@@ -12,17 +12,15 @@ log = logging.getLogger(__name__)
 CERT_SUFFIXES = {".cer", ".crt", ".pem"}
 
 
-@lru_cache(maxsize=1)
+@lru_cache(maxsize=1)  # кешируем контекст
 def _build_ssl_context() -> ssl.SSLContext:
-    """Контекст с сертификатами НУЦ Минцифры (для MAX API).
-
-    Грузит все сертификаты из папки SSL_CERTS_DIR (по умолчанию certs/ в корне
-    репозитория). Если папки нет — только системные сертификаты.
+    """
+    Грузит все сертификаты из папки SSL_CERTS_DIR.Если папки нет — только системные сертификаты.
     """
     ctx = ssl.create_default_context()
     certs_dir = settings.bot_settings.ssl_certs_dir
     if not certs_dir.is_dir():
-        log.warning("SSL: папка с сертификатами %s не найдена", certs_dir)
+        log.warning("Папка с сертификатами %s не найдена", certs_dir)
         return ctx
 
     for path in sorted(certs_dir.iterdir()):
@@ -30,14 +28,14 @@ def _build_ssl_context() -> ssl.SSLContext:
             continue
         try:
             ctx.load_verify_locations(path)
-            log.info("SSL: загружен сертификат %s", path.name)
+            log.info("Загружен сертификат %s", path.name)
         except Exception:
-            log.exception("SSL: не удалось загрузить сертификат %s", path)
+            log.exception("Не удалось загрузить сертификат %s", path)
     return ctx
 
 
 class MaxBotClient:
-    """Клиент MAX Bot API. https://dev.max.ru/docs-api"""
+    """Клиент макса."""
 
     def __init__(self, token: str | None = None, base_url: str | None = None) -> None:
         self.token = token or settings.bot_settings.max_bot_token
@@ -47,13 +45,14 @@ class MaxBotClient:
             headers={"Authorization": self.token},
             timeout=httpx.Timeout(60.0, connect=10.0),
             verify=_build_ssl_context(),
-        )
+        )  # создаем асинхронный клиент с токеном и ssl
 
     async def aclose(self) -> None:
-        await self._client.aclose()
+        await self._client.aclose()  # обертка над методом клиента
 
     @staticmethod
     def _check(resp: httpx.Response) -> None:
+        """Проверка ответа на ошибки."""
         if resp.status_code >= 400:
             log.error(
                 "MAX API %s %s → %s: %s",
@@ -61,22 +60,20 @@ class MaxBotClient:
                 resp.request.url.path,
                 resp.status_code,
                 resp.text,
-            )
+            )  # отдаем ошибку в логи в формате метод путь -> статус текст
         resp.raise_for_status()
-
-    # --- Получение обновлений (Long Polling) ---
 
     async def get_updates(
         self, marker: int | None = None, timeout: int = 30, limit: int = 100
     ) -> dict[str, Any]:
+        """Получение обновлений long-polling."""
+
         params: dict[str, Any] = {"timeout": timeout, "limit": limit}
         if marker is not None:
             params["marker"] = marker
         resp = await self._client.get("/updates", params=params)
         self._check(resp)
         return resp.json()
-
-    # --- Отправка сообщений ---
 
     async def send_message(
         self,
@@ -85,6 +82,8 @@ class MaxBotClient:
         *,
         attachments: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
+        """Отправка сообщения"""
+
         body: dict[str, Any] = {"text": text}
         if attachments:
             body["attachments"] = attachments
@@ -94,14 +93,14 @@ class MaxBotClient:
         self._check(resp)
         return resp.json()
 
-    # --- Подписки на вебхуки ---
-
     async def subscribe_webhook(
         self,
         url: str,
         secret: str,
         update_types: list[str] | None = None,
     ) -> dict[str, Any]:
+        """Подписка на вебхук"""
+
         body: dict[str, Any] = {"url": url}
         if secret:
             body["secret"] = secret
@@ -112,11 +111,14 @@ class MaxBotClient:
         return resp.json()
 
     async def unsubscribe_webhook(self, url: str) -> dict[str, Any]:
+        """Отписка от вебхука"""
         resp = await self._client.delete("/subscriptions", params={"url": url})
         self._check(resp)
         return resp.json()
 
     async def get_subscriptions(self) -> dict[str, Any]:
+        """Получение списка подписок"""
+
         resp = await self._client.get("/subscriptions")
         self._check(resp)
         return resp.json()
@@ -125,11 +127,8 @@ class MaxBotClient:
 def link_keyboard(
     button_text: str, start_param: str | None = None
 ) -> list[dict[str, Any]]:
-    """Кнопка-ссылка. Работает без задеплоенного мини-приложения.
+    """Кнопка-ссылка"""
 
-    Когда появится веб-апп и он будет привязан к боту в кабинете MAX —
-    можно будет вернуть open_app.
-    """
     url = settings.bot_settings.webapp_url
     if start_param:
         url = f"{url}?startapp={start_param}"

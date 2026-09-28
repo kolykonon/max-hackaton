@@ -1,4 +1,5 @@
 """Сервис карты-светофора: статусы групп крови по регионам."""
+
 import logging
 from datetime import datetime, timezone
 

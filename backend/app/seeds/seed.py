@@ -2,6 +2,7 @@
 
 Запуск: python -m app.seeds.seed
 """
+
 import asyncio
 import json
 import logging
