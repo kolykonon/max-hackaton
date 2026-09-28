@@ -795,7 +795,7 @@
     "/api/v1/map/status": {
       "get": {
         "tags": [
-          "regions"
+          "map"
         ],
         "summary": "Карта-светофор по регионам",
         "operationId": "get_map_status",
@@ -870,7 +870,7 @@
     "/api/v1/map/centers": {
       "get": {
         "tags": [
-          "regions"
+          "map"
         ],
         "summary": "Все центры крови для карты-светофора",
         "operationId": "get_map_centers",
@@ -2803,8 +2803,7 @@
           "statuses",
           "worst"
         ],
-        "title": "MapCenter",
-        "description": "Центр крови для карты-светофора: метка со статусами по группам, формат как у MapRegion"
+        "title": "MapCenter"
       },
       "MapRegion": {
         "properties": {

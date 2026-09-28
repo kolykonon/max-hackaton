@@ -38,10 +38,8 @@ def _load_json(name: str) -> list[dict]:
 
 
 def _region_statuses(region_code: str) -> dict[str, str]:
-    """~10% регионов без данных. Остальным — детерминированный набор."""
+    """Детерминированный набор статусов: данные есть у всех регионов."""
     rng = random.Random(zlib.crc32(region_code.encode()))
-    if rng.random() < 0.1:
-        return {}
     return {g: rng.choice(STATUSES) for g in BLOOD_GROUPS}
 
 
@@ -116,7 +114,9 @@ async def seed_centers(session, region_ids: dict[str, int]) -> None:
     log.info("Центров добавлено: %s, обновлено: %s", len(to_insert), updated)
 
     with_centers = {region_ids.get(c["region_code"]) for c in data}
-    missing = sorted(code for code, rid in region_ids.items() if rid not in with_centers)
+    missing = sorted(
+        code for code, rid in region_ids.items() if rid not in with_centers
+    )
     if missing:
         log.warning("Регионы без центров крови: %s", ", ".join(missing))
 

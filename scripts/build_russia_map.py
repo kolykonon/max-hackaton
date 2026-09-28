@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Сборка карты 89 субъектов РФ для фронта: frontend/src/assets/geo/russia.topo.json.
+"""Сборка границ 89 субъектов РФ:
+  - frontend/src/assets/geo/russia.topo.json — карта на фронте (TopoJSON, сильно упрощена);
+  - backend/app/seeds/russia.geojson — /regions/locate на бэке (GeoJSON, подробнее — точнее у границ).
 
 Источники — OpenStreetMap (ODbL, © OpenStreetMap contributors):
   1. 85 субъектов — выгрузка OSM из github.com/timurkanaz/Russia_geojson_OSM;
@@ -21,6 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "frontend" / "src" / "assets" / "geo" / "russia.topo.json"
+BACKEND_OUTPUT = ROOT / "backend" / "app" / "seeds" / "russia.geojson"
 
 REGIONS_URL = (
     "https://raw.githubusercontent.com/timurkanaz/Russia_geojson_OSM/master/"
@@ -34,8 +37,10 @@ OVERPASS_QUERY = (
 )
 USER_AGENT = "kaplya-hackathon-map-build/1.0"
 
-# Процент точек, который оставляет mapshaper. Подобран так, чтобы файл был около 500 КБ
+# Процент точек, который оставляет mapshaper. Для фронта — чтобы файл был около 500 КБ
 SIMPLIFY = "4%"
+# Бэк грузит границы один раз в память, размер не важен — оставляем больше точек
+BACKEND_SIMPLIFY = "12%"
 
 # Коды ISO 3166-2:RU. Для субъектов, которых нет в ISO, — коды проекта; должны совпадать с сидами бэка
 CODES = {
@@ -204,8 +209,23 @@ def main() -> None:
             ],
             check=True,
         )
-    size_kb = OUTPUT.stat().st_size / 1024
-    print(f"Готово: {OUTPUT.relative_to(ROOT)} ({size_kb:.0f} КБ, {EXPECTED_COUNT} субъектов)")
+
+        print(f"Упрощаю до {BACKEND_SIMPLIFY} точек и сохраняю GeoJSON для бэка…")
+        subprocess.run(
+            [
+                "npx", "-y", "mapshaper@0.7.68",
+                str(merged),
+                "-simplify", BACKEND_SIMPLIFY, "weighted", "keep-shapes",
+                # Острова оставляем почти все: точка на острове должна найти свой регион
+                "-filter-islands", "min-area=1km2", "remove-empty",
+                # 4 знака после запятой — около 10 м, точнее не нужно
+                "-o", "format=geojson", "precision=0.0001", str(BACKEND_OUTPUT),
+            ],
+            check=True,
+        )
+
+    for path in (OUTPUT, BACKEND_OUTPUT):
+        print(f"Готово: {path.relative_to(ROOT)} ({path.stat().st_size / 1024:.0f} КБ, {EXPECTED_COUNT} субъектов)")
 
 
 if __name__ == "__main__":

@@ -81,7 +81,7 @@ class DevSettings(SettingsConfigDictMixin, BaseSettings):
 
     model_config = _ENV_CONFIG
 
-    api_v1_prefix: str = "/api/v1/"
+    api_v1_prefix: str = "/api/v1"
     auth_dev_mode: bool = False
     demo_mode: bool = True
 

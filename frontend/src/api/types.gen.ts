@@ -642,10 +642,7 @@ export interface components {
         LocateRegionResponse: {
             region: components["schemas"]["Region"] | null;
         };
-        /**
-         * MapCenter
-         * @description Центр крови для карты-светофора: метка со статусами по группам, формат как у MapRegion
-         */
+        /** MapCenter */
         MapCenter: {
             /** Id */
             id: number;

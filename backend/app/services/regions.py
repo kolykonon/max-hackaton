@@ -1,8 +1,4 @@
-"""Сервис регионов: список и определение по координатам.
-
-Пока нет russia.topo.json от Андрея — locate всегда возвращает None.
-Когда файл появится, добавим shapely-проверку: point in polygon.
-"""
+"""Сервис регионов: список и определение по координатам (границы — region_locator)."""
 
 import logging
 
@@ -11,10 +7,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Center, Region
 from app.schemas.regions import Region as RegionSchema
+from app.services.region_locator import get_region_locator
 
 log = logging.getLogger(__name__)
-
-LOCATE_ENABLED = False
 
 
 class RegionService:
@@ -44,10 +39,24 @@ class RegionService:
         ]
 
     async def locate(self, lat: float, lon: float) -> RegionSchema | None:
-        if not LOCATE_ENABLED:
+        code = get_region_locator().find_code(lat, lon)
+        if code is None:
             return None
 
-        # TODO: shapely, когда Андрей принесёт russia.topo.json:
-        # point = Point(lon, lat)
-        # для каждого региона: if polygon.contains(point): вернуть регион
-        return None
+        row = (
+            await self.session.execute(
+                select(
+                    Region.id,
+                    Region.code,
+                    Region.name,
+                    exists().where(Center.region_id == Region.id).label("has_centers"),
+                ).where(Region.code == code)
+            )
+        ).one_or_none()
+        if row is None:
+            log.warning("Регион %s есть в границах, но не в БД", code)
+            return None
+
+        return RegionSchema(
+            id=row.id, code=row.code, name=row.name, has_centers=bool(row.has_centers)
+        )

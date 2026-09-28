@@ -37,7 +37,7 @@ async def create_appointment(
     body: SlotRequest,
     background: BackgroundTasks,
 ) -> AppointmentResponse:
-    schema, orm, tz_name = await service.create(user, body.slot_id)
+    schema, orm, _tz_name = await service.create(user, body.slot_id)
 
     background.add_task(
         send_appointment_confirmed, request.app.state.max, user.max_user_id
@@ -45,9 +45,7 @@ async def create_appointment(
 
     scheduler = getattr(request.app.state, "scheduler", None)
     if scheduler is not None:
-        schedule_reminders(
-            scheduler, orm, user.max_user_id, request.app.state.max, tz_name
-        )
+        schedule_reminders(scheduler, orm, user.max_user_id, request.app.state.max)
 
     return AppointmentResponse(appointment=schema)
 
@@ -66,14 +64,12 @@ async def reschedule_appointment(
     body: SlotRequest,
     background: BackgroundTasks,
 ) -> AppointmentResponse:
-    schema, orm, tz_name = await service.reschedule(user, appointment_id, body.slot_id)
+    schema, orm, _tz_name = await service.reschedule(user, appointment_id, body.slot_id)
 
     scheduler = getattr(request.app.state, "scheduler", None)
     if scheduler is not None:
         cancel_reminders(scheduler, appointment_id)
-        schedule_reminders(
-            scheduler, orm, user.max_user_id, request.app.state.max, tz_name
-        )
+        schedule_reminders(scheduler, orm, user.max_user_id, request.app.state.max)
 
     background.add_task(
         send_appointment_confirmed, request.app.state.max, user.max_user_id
