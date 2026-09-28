@@ -12,9 +12,13 @@ from app.core.errors import AppError
 from app.core.utils.data_validate import InitDataError, validate_init_data
 from app.models import User
 from app.schemas.common import ErrorCode
+from app.services.appointments import AppointmentService
+from app.services.booking import BookingService
 from app.services.demo import DemoService
 from app.services.demo_profile import create_demo_profile
+from app.services.map import MapService
 from app.services.profile import ProfileService
+from app.services.regions import RegionService
 
 REF_PREFIX = "ref_"
 
@@ -97,9 +101,6 @@ async def get_current_user(
 CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
-# --- сервисы ---
-
-
 async def get_profile_service(session: SessionDep) -> ProfileService:
     return ProfileService(session)
 
@@ -110,47 +111,6 @@ async def get_demo_service(request: Request, session: SessionDep) -> DemoService
 
 ProfileServiceDep = Annotated[ProfileService, Depends(get_profile_service)]
 DemoServiceDep = Annotated[DemoService, Depends(get_demo_service)]
-
-from app.services.booking import BookingService
-
-
-async def get_booking_service(session: SessionDep) -> BookingService:
-    return BookingService(session)
-
-
-BookingServiceDep = Annotated[BookingService, Depends(get_booking_service)]
-
-from app.services.appointments import AppointmentService
-from app.services.booking import BookingService
-from app.services.map import MapService
-from app.services.regions import RegionService
-
-
-async def get_booking_service(session: SessionDep) -> BookingService:
-    return BookingService(session)
-
-
-async def get_appointment_service(session: SessionDep) -> AppointmentService:
-    return AppointmentService(session)
-
-
-async def get_region_service(session: SessionDep) -> RegionService:
-    return RegionService(session)
-
-
-async def get_map_service(session: SessionDep) -> MapService:
-    return MapService(session)
-
-
-BookingServiceDep = Annotated[BookingService, Depends(get_booking_service)]
-AppointmentServiceDep = Annotated[AppointmentService, Depends(get_appointment_service)]
-RegionServiceDep = Annotated[RegionService, Depends(get_region_service)]
-MapServiceDep = Annotated[MapService, Depends(get_map_service)]
-
-from app.services.appointments import AppointmentService
-from app.services.booking import BookingService
-from app.services.map import MapService
-from app.services.regions import RegionService
 
 
 async def get_booking_service(session: SessionDep) -> BookingService:
