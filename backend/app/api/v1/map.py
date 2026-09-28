@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.api.deps import CurrentUser, MapServiceDep
 from app.schemas.common import error_responses
-from app.schemas.map import MapStatus
+from app.schemas.map import MapCenter, MapStatus
 
 router = APIRouter(prefix="/map", tags=["map"], responses=error_responses(401))
 
@@ -10,3 +10,8 @@ router = APIRouter(prefix="/map", tags=["map"], responses=error_responses(401))
 @router.get("/status", summary="Карта-светофор по регионам")
 async def get_map_status(user: CurrentUser, service: MapServiceDep) -> MapStatus:
     return await service.status()
+
+
+@router.get("/centers", summary="Все центры крови для карты-светофора")
+async def get_map_centers(user: CurrentUser, service: MapServiceDep) -> list[MapCenter]:
+    return await service.centers()
