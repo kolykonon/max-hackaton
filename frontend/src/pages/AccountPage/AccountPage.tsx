@@ -16,6 +16,7 @@ import { GoalCard } from '@/components/features/account/GoalCard/GoalCard'
 import { HistoryButton } from '@/components/features/account/HistoryButton/HistoryButton'
 import { HonoraryAchievedCard } from '@/components/features/account/HonoraryAchievedCard/HonoraryAchievedCard'
 import { HonoraryEta } from '@/components/features/account/HonoraryEta/HonoraryEta'
+import { ImpactCard } from '@/components/features/account/ImpactCard/ImpactCard'
 import { LevelCard } from '@/components/features/account/LevelCard/LevelCard'
 import { ProfileHeader } from '@/components/features/account/ProfileHeader/ProfileHeader'
 import { ReferralBanner } from '@/components/features/account/ReferralBanner/ReferralBanner'
@@ -123,6 +124,7 @@ export const AccountPage = () => {
           photoUrl={me.data.photo_url ?? undefined}
           onAvatarClick={onAvatarClick}
         />
+        <ImpactCard whole={honorary.whole.count} plasma={honorary.plasma.count} />
         <LevelCard total={total} onOpen={() => setSheet('levels')} />
         <ReferralBanner count={me.data.referrals_count} onOpen={() => navigate('/referrals')} />
         <BloodCard footer={blood.donor_code && <DonorCode code={blood.donor_code} onCopy={copyCode} />}>
