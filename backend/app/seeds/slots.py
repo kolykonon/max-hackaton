@@ -15,7 +15,7 @@ import zlib
 from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import delete, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from app.core.db import sessionmaker
@@ -77,6 +77,11 @@ async def generate_slots(reset: bool = True) -> None:
             log.info("Удаляем все существующие слоты")
             await session.execute(delete(Slot))
             await session.commit()
+        else:
+            latest = await session.scalar(select(func.max(Slot.starts_at)))
+            if latest is not None and latest.date() >= today + timedelta(days=DAYS_AHEAD - 2):
+                log.info("Слоты уже сгенерированы до %s, пропускаем", latest.date())
+                return
 
         rows = (
             await session.execute(
@@ -129,7 +134,9 @@ async def generate_slots(reset: bool = True) -> None:
         BATCH = 5000
         for i in range(0, len(all_values), BATCH):
             batch = all_values[i : i + BATCH]
-            stmt = pg_insert(Slot).values(batch)
+            stmt = pg_insert(Slot).values(batch).on_conflict_do_nothing(
+                constraint="uq_slots_center_type_starts_at"
+            )
             await session.execute(stmt)
             await session.commit()
             log.info(
