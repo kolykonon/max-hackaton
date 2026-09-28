@@ -1,0 +1,31 @@
+# Прод-надстройка над compose.yaml (docs/DEPLOY.md). Подключается через COMPOSE_FILE в .env:
+#   COMPOSE_FILE=compose.yaml:compose.prod.yaml
+# - Postgres и бэк не торчат наружу: снаружи только Caddy (80/443), бэк доступен через /api;
+# - код берётся из образа, а не с диска: после git pull нужен --build, зато код и зависимости всегда совпадают;
+# - логи Docker ограничены по размеру, чтобы не забить диск.
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+services:
+  postgres:
+    ports: !reset []
+    logging: *logging
+
+  backend:
+    ports: !reset []
+    volumes: !override
+      - ./certs:/certs:ro
+    logging: *logging
+
+  bot:
+    restart: always
+    volumes: !override
+      - ./certs:/certs:ro
+    logging: *logging
+
+  web:
+    logging: *logging
