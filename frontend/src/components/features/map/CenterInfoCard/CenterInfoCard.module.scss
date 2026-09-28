@@ -12,6 +12,9 @@
   border-radius: $radius-l;
   background: $color-bg;
   box-shadow: $shadow-floating;
+  // Подробностей много — карточка прокручивается
+  max-height: 60%;
+  overflow-y: auto;
 
   &__head {
     display: flex;

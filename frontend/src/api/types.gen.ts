@@ -656,6 +656,30 @@ export interface components {
             lon: number;
             /** Region Id */
             region_id: number;
+            /** City */
+            city: string | null;
+            /** Center Type */
+            center_type: string | null;
+            /** Phone */
+            phone: string | null;
+            /** Work Hours */
+            work_hours: string | null;
+            /** Booking Info */
+            booking_info: string | null;
+            /** Donation Types */
+            donation_types: string | null;
+            /** Donor Requirements */
+            donor_requirements: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Data Status */
+            data_status: string | null;
+            /** Source Url */
+            source_url: string | null;
+            /** Source Url 2 */
+            source_url_2: string | null;
+            /** Verified On */
+            verified_on: string | null;
             /** Statuses */
             statuses: {
                 [key: string]: components["schemas"]["StockStatus"];
