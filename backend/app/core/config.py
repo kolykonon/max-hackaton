@@ -12,6 +12,7 @@ _ENV_CONFIG = SettingsConfigDict(
     env_file=str(ENV_FILE),
     extra="ignore",
     case_sensitive=False,
+    env_ignore_empty=True,  # пустое значение в .env = значение по умолчанию
 )  # конфиг для pydantic-settings
 
 
