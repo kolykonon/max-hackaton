@@ -127,11 +127,11 @@ class MaxBotClient:
 def link_keyboard(
     button_text: str, start_param: str | None = None
 ) -> list[dict[str, Any]]:
-    """Кнопка-ссылка"""
+    """Кнопка-диплинк: открывает мини-приложение внутри MAX"""
 
-    url = settings.bot_settings.webapp_url
+    url = f"https://max.ru/{settings.bot_settings.max_bot_username}?startapp"
     if start_param:
-        url = f"{url}?startapp={start_param}"
+        url = f"{url}={start_param}"
     return [
         {
             "type": "inline_keyboard",
