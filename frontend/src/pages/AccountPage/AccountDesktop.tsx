@@ -72,7 +72,6 @@ export const AccountDesktop = ({
   return (
     <div className={styles.desk}>
       <section className={cn(styles.hero, styles.appear)}>
-        <div className={styles.hero__glow} aria-hidden />
         <div className={styles.hero__top}>
           <button
             type="button"

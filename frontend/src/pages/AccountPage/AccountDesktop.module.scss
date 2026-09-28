@@ -1,7 +1,6 @@
 // Десктопный дашборд: 12 колонок, hero на всю ширину
 // ponytail: приглушённые тона вместо чистого $color-drop-blood — тот слишком яркий для фона на всю ширину
 $blood: #b3383f;
-$blood-deep: #6b2a30;
 $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
 .desk {
@@ -60,28 +59,9 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
   grid-column: 1 / -1;
   overflow: hidden;
+  @include card;
   padding: $space-2xl 40px $space-xl;
   border-radius: 28px;
-  color: #fff;
-  background: linear-gradient(125deg, $blood 0%, $blood 35%, $blood-deep 100%);
-  box-shadow: 0 20px 48px color-mix(in srgb, #{$blood} 30%, transparent);
-
-  &__glow {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(
-        circle at 88% 20%,
-        rgb(255 255 255 / 18%) 0,
-        transparent 38%
-      ),
-      radial-gradient(
-        circle at 10% 120%,
-        rgb(255 255 255 / 10%) 0,
-        transparent 45%
-      );
-  }
 
   &__top {
     position: relative;
@@ -95,7 +75,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     flex-shrink: 0;
     padding: 4px;
     border-radius: $radius-round;
-    background: rgb(255 255 255 / 25%);
+    background: color-mix(in srgb, #{$blood} 15%, transparent);
   }
 
   &__who {
@@ -122,14 +102,14 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     align-items: center;
     padding: 6px 10px 6px 12px;
     border-radius: $radius-round;
-    background: rgb(255 255 255 / 18%);
-    backdrop-filter: blur(8px);
+    color: $blood;
+    background: color-mix(in srgb, #{$blood} 10%, transparent);
     font-size: 15px;
     font-weight: 600;
     transition: background $transition-fast;
 
     &:hover {
-      background: rgb(255 255 255 / 28%);
+      background: color-mix(in srgb, #{$blood} 18%, transparent);
     }
   }
 
@@ -150,14 +130,14 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   &__total-label {
     margin-top: $space-2xs;
     font-size: 16px;
-    opacity: 0.8;
+    color: $color-text-secondary;
   }
 
   &__caption {
     position: relative;
     margin-top: $space-s !important;
     font-size: 14px;
-    opacity: 0.85;
+    color: $color-text-secondary;
   }
 }
 
@@ -176,15 +156,14 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     left: 7px;
     height: 6px;
     border-radius: $radius-round;
-    background: rgb(255 255 255 / 22%);
+    background: $color-bg-secondary;
   }
 
   &__fill {
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: #fff;
-    box-shadow: 0 0 12px rgb(255 255 255 / 60%);
+    background: $blood;
     animation: fill 1.2s $ease-out 0.3s both;
   }
 
@@ -200,7 +179,6 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     gap: 6px;
     align-items: center;
     width: 20px;
-    opacity: 0.6;
 
     &:first-child {
       align-items: flex-start;
@@ -209,22 +187,18 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     &:last-child {
       align-items: flex-end;
     }
-
-    &--done {
-      opacity: 1;
-    }
   }
 
   &__dot {
     width: 20px;
     height: 20px;
-    border: 3px solid rgb(255 255 255 / 40%);
+    border: 3px solid $color-divider;
     border-radius: $radius-round;
-    background: $blood-deep;
+    background: $color-bg-card;
 
     .scale__point--done & {
-      border-color: #fff;
-      background: #fff;
+      border-color: $blood;
+      background: $blood;
     }
   }
 
@@ -236,7 +210,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   &__name {
     font-size: 12px;
     white-space: nowrap;
-    opacity: 0.85;
+    color: $color-text-secondary;
   }
 }
 
@@ -458,17 +432,9 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  @include card;
   padding: $space-xl;
   border-radius: 24px;
-  color: #fff;
-  background:
-    radial-gradient(
-      circle at 100% 0%,
-      color-mix(in srgb, #{$blood} 55%, transparent) 0,
-      transparent 55%
-    ),
-    linear-gradient(160deg, #2a2b35 0%, #15161c 100%);
-  box-shadow: 0 16px 40px rgb(0 0 0 / 18%);
   @include lift;
 
   &__head {
@@ -479,13 +445,13 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    opacity: 0.9;
+    color: $color-text-secondary;
   }
 
   &__demo {
     padding: 3px 10px;
     border-radius: $radius-round;
-    background: rgb(255 255 255 / 14%);
+    background: $color-bg-secondary;
     font-size: 11px;
     letter-spacing: 0;
     text-transform: none;
@@ -509,7 +475,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   &__group-rh {
     font-size: 32px;
     font-weight: 700;
-    color: #ff6b73;
+    color: $blood;
   }
 
   &__stats {
@@ -519,7 +485,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
     dt {
       font-size: 12px;
-      opacity: 0.6;
+      color: $color-text-tertiary;
     }
 
     dd {
@@ -537,11 +503,11 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     margin-top: $space-l;
     padding: $space-s $space-m;
     border-radius: $radius-l;
-    background: rgb(255 255 255 / 8%);
-    transition: background $transition-fast;
+    background: $color-bg-secondary;
+    transition: filter $transition-fast;
 
     &:hover {
-      background: rgb(255 255 255 / 16%);
+      filter: brightness(0.96);
     }
 
     span {
@@ -558,7 +524,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       font-size: 11px;
       font-weight: 400;
       letter-spacing: 0;
-      opacity: 0.6;
+      color: $color-text-tertiary;
     }
   }
 }
