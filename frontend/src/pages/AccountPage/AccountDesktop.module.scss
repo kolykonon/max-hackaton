@@ -135,7 +135,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     display: inline-flex;
     gap: $space-xs;
     align-items: center;
-    color: $blood;
+    color: $color-accent;
     font-size: 48px;
     font-weight: 800;
     letter-spacing: -0.03em;
@@ -185,7 +185,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: $blood;
+    background: $color-accent;
     animation: fill 1.2s $ease-out 0.3s both;
   }
 
@@ -219,8 +219,8 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     background: $color-bg-card;
 
     .scale__point--done & {
-      border-color: $blood;
-      background: $blood;
+      border-color: $color-accent;
+      background: $color-accent;
     }
   }
 
