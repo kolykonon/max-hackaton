@@ -66,17 +66,21 @@ export const openLink = (url: string): void => {
   else window.open(url, '_blank', 'noopener,noreferrer')
 }
 
-/** «Поделиться» внутри MAX. Вне MAX — системное меню или копирование ссылки. */
-export const shareContent = async (params: { text: string; link: string }): Promise<'shared' | 'copied'> => {
+/**
+ * «Поделиться» внутри MAX. Вне MAX — системное меню или копирование.
+ * Ссылку ставим в конец текста сами: если передать её отдельно, MAX и системное меню кладут её перед текстом.
+ */
+export const shareContent = async ({ text, link }: { text: string; link: string }): Promise<'shared' | 'copied'> => {
+  const message = `${text}\n${link}`
   if (isInsideMax()) {
-    await webApp()!.shareMaxContent(params)
+    await webApp()!.shareMaxContent({ text: message })
     return 'shared'
   }
   if (navigator.share) {
-    await navigator.share({ text: params.text, url: params.link })
+    await navigator.share({ text: message })
     return 'shared'
   }
-  await navigator.clipboard.writeText(params.link)
+  await navigator.clipboard.writeText(message)
   return 'copied'
 }
 

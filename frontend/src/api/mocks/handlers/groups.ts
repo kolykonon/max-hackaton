@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw'
 
 import type { DonationType } from '@/content/types'
-import { addDays, parseISODate, startOfDay, toISODate } from '@/utils/format'
+import { addDays, formatDayMonth, parseISODate, startOfDay, toISODate } from '@/utils/format'
 
 import type { Group, GroupCreate } from '../../types'
 import { centersOf, db, decodeSlot, findCenter, type MockGroup, MOSCOW_ID } from '../db'
@@ -66,7 +66,7 @@ const toGroup = (mock: MockGroup): Group => {
     is_past: parseISODate(mock.date) < startOfDay(new Date()),
     free_slots: freeSlotsCount(mock.centerId, mock.donationType, mock.date),
     link: `https://max.ru/kaplya_bot?startapp=grp_${mock.code}`,
-    share_text: `Пойдём сдавать кровь вместе? ${mock.date}, «${center.name}». Присоединяйся:`,
+    share_text: `Пойдём сдавать кровь вместе? ${formatDayMonth(parseISODate(mock.date))}, «${center.name}». Присоединяйся:`,
   }
 }
 
@@ -105,7 +105,7 @@ const pastDemoGroup = (): Group => {
     is_past: true,
     free_slots: 0,
     link: `https://max.ru/kaplya_bot?startapp=grp_${PAST_DEMO_CODE}`,
-    share_text: `Пойдём сдавать кровь вместе? ${date}, «${center.name}». Присоединяйся:`,
+    share_text: `Пойдём сдавать кровь вместе? ${formatDayMonth(parseISODate(date))}, «${center.name}». Присоединяйся:`,
   }
 }
 
