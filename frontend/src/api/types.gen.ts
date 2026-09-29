@@ -124,6 +124,142 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/region": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Регион донора (для пушей о дефиците крови) */
+        put: operations["update_region"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/impact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Вклад: литры и сколько людям могли помочь */
+        get: operations["get_impact"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/share-card": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Карточка «Я сдал кровь» / «Мой уровень» для shareMaxContent */
+        get: operations["get_share_card"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/after-donation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Последняя донация за год: документы и статус дня отдыха */
+        get: operations["get_after_donation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/donations/{donation_id}/after": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Документы и день отдыха по конкретной донации */
+        get: operations["get_donation_after"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/donations/{donation_id}/rest-day": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Отметить, использован ли доп. день отдыха */
+        put: operations["update_rest_day"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/donations/{donation_id}/leave-application": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Скачать заявление на доп. день отдыха (PDF или DOCX) */
+        post: operations["download_leave_application"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/donations/{donation_id}/leave-application/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Прислать заявление файлом в чат с ботом */
+        post: operations["send_leave_application"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/regions": {
         parameters: {
             query?: never;
@@ -311,6 +447,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Создать групповую донацию */
+        post: operations["create_group"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/groups/my": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Мои групповые донации: предстоящие или прошедшие */
+        get: operations["my_groups"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/groups/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Группа по коду из ссылки grp_<code> */
+        get: operations["get_group"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/groups/{code}/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Присоединиться к группе */
+        post: operations["join_group"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/demo/reset": {
         parameters: {
             query?: never;
@@ -362,6 +566,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/demo/appointments/{appointment_id}/ask-donated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Спросить «Сдали кровь?» сразу */
+        post: operations["demo_ask_donated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/demo/pushes/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Прислать проактивный пуш сейчас (без проверки условий) */
+        post: operations["demo_push"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/demo/pushes-run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Прогнать ежедневную рассылку пушей сейчас */
+        post: operations["demo_run_daily"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/health": {
         parameters: {
             query?: never;
@@ -383,6 +638,32 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AfterDonation
+         * @description Что делать после донации: документы и доп. день отдыха (ст. 186 ТК РФ).
+         */
+        AfterDonation: {
+            /** Donation Id */
+            donation_id: number;
+            donation_type: components["schemas"]["DonationType"];
+            /**
+             * Donated On
+             * Format: date
+             */
+            donated_on: string;
+            /** Center Name */
+            center_name: string | null;
+            /**
+             * Documents
+             * @description Что взять в центре крови
+             */
+            documents: string[];
+            rest_day: components["schemas"]["RestDay"];
+        };
+        /** AfterDonationResponse */
+        AfterDonationResponse: {
+            after_donation: components["schemas"]["AfterDonation"] | null;
+        };
         /** Appointment */
         Appointment: {
             /** Id */
@@ -499,6 +780,21 @@ export interface components {
             /** Groups */
             groups: components["schemas"]["SlotGroup"][];
         };
+        /** DailyRunResult */
+        DailyRunResult: {
+            /** Sent */
+            sent: number;
+        };
+        /**
+         * DemoPushKind
+         * @enum {string}
+         */
+        DemoPushKind: "interval_open" | "deficit" | "rest_day";
+        /**
+         * DocFormat
+         * @enum {string}
+         */
+        DocFormat: "pdf" | "docx";
         /** Donation */
         Donation: {
             /** Id */
@@ -553,10 +849,104 @@ export interface components {
          * ErrorCode
          * @enum {string}
          */
-        ErrorCode: "unauthorized" | "not_found" | "validation_error" | "slot_not_found" | "slot_taken" | "active_exists" | "interval_not_passed" | "personal_data_incomplete" | "appointment_not_found" | "appointment_not_active" | "demo_disabled" | "internal_error";
+        ErrorCode: "unauthorized" | "not_found" | "validation_error" | "slot_not_found" | "slot_taken" | "active_exists" | "interval_not_passed" | "personal_data_incomplete" | "appointment_not_found" | "appointment_not_active" | "demo_disabled" | "donation_not_found" | "group_not_found" | "group_closed" | "bot_send_failed" | "internal_error";
         /** ErrorResponse */
         ErrorResponse: {
             error: components["schemas"]["ErrorBody"];
+        };
+        /** Group */
+        Group: {
+            /** Code */
+            code: string;
+            center: components["schemas"]["GroupCenter"];
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            donation_type: components["schemas"]["DonationType"];
+            /** Owner Name */
+            owner_name: string;
+            /** Members */
+            members: components["schemas"]["GroupMember"][];
+            /** Members Count */
+            members_count: number;
+            /**
+             * Donated Count
+             * @description Участники, у которых донация в группе засчитана
+             */
+            donated_count: number;
+            /** Is Member */
+            is_member: boolean;
+            /** Is Owner */
+            is_owner: boolean;
+            /**
+             * Is Booked
+             * @description Текущий пользователь уже записан
+             */
+            is_booked: boolean;
+            /** Is Past */
+            is_past: boolean;
+            /**
+             * Free Slots
+             * @description Свободных слотов в центре на дату
+             */
+            free_slots: number;
+            /**
+             * Link
+             * @description https://max.ru/<бот>?startapp=grp_<code>
+             */
+            link: string;
+            /**
+             * Share Text
+             * @description Текст для shareMaxContent
+             */
+            share_text: string;
+        };
+        /** GroupCenter */
+        GroupCenter: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Address */
+            address: string;
+            /** Region Id */
+            region_id: number;
+        };
+        /** GroupCreate */
+        GroupCreate: {
+            /** Center Id */
+            center_id: number;
+            /**
+             * Date
+             * Format: date
+             * @description Локальная дата центра
+             */
+            date: string;
+            donation_type: components["schemas"]["DonationType"];
+        };
+        /** GroupMember */
+        GroupMember: {
+            /**
+             * Name
+             * @description Имя и первая буква фамилии: «Иван П.»
+             */
+            name: string;
+            /** Photo Url */
+            photo_url: string | null;
+            /** Is Owner */
+            is_owner: boolean;
+            /**
+             * Is Booked
+             * @description Есть запись в этот центр на эту дату
+             */
+            is_booked: boolean;
+            /**
+             * Booked Time
+             * @description Время записи участника
+             */
+            booked_time: string | null;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -614,12 +1004,92 @@ export interface components {
             /** Whole Needed For 40 */
             whole_needed_for_40: number;
         };
+        /**
+         * Impact
+         * @description «Вклад»: литры и до скольких людей могли помочь донации.
+         */
+        Impact: {
+            /** Whole Count */
+            whole_count: number;
+            /** Plasma Count */
+            plasma_count: number;
+            /**
+             * Whole Liters
+             * @description 0,45 л за донацию цельной крови
+             */
+            whole_liters: number;
+            /**
+             * Plasma Liters Max
+             * @description До 0,75 л за донацию плазмы
+             */
+            plasma_liters_max: number;
+            /**
+             * Total Liters Max
+             * @description Верхняя оценка: кровь + плазма
+             */
+            total_liters_max: number;
+            /**
+             * Patients Helped Max
+             * @description До 3 человек за донацию цельной крови; плазму не считаем
+             */
+            patients_helped_max: number;
+            /** Sources */
+            sources: components["schemas"]["ImpactSource"][];
+        };
+        /** ImpactSource */
+        ImpactSource: {
+            /** Title */
+            title: string;
+            /** Url */
+            url: string;
+            /** Claim */
+            claim: string;
+        };
         /** IntervalActive */
         IntervalActive: {
             /** Whole Blood */
             whole_blood: boolean;
             /** Plasma */
             plasma: boolean;
+        };
+        /**
+         * LeaveApplicationInput
+         * @description Реквизиты для заявления. Не сохраняются. Пустые поля — линии в документе.
+         */
+        LeaveApplicationInput: {
+            /**
+             * Employer Name
+             * @example ООО «Ромашка»
+             */
+            employer_name?: string | null;
+            /**
+             * Head Position
+             * @description Должность руководителя в дательном падеже
+             * @example Генеральному директору
+             */
+            head_position?: string | null;
+            /**
+             * Head Name
+             * @description ФИО руководителя в дательном падеже
+             * @example Петрову П. П.
+             */
+            head_name?: string | null;
+            /**
+             * Employee Position
+             * @example менеджер
+             */
+            employee_position?: string | null;
+            /**
+             * Rest Date
+             * @description Желаемый день отдыха: после дня донации, в течение года
+             */
+            rest_date?: string | null;
+            /**
+             * Attach To Vacation
+             * @description Присоединить к отпуску вместо rest_date
+             * @default false
+             */
+            attach_to_vacation: boolean;
         };
         /** Level */
         Level: {
@@ -721,6 +1191,8 @@ export interface components {
             blood: components["schemas"]["BloodInfo"];
             /** Referrals Count */
             referrals_count: number;
+            /** @description Регион донора для пушей о дефиците */
+            region?: components["schemas"]["RegionShort"] | null;
         };
         /** NextAllowed */
         NextAllowed: {
@@ -851,6 +1323,74 @@ export interface components {
             /** Has Centers */
             has_centers: boolean;
         };
+        /** RegionShort */
+        RegionShort: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+        };
+        /** RegionUpdate */
+        RegionUpdate: {
+            /** Region Id */
+            region_id: number;
+        };
+        /** RestDay */
+        RestDay: {
+            /**
+             * Deadline
+             * Format: date
+             * @description До какой даты можно взять день отдыха
+             */
+            deadline: string;
+            /**
+             * Days Left
+             * @description Дней до deadline, < 0 — срок прошёл
+             */
+            days_left: number;
+            /** Used */
+            used: boolean;
+            /** Used At */
+            used_at: string | null;
+        };
+        /** RestDayUpdate */
+        RestDayUpdate: {
+            /** Used */
+            used: boolean;
+        };
+        /**
+         * ShareCard
+         * @description Данные карточки «Я сдал кровь» / «Мой уровень» и текст для shareMaxContent.
+         */
+        ShareCard: {
+            kind: components["schemas"]["ShareCardKind"];
+            /** Title */
+            title: string;
+            /** Subtitle */
+            subtitle: string;
+            /** Total */
+            total: number;
+            level: components["schemas"]["Level"];
+            /** Patients Helped Max */
+            patients_helped_max: number;
+            /** Last Donation On */
+            last_donation_on: string | null;
+            /**
+             * Text
+             * @description text для shareMaxContent
+             */
+            text: string;
+            /**
+             * Link
+             * @description link для shareMaxContent — реферальная ссылка
+             */
+            link: string;
+        };
+        /**
+         * ShareCardKind
+         * @enum {string}
+         */
+        ShareCardKind: "donation" | "level";
         /** Slot */
         Slot: {
             /** Id */
@@ -1251,6 +1791,417 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_region: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegionUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Ошибка валидации */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_impact: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Impact"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_share_card: {
+        parameters: {
+            query?: {
+                kind?: components["schemas"]["ShareCardKind"];
+            };
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShareCard"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_after_donation: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AfterDonationResponse"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_donation_after: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                donation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AfterDonation"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_rest_day: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                donation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RestDayUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AfterDonation"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Ошибка валидации */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    download_leave_application: {
+        parameters: {
+            query?: {
+                format?: components["schemas"]["DocFormat"];
+            };
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                donation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LeaveApplicationInput"];
+            };
+        };
+        responses: {
+            /** @description Файл заявления */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": string;
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Ошибка валидации */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    send_leave_application: {
+        parameters: {
+            query?: {
+                format?: components["schemas"]["DocFormat"];
+            };
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                donation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LeaveApplicationInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Ошибка валидации */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Бот не смог отправить сообщение */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };
@@ -1816,6 +2767,216 @@ export interface operations {
             };
         };
     };
+    create_group: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GroupCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Group"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Ошибка валидации */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    my_groups: {
+        parameters: {
+            query?: {
+                past?: boolean;
+            };
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Group"][];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_group: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Group"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    join_group: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Group"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Конфликт */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     demo_reset: {
         parameters: {
             query?: never;
@@ -1964,6 +3125,165 @@ export interface operations {
             };
             /** @description Конфликт */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    demo_ask_donated: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                appointment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Конфликт */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    demo_push: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                kind: components["schemas"]["DemoPushKind"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    demo_run_daily: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyRunResult"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

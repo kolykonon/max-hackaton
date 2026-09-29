@@ -6,9 +6,7 @@
   pointer-events: none;
 
   // У BaseMap min-height 300px — в карточке ниже
-  & > * {
-    min-height: 0;
-  }
+  --base-map-min-height: 0;
 
   &__fallback {
     display: flex;

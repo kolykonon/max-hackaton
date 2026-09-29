@@ -14,6 +14,15 @@ export type ZoneStatus = MapStatus['regions'][number]
 export const getZoneStatus = (zone: ZoneStatus, group: BloodGroup | null): StockStatus =>
   group ? (zone.statuses[group] ?? 'none') : (zone.worst ?? 'none')
 
+/** Метки центров для RegionsMap: цвет — статус выбранной группы, а без выбора — худший. */
+export const toMapPoints = (centers: MapCenter[], group: BloodGroup | null) =>
+  centers.map((center) => ({
+    id: center.id,
+    lon: center.lon,
+    lat: center.lat,
+    status: (group ? center.statuses[group] : center.worst) ?? ('none' as StockStatus),
+  }))
+
 /** Статусы по всем 8 группам: пропущенные — «нет данных». */
 export const fillStatuses = (zone: ZoneStatus): Record<BloodGroup, StockStatus> =>
   Object.fromEntries(BLOOD_GROUPS.map((group) => [group, zone.statuses[group] ?? 'none'])) as Record<BloodGroup, StockStatus>

@@ -13,6 +13,9 @@ import { BookingSummary } from '@/components/shared/BookingSummary/BookingSummar
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
 import { OutlineButton } from '@/components/shared/OutlineButton/OutlineButton'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
+import { Toast } from '@/components/shared/Toast/Toast'
+import { useFinishGroupCreation } from '@/hooks/useFinishGroupCreation'
+import { useToast } from '@/hooks/useToast'
 import { useBookingStore } from '@/store/booking'
 import { formatDayMonth, parseISODate, startOfDay, toISODate } from '@/utils/format'
 
@@ -23,7 +26,19 @@ const firstOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(
 
 export const BookingDatePage = () => {
   const navigate = useNavigate()
-  const { donationType, regionId, date, rescheduleId, setDate } = useBookingStore()
+  const { mode, donationType, regionId, date, rescheduleId, presetCenter, setDate } = useBookingStore()
+  const toast = useToast()
+  const isGroup = mode === 'group'
+  // «Собрать снова»: центр уже выбран — группа создаётся сразу после даты
+  const group = useFinishGroupCreation(() => toast.show('Не удалось создать группу. Попробуйте ещё раз'))
+  const next = () => {
+    if (isGroup && presetCenter) group.finish()
+    else navigate(presetCenter ? '/booking/time' : '/booking/center')
+  }
+  const back = () => {
+    if (rescheduleId) navigate('/home')
+    else navigate(isGroup && presetCenter ? '/groups' : '/booking/type')
+  }
   const dates = useBookingDates(regionId, donationType)
   const [shownMonth, setShownMonth] = useState<Date | null>(null)
 
@@ -80,22 +95,19 @@ export const BookingDatePage = () => {
   return (
     <Screen
       header={
-        <StepHeader
-          title="Выберите дату"
-          step={2}
-          onBack={() => navigate(rescheduleId ? '/home' : '/booking/type')}
-        />
+        <StepHeader title="Выберите дату" step={2} total={isGroup ? 3 : undefined} onBack={back} />
       }
       footer={
         <StickyFooter>
-          <Button size="large" stretched disabled={!date} onClick={() => navigate('/booking/center')}>
-            Далее
+          <Button size="large" stretched disabled={!date} loading={group.isPending} onClick={next}>
+            {isGroup && presetCenter ? 'Создать группу' : 'Далее'}
           </Button>
         </StickyFooter>
       }
     >
       <BookingSummary />
       {renderCalendar()}
+      <Toast message={toast.message} />
     </Screen>
   )
 }

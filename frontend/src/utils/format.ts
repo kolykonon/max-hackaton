@@ -15,6 +15,9 @@ const WEEKDAYS_FULL = ['воскресенье', 'понедельник', 'вт
 export const formatDayMonth = (date: Date): string =>
   `${date.getDate()} ${MONTHS_GENITIVE[date.getMonth()]}`
 
+/** «14 октября 2027» — для сроков дальше текущего года */
+export const formatDayMonthYear = (date: Date): string => `${formatDayMonth(date)} ${date.getFullYear()}`
+
 /** «Октябрь 2026» */
 export const formatMonthYear = (date: Date): string =>
   `${MONTHS_NOMINATIVE[date.getMonth()]} ${date.getFullYear()}`

@@ -1,0 +1,19 @@
+.leave-application-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2xs;
+  }
+
+  &__vacation {
+    display: flex;
+    gap: $space-s;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+}

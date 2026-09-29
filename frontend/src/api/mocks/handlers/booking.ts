@@ -35,7 +35,18 @@ const TIMES = Array.from({ length: 24 }, (_, i) => {
   return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
 })
 
-const takenSlotIds = () => new Set(db.state.appointments.filter((a) => a.status === 'active').map((a) => a.slotId))
+// Время Марии из демо-группы занято — как было бы на настоящем бэке
+let demoGroupSlotId: number | null = null
+
+export const setDemoGroupSlot = (slotId: number | null) => {
+  demoGroupSlotId = slotId
+}
+
+const takenSlotIds = () =>
+  new Set([
+    ...db.state.appointments.filter((a) => a.status === 'active').map((a) => a.slotId),
+    ...(demoGroupSlotId ? [demoGroupSlotId] : []),
+  ])
 
 const isBusyByDemo = (centerId: number, date: string, time: string) => {
   const day = parseISODate(date).getDate()
@@ -43,7 +54,7 @@ const isBusyByDemo = (centerId: number, date: string, time: string) => {
   return (centerId * 7 + day * 3 + Number(time.replace(':', ''))) % 3 === 0
 }
 
-const slotsFor = (centerId: number, donationType: DonationType, date: string) => {
+export const slotsFor = (centerId: number, donationType: DonationType, date: string) => {
   const taken = takenSlotIds()
   const isWorkday = parseISODate(date).getDay() !== 0
   return TIMES.map((time) => {
@@ -63,7 +74,7 @@ const periodOf = (time: string): SlotPeriod => {
   return hour < 17 ? 'day' : 'evening'
 }
 
-const freeSlotsCount = (centerId: number, donationType: DonationType, date: string) =>
+export const freeSlotsCount = (centerId: number, donationType: DonationType, date: string) =>
   slotsFor(centerId, donationType, date).filter((s) => s.is_free).length
 
 const toAppointment = (id: number, slotId: number, donationType: DonationType): Appointment => {

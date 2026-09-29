@@ -19,14 +19,21 @@ const useUpdateAppointmentCache = () => {
   return {
     onSuccess: (data: AppointmentResponse) => {
       queryClient.setQueryData(queryKeys.currentAppointment, data)
-      return queryClient.invalidateQueries({ queryKey: ['booking'] })
+      // Слоты и даты — занятость изменилась; группы — кто из участников записан
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['booking'] }),
+        queryClient.invalidateQueries({ queryKey: ['groups'] }),
+      ])
     },
     // 404 / 409 appointment_not_active — запись уже изменилась, показываем актуальную
     onError: () => queryClient.invalidateQueries({ queryKey: queryKeys.currentAppointment }),
   }
 }
 
-/** Ошибки: 404 slot_not_found, 409 slot_taken / active_exists, 422 interval_not_passed / personal_data_incomplete. */
+/**
+ * Ошибки: 404 slot_not_found, 409 slot_taken / active_exists, 422 interval_not_passed / personal_data_incomplete.
+ * Если пользователь в группе на этот центр и день, бэк сам напишет создателю группы.
+ */
 export const useCreateAppointment = () =>
   useMutation({
     mutationFn: (slotId: number) => api.post<AppointmentResponse>('/appointments', { slot_id: slotId }),

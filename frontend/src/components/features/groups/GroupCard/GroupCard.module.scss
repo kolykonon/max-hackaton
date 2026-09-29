@@ -1,0 +1,37 @@
+.group-card {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-3xs;
+    min-width: 0;
+  }
+
+  &__center {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__status {
+    margin-top: $space-2xs;
+    font-size: 13px;
+    font-weight: 600;
+    color: $color-text-secondary;
+
+    &--booked {
+      color: $color-positive;
+    }
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    color: $color-text-tertiary;
+  }
+}

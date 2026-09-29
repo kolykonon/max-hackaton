@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Clock,
   Copy,
+  MapPin,
   HeartHandshake,
   Users,
 } from "lucide-react";
@@ -38,6 +39,7 @@ interface AccountDesktopProps {
   onOpenType: (kind: DonationKind) => void;
   onOpenHonorary: () => void;
   onOpenReferrals: () => void;
+  onOpenRegion: () => void;
   onOpenGuide: () => void;
 }
 
@@ -70,6 +72,7 @@ export const AccountDesktop = ({
   onOpenType,
   onOpenHonorary,
   onOpenReferrals,
+  onOpenRegion,
   onOpenGuide,
 }: AccountDesktopProps) => {
   const { total, honorary } = progress;
@@ -372,6 +375,23 @@ export const AccountDesktop = ({
         <ArrowRight size={22} className={styles.tile__arrow} />
       </button>
 
+      <button
+        type="button"
+        className={cn(styles.tile, styles.appear)}
+        onClick={onOpenRegion}
+      >
+        <span className={cn(styles.tile__icon, styles["tile__icon--red"])}>
+          <MapPin size={26} />
+        </span>
+        <span className={styles.tile__text}>
+          <b>{me.region ? me.region.name : "Укажите регион"}</b>
+          <small>
+            {me.region
+              ? "Мой регион: сообщим, когда здесь не хватает вашей группы"
+              : "Сообщим, когда в нём не хватает вашей группы крови"}
+          </small>
+        </span>
+      </button>
       <button
         type="button"
         className={cn(styles.tile, styles.appear)}

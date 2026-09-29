@@ -23,6 +23,9 @@ class Me(Schema):
     onboarding_completed: bool
     blood: BloodInfo
     referrals_count: int = Field(ge=0)
+    region: "RegionShort | None" = Field(
+        default=None, description="Регион донора для пушей о дефиците"
+    )
 
 
 class OnboardingRequest(Schema):
@@ -193,3 +196,54 @@ class DonationHistory(Schema):
 class Referrals(Schema):
     count: int = Field(ge=0)
     link: str
+
+
+class RegionShort(Schema):
+    id: int
+    name: str
+
+
+class RegionUpdate(Schema):
+    region_id: int
+
+
+class ImpactSource(Schema):
+    title: str
+    url: str
+    claim: str
+
+
+class Impact(Schema):
+    """«Вклад»: литры и до скольких людей могли помочь донации."""
+
+    whole_count: int = Field(ge=0)
+    plasma_count: int = Field(ge=0)
+    whole_liters: float = Field(ge=0, description="0,45 л за донацию цельной крови")
+    plasma_liters_max: float = Field(ge=0, description="До 0,75 л за донацию плазмы")
+    total_liters_max: float = Field(ge=0, description="Верхняя оценка: кровь + плазма")
+    patients_helped_max: int = Field(
+        ge=0, description="До 3 человек за донацию цельной крови; плазму не считаем"
+    )
+    sources: list[ImpactSource]
+
+
+class ShareCardKind(StrEnum):
+    DONATION = "donation"
+    LEVEL = "level"
+
+
+class ShareCard(Schema):
+    """Данные карточки «Я сдал кровь» / «Мой уровень» и текст для shareMaxContent."""
+
+    kind: ShareCardKind
+    title: str
+    subtitle: str
+    total: int = Field(ge=0)
+    level: Level
+    patients_helped_max: int = Field(ge=0)
+    last_donation_on: dt.date | None
+    text: str = Field(description="text для shareMaxContent")
+    link: str = Field(description="link для shareMaxContent — реферальная ссылка")
+
+
+Me.model_rebuild()

@@ -1,8 +1,10 @@
 import { http } from 'msw'
 import { setupWorker } from 'msw/browser'
 
+import { afterDonationHandlers } from './handlers/afterDonation'
 import { bookingHandlers } from './handlers/booking'
 import { demoHandlers } from './handlers/demo'
+import { groupHandlers } from './handlers/groups'
 import { meHandlers } from './handlers/me'
 import { apiError, BASE, shouldFail } from './utils'
 
@@ -12,5 +14,5 @@ const failureHandler = http.all(`${BASE}/*`, ({ request }) => {
   return undefined
 })
 
-export const worker = setupWorker(failureHandler, ...meHandlers, ...bookingHandlers, ...demoHandlers)
+export const worker = setupWorker(failureHandler, ...meHandlers, ...bookingHandlers, ...groupHandlers, ...afterDonationHandlers, ...demoHandlers)
 

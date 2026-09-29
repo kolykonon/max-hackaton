@@ -1,0 +1,27 @@
+.past-groups {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  margin-top: $space-s;
+
+  &__toggle {
+    @include reset-button;
+    @include focus-ring;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: $space-xs 0;
+    cursor: pointer;
+    color: $color-text;
+  }
+
+  &__chevron {
+    color: $color-text-tertiary;
+    transition: transform $transition-fast;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+}

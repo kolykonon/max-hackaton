@@ -2,10 +2,12 @@ import logging
 
 from fastapi import APIRouter, BackgroundTasks, Request, status
 
-from app.api.deps import AppointmentServiceDep, CurrentUser
+from app.api.deps import AppointmentServiceDep, CurrentUser, GroupServiceDep
+from app.bot import pushes
 from app.bot.handlers import send_appointment_confirmed
 from app.schemas.appointments import AppointmentResponse, SlotRequest
 from app.schemas.common import error_responses
+from app.services.groups import human_date
 from app.services.reminders import cancel_reminders, schedule_reminders
 
 log = logging.getLogger(__name__)
@@ -34,6 +36,7 @@ async def create_appointment(
     request: Request,
     user: CurrentUser,
     service: AppointmentServiceDep,
+    groups: GroupServiceDep,
     body: SlotRequest,
     background: BackgroundTasks,
 ) -> AppointmentResponse:
@@ -42,6 +45,20 @@ async def create_appointment(
     background.add_task(
         send_appointment_confirmed, request.app.state.max, user.max_user_id
     )
+
+    for owner_max_id, group in await groups.groups_of_booking(user, orm):
+        background.add_task(
+            pushes.send_group_booked,
+            request.app.state.max,
+            owner_max_id,
+            group.code,
+            user.first_name,
+            group.center.name,
+            human_date(group.date),
+            schema.local_time,
+            sum(member.is_booked for member in group.members),
+            group.members_count,
+        )
 
     scheduler = getattr(request.app.state, "scheduler", None)
     if scheduler is not None:

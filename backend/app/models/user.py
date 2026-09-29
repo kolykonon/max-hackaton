@@ -71,3 +71,9 @@ class User(Base, IDMixin, CreatedAtMixin):
         nullable=True,
         index=True,
     )
+    # Регион донора — для пуша «в вашем регионе не хватает вашей группы».
+    # Задаётся в профиле или автоматически по центру первой записи
+    region_id: Mapped[int | None] = mapped_column(
+        ForeignKey("regions.id", ondelete="SET NULL"),
+        nullable=True,
+    )

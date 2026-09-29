@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useCurrentAppointment } from "@/api/hooks/appointments";
 import { useDemoAction } from "@/api/hooks/demo";
-import { useMe, useProgress } from "@/api/hooks/me";
+import { useMe, useProgress, useUpdateRegion } from "@/api/hooks/me";
 import { BloodCard } from "@/components/features/account/BloodCard/BloodCard";
 import { BloodStat } from "@/components/features/account/BloodCard/BloodStat";
 import { DonorCode } from "@/components/features/account/BloodCard/DonorCode";
@@ -24,6 +24,8 @@ import { ImpactCard } from "@/components/features/account/ImpactCard/ImpactCard"
 import { LevelCard } from "@/components/features/account/LevelCard/LevelCard";
 import { ProfileHeader } from "@/components/features/account/ProfileHeader/ProfileHeader";
 import { ReferralBanner } from "@/components/features/account/ReferralBanner/ReferralBanner";
+import { RegionRow } from "@/components/features/account/RegionRow/RegionRow";
+import { RegionSheet } from "@/components/features/account/RegionSheet/RegionSheet";
 import { Screen } from "@/components/layout/Screen/Screen";
 import { ErrorState } from "@/components/shared/ErrorState/ErrorState";
 import { Skeleton } from "@/components/shared/Skeleton/Skeleton";
@@ -36,7 +38,7 @@ import { formatYearsMonths } from "@/utils/format";
 import { AccountDesktop } from "./AccountDesktop";
 import styles from "./AccountPage.module.scss";
 
-type Sheet = "levels" | "history" | "demo" | null;
+type Sheet = "levels" | "history" | "demo" | "region" | null;
 
 const DEMO_MENU_TAPS = 5;
 
@@ -63,6 +65,7 @@ export const AccountPage = () => {
   const progress = useProgress();
   const current = useCurrentAppointment();
   const demo = useDemoAction();
+  const updateRegion = useUpdateRegion();
   const [sheet, setSheet] = useState<Sheet>(null);
   const [typeSheet, setTypeSheet] = useState<DonationKind | null>(null);
   const [demoPending, setDemoPending] = useState<DemoAction | null>(null);
@@ -106,6 +109,17 @@ export const AccountPage = () => {
       avatarTaps.current = 0;
       setSheet("demo");
     }
+  };
+
+  const selectRegion = (regionId: number) => {
+    updateRegion.mutate(regionId, {
+      onSuccess: () => {
+        setSheet(null);
+        toast.show("Регион сохранён");
+      },
+      onError: () =>
+        toast.show("Не удалось сохранить регион. Попробуйте ещё раз"),
+    });
   };
 
   const copyCode = async () => {
@@ -153,6 +167,7 @@ export const AccountPage = () => {
           onOpenType={setTypeSheet}
           onOpenHonorary={() => navigate("/honorary")}
           onOpenReferrals={() => navigate("/referrals")}
+          onOpenRegion={() => setSheet("region")}
           onOpenGuide={() => navigate("/guide")}
         />
       ) : (
@@ -193,6 +208,10 @@ export const AccountPage = () => {
             />
             <BloodStat label="Фенотип" value={blood.phenotype ?? undefined} />
           </BloodCard>
+          <RegionRow
+            regionName={me.data.region?.name}
+            onOpen={() => setSheet("region")}
+          />
           <section className={styles["account-page__honorary"]}>
             <Typography.Text variant="subheader">
               Путь к званию «Почётный донор России»
@@ -247,6 +266,12 @@ export const AccountPage = () => {
         onClose={closeSheet}
       />
       <DonationHistorySheet open={sheet === "history"} onClose={closeSheet} />
+      <RegionSheet
+        open={sheet === "region"}
+        selectedId={me.data.region?.id ?? null}
+        onSelect={selectRegion}
+        onClose={closeSheet}
+      />
       <DemoMenuSheet
         open={sheet === "demo"}
         hasAppointment={Boolean(current.data?.appointment)}

@@ -1,19 +1,22 @@
-import { IconButton } from '@maxhub/max-ui'
-import { LocateFixed } from 'lucide-react'
-import { type LngLatBoundsLike, type Map as MapLibreMap, Marker } from 'maplibre-gl'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import type { LngLatBoundsLike } from 'maplibre-gl'
+import { useMemo, useRef } from 'react'
 
 import type { BookingCenter } from '@/api/types'
-import { BaseMap } from '@/components/shared/BaseMap/BaseMap'
+import { type MapPoint, RegionsMap, type RegionsMapHandle } from '@/components/features/map/RegionsMap/RegionsMap'
+import { useRegionsMapData } from '@/components/features/map/useRegionsMapData'
+import { zoneAt } from '@/components/features/map/utils'
 import { geometryBounds, RUSSIA_BOUNDS } from '@/components/shared/BaseMap/bounds'
+import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
+import { MapControls } from '@/components/shared/MapControls/MapControls'
+import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
+import type { BloodGroup } from '@/content/types'
 import type { RegionFeature } from '@/hooks/useRussiaGeo'
 
-import styles from './CenterMap.module.scss'
-import { createPinElement, setPinSelected } from './pinElement'
-
 interface CenterMapProps {
-  region: RegionFeature | null
-  regionName: string
+  /** Код региона записи (RU-MOW) — к нему приближаемся, если центров нет. */
+  regionCode: string | null
+  /** Группа пользователя: по ней красим регионы, как на экране «Карта». */
+  group: BloodGroup | null
   centers: BookingCenter[]
   selectedId: number | null
   onSelect: (center: BookingCenter) => void
@@ -23,6 +26,8 @@ interface CenterMapProps {
 }
 
 const SINGLE_CENTER_DELTA = 0.02
+const LOCATE_ZOOM = 13
+const noop = () => {}
 
 /** Что показать при открытии: все центры, один центр с окрестностями или регион целиком. */
 const initialBounds = (centers: BookingCenter[], region: RegionFeature | null): LngLatBoundsLike => {
@@ -39,78 +44,54 @@ const initialBounds = (centers: BookingCenter[], region: RegionFeature | null): 
   return (region && geometryBounds(region.geometry)) ?? RUSSIA_BOUNDS
 }
 
-/** Вкладка «Карта» на шаге 3: улицы, граница региона и метки центров цвета светофора вашей группы. */
-export const CenterMap = ({ region, regionName, centers, selectedId, onSelect, userLocation, onLocateFailed }: CenterMapProps) => {
-  const [map, setMap] = useState<MapLibreMap | null>(null)
-  const pins = useRef(new Map<number, HTMLElement>())
-  const onSelectRef = useRef(onSelect)
+/** Вкладка «Карта» на шаге 3: та же карта, что на экране «Карта», но метки — только центры со свободными местами. */
+export const CenterMap = ({ regionCode, group, centers, selectedId, onSelect, userLocation, onLocateFailed }: CenterMapProps) => {
+  const mapRef = useRef<RegionsMapHandle>(null)
+  const mapData = useRegionsMapData(group)
+  const region = mapData.geo.data?.features.find((item) => item.properties.code === regionCode) ?? null
   const bounds = useMemo(() => initialBounds(centers, region), [centers, region])
+  // Цвет метки — статус группы пользователя в этом центре
+  const points = useMemo<MapPoint[]>(
+    () => centers.map((center) => ({ id: center.id, lon: center.lon, lat: center.lat, status: center.group_status ?? 'none' })),
+    [centers],
+  )
+  const selected = centers.find((center) => center.id === selectedId)
+  // Обводим зону (район Москвы) или регион выбранного центра
+  const selectedCode = (selected && zoneAt(mapData.zones, selected.lon, selected.lat)?.properties.code) ?? regionCode
 
-  useEffect(() => {
-    onSelectRef.current = onSelect
-  })
-
-  const onReady = (instance: MapLibreMap) => {
-    if (region) {
-      instance.addSource('region', { type: 'geojson', data: region })
-      instance.addLayer({
-        id: 'region-border',
-        type: 'line',
-        source: 'region',
-        paint: { 'line-color': '#007aff', 'line-width': 2, 'line-opacity': 0.5, 'line-dasharray': [2, 2] },
-      })
-    }
-    setMap(instance)
+  if (mapData.isPending) return <Skeleton height={420} radius="s" />
+  if (mapData.isError) {
+    return <ErrorState text="Не удалось загрузить карту" retrying={mapData.isFetching} onRetry={mapData.refetch} />
   }
 
-  // Метки центров пересоздаём, только когда меняется список
-  useEffect(() => {
-    if (!map) return
-    const elements = pins.current
-    const markers = centers.map((center) => {
-      const element = createPinElement(center.name, center.group_status ?? 'none', () => onSelectRef.current(center))
-      elements.set(center.id, element)
-      return new Marker({ element, anchor: 'bottom' }).setLngLat([center.lon, center.lat]).addTo(map)
-    })
-    return () => {
-      markers.forEach((marker) => marker.remove())
-      elements.clear()
-    }
-  }, [map, centers])
-
-  useEffect(() => {
-    pins.current.forEach((element, id) => setPinSelected(element, id === selectedId))
-    const selected = centers.find((center) => center.id === selectedId)
-    if (map && selected) map.easeTo({ center: [selected.lon, selected.lat], duration: 400 })
-  }, [map, selectedId, centers])
-
-  // Точка «вы здесь», если геопозиция есть
-  useEffect(() => {
-    if (!map || !userLocation) return
-    const element = document.createElement('div')
-    element.className = styles['center-map__me']
-    const marker = new Marker({ element }).setLngLat([userLocation.lon, userLocation.lat]).addTo(map)
-    return () => {
-      marker.remove()
-    }
-  }, [map, userLocation])
+  const selectCenter = (id: number) => {
+    const center = centers.find((item) => item.id === id)
+    if (center) onSelect(center)
+  }
 
   const locate = () => {
-    if (!map || !userLocation) return onLocateFailed()
-    map.flyTo({ center: [userLocation.lon, userLocation.lat], zoom: 13 })
+    if (!userLocation) return onLocateFailed()
+    mapRef.current?.flyTo(userLocation.lon, userLocation.lat, LOCATE_ZOOM)
   }
 
   return (
-    <BaseMap bounds={bounds} onReady={onReady} label={`Карта центров крови: ${regionName}`} className={styles['center-map']}>
-      <IconButton
-        size="large"
-        variant="primary-contrast"
-        aria-label="Показать моё местоположение"
-        className={styles['center-map__locate']}
-        onClick={locate}
-      >
-        <LocateFixed size={24} />
-      </IconButton>
-    </BaseMap>
+    <RegionsMap
+      ref={mapRef}
+      regions={mapData.features}
+      statuses={mapData.statuses}
+      selectedCode={selectedCode}
+      onSelect={noop}
+      userLocation={userLocation}
+      bounds={bounds}
+      centers={points}
+      selectedCenterId={selectedId}
+      onSelectCenter={selectCenter}
+    >
+      <MapControls
+        onZoomIn={() => mapRef.current?.zoomIn()}
+        onZoomOut={() => mapRef.current?.zoomOut()}
+        onLocate={locate}
+      />
+    </RegionsMap>
   )
 }

@@ -3,7 +3,7 @@ import { lazy, Suspense, useMemo } from 'react'
 
 import { useMe } from '@/api/hooks/me'
 import { useMapCenters, useMapStatus } from '@/api/hooks/regions'
-import { getZoneStatus } from '@/components/features/map/utils'
+import { getZoneStatus, toMapPoints } from '@/components/features/map/utils'
 import { DEFAULT_ZONE, getLastZone } from '@/components/shared/RussiaMap/lastZone'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import type { StockStatus } from '@/content/types'
@@ -34,6 +34,7 @@ export const TrafficLightPreview = () => {
       >,
     [status.data, group],
   )
+  const points = useMemo(() => toMapPoints(centers.data ?? [], group), [centers.data, group])
 
   const skeleton = <Skeleton height={200} radius="s" className={styles['traffic-light-preview']} />
   if (geo.isPending || status.isPending) return skeleton
@@ -58,8 +59,7 @@ export const TrafficLightPreview = () => {
           onSelect={noop}
           userLocation={null}
           initialFocusCode={zoneCode}
-          centers={centers.data}
-          group={group}
+          centers={points}
           selectedCenterId={null}
           onSelectCenter={noop}
         />

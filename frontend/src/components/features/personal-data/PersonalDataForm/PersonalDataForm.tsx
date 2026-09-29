@@ -1,7 +1,7 @@
 import { IdCard, Phone, ShieldPlus } from 'lucide-react'
 
+import { DataField } from '@/components/shared/DataField/DataField'
 
-import { DataField } from '../DataField/DataField'
 import { DataSection } from '../DataSection/DataSection'
 import { FIELDS, type FieldErrors, type FieldKey, type PersonalDataValues } from '../fields'
 import styles from './PersonalDataForm.module.scss'

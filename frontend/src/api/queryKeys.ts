@@ -15,4 +15,8 @@ export const queryKeys = {
   bookingCenters: (params: object) => ['booking', 'centers', params] as const,
   bookingSlots: (centerId: number, type: DonationType, date: string) => ['booking', 'slots', centerId, type, date] as const,
   currentAppointment: ['appointments', 'current'] as const,
+  afterDonation: ['me', 'after-donation'] as const,
+  donationAfter: (donationId: number) => ['me', 'after-donation', donationId] as const,
+  group: (code: string) => ['groups', code] as const,
+  myGroups: (past: boolean) => ['groups', 'my', past] as const,
 }

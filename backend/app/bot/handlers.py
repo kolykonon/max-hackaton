@@ -12,6 +12,7 @@ class UpdateType(StrEnum):
 
     BOT_STARTED = "bot_started"
     MESSAGE_CREATED = "message_created"
+    MESSAGE_CALLBACK = "message_callback"
 
 
 async def handle_update(client: MaxBotClient, update: dict) -> None:
@@ -38,6 +39,13 @@ async def handle_update(client: MaxBotClient, update: dict) -> None:
                 await _send_start(client, user_id)
             else:
                 await _send_fallback(client, user_id)
+            return
+
+        case UpdateType.MESSAGE_CALLBACK:
+            # импорт здесь: callbacks тянет сервисы, а сервисы импортируют handlers
+            from app.bot.callbacks import handle_callback
+
+            await handle_callback(client, update)
             return
 
 

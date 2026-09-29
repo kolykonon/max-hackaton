@@ -9,6 +9,10 @@ export interface MockDonation {
   type: DonationType
   date: string
   centerName: string
+  /** Засчитана через приложение (демо-кнопка) — для неё есть «После донации», как на бэке у не-демо донаций. */
+  fromApp?: boolean
+  /** Когда отметили, что день отдыха использован. */
+  restUsedAt?: string | null
 }
 
 export interface MockAppointment {
@@ -18,12 +22,24 @@ export interface MockAppointment {
   status: 'active' | 'cancelled' | 'rescheduled' | 'completed'
 }
 
+/** Групповая донация: свою группу пользователь создаёт, в демо-группу — вступает. */
+export interface MockGroup {
+  code: string
+  centerId: number
+  date: string
+  donationType: DonationType
+  isOwner: boolean
+  isMember: boolean
+}
+
 interface MockState {
   onboardingCompleted: boolean
   personalData: PersonalDataInput
   isDemoData: boolean
+  regionId: number | null
   donations: MockDonation[]
   appointments: MockAppointment[]
+  groups: MockGroup[]
   nextId: number
 }
 
@@ -35,15 +51,23 @@ const initialState = (): MockState => ({
   onboardingCompleted: false,
   personalData: { ...DEMO_PERSONAL_DATA },
   isDemoData: true,
+  regionId: null,
   donations: DONATIONS.map((d) => ({ id: d.id, type: d.type, date: d.date.toISOString(), centerName: d.centerName })),
   appointments: [],
+  groups: [],
   nextId: 1000,
 })
 
 const load = (): MockState => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw) as MockState
+    if (raw) {
+      const state = JSON.parse(raw) as MockState
+      // Сохранено до появления групп
+      state.groups ??= []
+      state.regionId ??= null
+      return state
+    }
   } catch {
     // повреждённое состояние — начинаем заново
   }

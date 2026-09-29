@@ -1,4 +1,5 @@
 import { Button, Typography } from '@maxhub/max-ui'
+import { HeartHandshake } from 'lucide-react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 import { useBookingSlots } from '@/api/hooks/booking'
@@ -9,6 +10,7 @@ import { Screen } from '@/components/layout/Screen/Screen'
 import { StepHeader } from '@/components/layout/StepHeader/StepHeader'
 import { StickyFooter } from '@/components/layout/StickyFooter/StickyFooter'
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
+import { InfoRow } from '@/components/shared/InfoRow/InfoRow'
 import { OutlineButton } from '@/components/shared/OutlineButton/OutlineButton'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { useBookingStore } from '@/store/booking'
@@ -21,10 +23,15 @@ const PERIOD_LABEL: Record<SlotPeriod, string> = { morning: 'Утро', day: 'Д
 /** Шаг 4 — время. */
 export const BookingTimePage = () => {
   const navigate = useNavigate()
-  const { donationType, date, center, slot, setSlot } = useBookingStore()
+  const { donationType, date, center, slot, presetCenter, group, setSlot, releaseCenter } = useBookingStore()
   const slots = useBookingSlots(center?.id ?? null, donationType, date)
 
   if (!center || !date) return <Navigate to="/home" replace />
+
+  const pickOtherCenter = () => {
+    releaseCenter()
+    navigate('/booking/center')
+  }
 
   const renderSlots = () => {
     if (slots.isPending) return <Skeleton height={260} />
@@ -39,7 +46,7 @@ export const BookingTimePage = () => {
             На этот день всё занято
           </Typography.Text>
           <div className={styles['booking-time__empty-actions']}>
-            <OutlineButton size="medium" onClick={() => navigate('/booking/center')}>
+            <OutlineButton size="medium" onClick={pickOtherCenter}>
               Другой центр
             </OutlineButton>
             <OutlineButton size="medium" onClick={() => navigate('/booking/date')}>
@@ -66,7 +73,13 @@ export const BookingTimePage = () => {
 
   return (
     <Screen
-      header={<StepHeader title="Выберите время" step={4} onBack={() => navigate('/booking/center')} />}
+      header={
+        <StepHeader
+          title="Выберите время"
+          step={4}
+          onBack={() => navigate(presetCenter ? '/booking/date' : '/booking/center')}
+        />
+      }
       footer={
         <StickyFooter>
           <Button size="large" stretched disabled={!slot} onClick={() => navigate('/booking/check')}>
@@ -81,6 +94,15 @@ export const BookingTimePage = () => {
           {formatDayMonthWeekday(parseISODate(date))}
         </Typography.Text>
       </div>
+      {group && group.date === date && group.centerId === center.id && group.booked.length > 0 && (
+        <InfoRow
+          icon={HeartHandshake}
+          tone="red"
+          title={group.booked.map((member) => `${member.name} — ${member.time}`).join(', ')}
+          description="Уже записаны из вашей группы. Выберите время рядом"
+          className={styles['booking-time__group']}
+        />
+      )}
       {renderSlots()}
     </Screen>
   )

@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { TabLayout } from '@/components/layout/TabLayout/TabLayout'
 import { AccountPage } from '@/pages/AccountPage/AccountPage'
+import { AfterDonationPage } from '@/pages/AfterDonationPage/AfterDonationPage'
 import { BookingCenterPage } from '@/pages/BookingCenterPage/BookingCenterPage'
 import { BookingCheckPage } from '@/pages/BookingCheckPage/BookingCheckPage'
 import { BookingConfirmedPage } from '@/pages/BookingConfirmedPage/BookingConfirmedPage'
@@ -12,6 +13,8 @@ import { ConsentPage } from '@/pages/ConsentPage/ConsentPage'
 import { DonationInfoPage } from '@/pages/DonationInfoPage/DonationInfoPage'
 import { GuidePage } from '@/pages/GuidePage/GuidePage'
 import { HomePage } from '@/pages/HomePage/HomePage'
+import { GroupPage } from '@/pages/GroupPage/GroupPage'
+import { GroupsPage } from '@/pages/GroupsPage/GroupsPage'
 import { HonoraryPage } from '@/pages/HonoraryPage/HonoraryPage'
 import { MapPage } from '@/pages/MapPage/MapPage'
 import { OnboardingPage } from '@/pages/OnboardingPage/OnboardingPage'
@@ -42,6 +45,9 @@ const App = () => (
     <Route path="/booking/done" element={<BookingConfirmedPage />} />
     <Route path="/referrals" element={<ReferralsPage />} />
     <Route path="/honorary" element={<HonoraryPage />} />
+    <Route path="/groups" element={<GroupsPage />} />
+    <Route path="/after-donation/:id" element={<AfterDonationPage />} />
+    <Route path="/group/:code" element={<GroupPage />} />
 
     <Route path="*" element={<Navigate to="/home" replace />} />
   </Routes>

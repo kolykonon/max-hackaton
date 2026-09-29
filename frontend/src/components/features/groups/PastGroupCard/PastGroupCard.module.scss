@@ -1,0 +1,11 @@
+.past-group-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2xs;
+
+  &__actions {
+    display: flex;
+    gap: $space-xs;
+    margin-top: $space-xs;
+  }
+}

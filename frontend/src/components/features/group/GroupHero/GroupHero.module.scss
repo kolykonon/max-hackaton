@@ -1,0 +1,18 @@
+.group-hero {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  align-items: center;
+  padding: $space-2xl $space-m $space-s;
+  text-align: center;
+
+  &__icon {
+    width: 88px;
+    height: 88px;
+  }
+
+  &__title {
+    display: block;
+    margin-top: $space-l;
+  }
+}
