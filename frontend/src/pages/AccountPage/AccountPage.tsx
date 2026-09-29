@@ -3,7 +3,8 @@ import { useRef, useState, useSyncExternalStore } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useCurrentAppointment } from "@/api/hooks/appointments";
-import { useDemoAction } from "@/api/hooks/demo";
+import { ApiError } from "@/api/client";
+import { type DemoPath, useDemoAction } from "@/api/hooks/demo";
 import { useMe, useProgress, useUpdateRegion } from "@/api/hooks/me";
 import { BloodCard } from "@/components/features/account/BloodCard/BloodCard";
 import { BloodStat } from "@/components/features/account/BloodCard/BloodStat";
@@ -11,6 +12,7 @@ import { DonorCode } from "@/components/features/account/BloodCard/DonorCode";
 import {
   DemoMenuSheet,
   type DemoAction,
+  type DemoAppointmentAction,
 } from "@/components/features/account/DemoMenuSheet/DemoMenuSheet";
 import { DonationHistorySheet } from "@/components/features/account/DonationHistorySheet/DonationHistorySheet";
 import { DonationTypeSheet } from "@/components/features/account/DonationTypeSheet/DonationTypeSheet";
@@ -54,7 +56,30 @@ const getIsDesktop = () => window.matchMedia(DESKTOP_QUERY).matches;
 const DEMO_MESSAGES: Record<DemoAction, string> = {
   reset: "Профиль сброшен к демо-состоянию",
   remind: "Напоминание отправлено в чат",
+  "ask-donated": "Вопрос «Сдали кровь?» отправлен в чат",
   complete: "Донация засчитана",
+  interval_open: "Пуш «Интервал прошёл» отправлен в чат",
+  deficit: "Пуш «Не хватает группы» отправлен в чат",
+  rest_day: "Напоминание про день отдыха отправлено в чат",
+};
+
+const isAppointmentAction = (
+  action: DemoAction,
+): action is DemoAppointmentAction =>
+  action === "remind" || action === "ask-donated" || action === "complete";
+
+// Действиям с записью нужен её id; без записи кнопки в меню неактивны
+const demoPath = (
+  action: DemoAction,
+  appointmentId?: number,
+): DemoPath | null => {
+  if (action === "reset") return "/demo/reset";
+  if (isAppointmentAction(action)) {
+    return appointmentId
+      ? `/demo/appointments/${appointmentId}/${action}`
+      : null;
+  }
+  return `/demo/pushes/${action}`;
 };
 
 /** Экран «Личный кабинет». */
@@ -132,19 +157,20 @@ export const AccountPage = () => {
   };
 
   const runDemo = (action: DemoAction) => {
-    const appointmentId = current.data?.appointment?.id;
-    if (action !== "reset" && !appointmentId) return;
-    const path =
-      action === "reset"
-        ? "/demo/reset"
-        : (`/demo/appointments/${appointmentId!}/${action}` as const);
+    const path = demoPath(action, current.data?.appointment?.id);
+    if (!path) return;
     setDemoPending(action);
     demo.mutate(path, {
       onSuccess: () => {
         setSheet(null);
         toast.show(DEMO_MESSAGES[action]);
       },
-      onError: () => toast.show("Не получилось. Демо-режим включён на бэке?"),
+      onError: (error) =>
+        toast.show(
+          error instanceof ApiError && error.code === "donation_not_found"
+            ? "Сначала засчитайте донацию — напоминать пока не о чем"
+            : "Не получилось. Демо-режим включён на бэке?",
+        ),
       onSettled: () => setDemoPending(null),
     });
   };

@@ -1,6 +1,12 @@
 .demo-menu-sheet {
   display: flex;
   flex-direction: column;
-  gap: $space-s;
+  gap: $space-l;
   padding-top: $space-xs;
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+  }
 }
