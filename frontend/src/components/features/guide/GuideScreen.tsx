@@ -10,6 +10,7 @@ import { ProgressSegments } from '@/components/shared/ProgressSegments/ProgressS
 import { TextLink } from '@/components/shared/TextLink/TextLink'
 import { GUIDE_SECTIONS, type GuideSectionId } from '@/content/guide'
 import { useBackButton } from '@/hooks/useBackButton'
+import { getStartRoute } from '@/utils/startRoute'
 
 import { GuideBenefit } from './GuideBenefit'
 import { GuideCover } from './GuideCover'
@@ -79,7 +80,7 @@ export const GuideScreen = ({ onboarding }: GuideScreenProps) => {
       setShowConsentHint(true)
       return
     }
-    completeOnboarding.mutate(undefined, { onSuccess: () => navigate('/home', { replace: true }) })
+    completeOnboarding.mutate(undefined, { onSuccess: () => navigate(getStartRoute(), { replace: true }) })
   }
 
   const title = GUIDE_SECTIONS.find((section) => section.id === current)!.title

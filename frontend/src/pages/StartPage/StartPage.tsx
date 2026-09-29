@@ -8,7 +8,7 @@ import { getStartRoute } from '@/utils/startRoute'
  * Вход в приложение: спиннер → GET /me → онбординг или «Запись».
  * Ошибка проверки тоже ведёт на онбординг (онбординг, общие правила).
  * start_param=appointment (кнопка «Открыть запись» в чате) тоже ведёт на «Запись» — она и так стартовая.
- * start_param=grp_<code> и rest_<id> — экран группы и «После донации», после онбординга.
+ * start_param=book, grp_<code> и rest_<id> — начало записи, экран группы и «После донации», после онбординга.
  */
 export const StartPage = () => {
   const { data: me, isPending, isError } = useMe()

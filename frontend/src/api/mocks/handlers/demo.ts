@@ -39,5 +39,22 @@ export const demoHandlers = [
     return noContent()
   }),
 
+  // «Сдали кровь?» и пуши присылает бот — в моках только проверяем условия
+  http.post(`${BASE}/demo/appointments/:id/ask-donated`, async ({ params }) => {
+    await latency()
+    const appointment = db.state.appointments.find((a) => a.id === Number(params.id))
+    if (!appointment) return apiError(404, 'appointment_not_found', 'Запись не найдена')
+    if (appointment.status !== 'active') return apiError(409, 'appointment_not_active', 'Запись уже неактивна')
+    return noContent()
+  }),
+
+  http.post(`${BASE}/demo/pushes/:kind`, async ({ params }) => {
+    await latency()
+    if (params.kind === 'rest_day' && !db.state.donations.some((d) => d.fromApp)) {
+      return apiError(404, 'donation_not_found', 'Нет засчитанной донации')
+    }
+    return noContent()
+  }),
+
   http.get(`${BASE}/health`, () => HttpResponse.json({ status: 'ok' })),
 ]
