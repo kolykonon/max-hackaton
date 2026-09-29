@@ -18,6 +18,7 @@ export type Donation = Schemas['Donation']
 export type Referrals = Schemas['Referrals']
 
 export type Region = Schemas['Region']
+export type RegionShort = Schemas['RegionShort']
 export type LocateRegionResponse = Schemas['LocateRegionResponse']
 export type MapStatus = Schemas['MapStatus']
 export type MapCenter = Schemas['MapCenter']

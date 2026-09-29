@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw'
 
 import type { DonationHistory, Me, PersonalData, PersonalDataFieldName, PersonalDataInput } from '../../types'
 import { db } from '../db'
-import { DEMO_USER } from '../fixtures'
+import { DEMO_USER, REGIONS } from '../fixtures'
 import { getEligibility, getProgress } from '../logic'
 import { apiError, BASE, latency } from '../utils'
 
@@ -41,19 +41,33 @@ const validate = (data: PersonalDataInput): Record<string, string> => {
   return errors
 }
 
+const toMe = (): Me => {
+  const region = REGIONS.find((r) => r.id === db.state.regionId)
+  return {
+    id: 1,
+    first_name: DEMO_USER.firstName,
+    last_name: DEMO_USER.lastName,
+    photo_url: null,
+    onboarding_completed: db.state.onboardingCompleted,
+    blood: { group: DEMO_USER.bloodGroup, kell: DEMO_USER.kell, phenotype: DEMO_USER.phenotype, donor_code: DEMO_USER.donorCode },
+    referrals_count: DEMO_USER.referralsCount,
+    region: region ? { id: region.id, name: region.name } : null,
+  }
+}
+
 export const meHandlers = [
   http.get(`${BASE}/me`, async () => {
     await latency()
-    const me: Me = {
-      id: 1,
-      first_name: DEMO_USER.firstName,
-      last_name: DEMO_USER.lastName,
-      photo_url: null,
-      onboarding_completed: db.state.onboardingCompleted,
-      blood: { group: DEMO_USER.bloodGroup, kell: DEMO_USER.kell, phenotype: DEMO_USER.phenotype, donor_code: DEMO_USER.donorCode },
-      referrals_count: DEMO_USER.referralsCount,
-    }
-    return HttpResponse.json(me)
+    return HttpResponse.json(toMe())
+  }),
+
+  http.put(`${BASE}/me/region`, async ({ request }) => {
+    await latency()
+    const { region_id: regionId } = (await request.json()) as { region_id: number }
+    if (!REGIONS.some((r) => r.id === regionId)) return apiError(404, 'not_found', 'Регион не найден')
+    db.state.regionId = regionId
+    db.save()
+    return HttpResponse.json(toMe())
   }),
 
   http.post(`${BASE}/me/onboarding`, async ({ request }) => {

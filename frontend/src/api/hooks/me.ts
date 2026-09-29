@@ -34,3 +34,12 @@ export const useDonations = (enabled = true) =>
   useQuery({ queryKey: queryKeys.donations, queryFn: () => api.get<DonationHistory>('/me/donations'), enabled })
 
 export const useReferrals = () => useQuery({ queryKey: queryKeys.referrals, queryFn: () => api.get<Referrals>('/me/referrals') })
+
+/** Регион донора для пушей о дефиците крови. 404 — нет такого региона. */
+export const useUpdateRegion = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (regionId: number) => api.put<Me>('/me/region', { region_id: regionId }),
+    onSuccess: (data) => queryClient.setQueryData(queryKeys.me, data),
+  })
+}

@@ -32,6 +32,7 @@ interface MockState {
   onboardingCompleted: boolean
   personalData: PersonalDataInput
   isDemoData: boolean
+  regionId: number | null
   donations: MockDonation[]
   appointments: MockAppointment[]
   groups: MockGroup[]
@@ -46,6 +47,7 @@ const initialState = (): MockState => ({
   onboardingCompleted: false,
   personalData: { ...DEMO_PERSONAL_DATA },
   isDemoData: true,
+  regionId: null,
   donations: DONATIONS.map((d) => ({ id: d.id, type: d.type, date: d.date.toISOString(), centerName: d.centerName })),
   appointments: [],
   groups: [],
@@ -59,6 +61,7 @@ const load = (): MockState => {
       const state = JSON.parse(raw) as MockState
       // Сохранено до появления групп
       state.groups ??= []
+      state.regionId ??= null
       return state
     }
   } catch {

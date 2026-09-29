@@ -556,7 +556,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   @include plain-button;
   @include card;
   @include lift;
-  grid-column: span 6;
+  grid-column: span 4;
   display: flex;
   gap: $space-m;
   align-items: center;

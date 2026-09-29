@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { useEligibility } from '@/api/hooks/me'
 import { useLocateRegion, useRegions } from '@/api/hooks/regions'
 import { DonationTypeSwitch } from '@/components/features/booking-type-region/DonationTypeSwitch/DonationTypeSwitch'
-import { GeoRegionCard } from '@/components/features/booking-type-region/GeoRegionCard/GeoRegionCard'
-import { RegionList } from '@/components/features/booking-type-region/RegionList/RegionList'
-import { RegionSearch } from '@/components/features/booking-type-region/RegionSearch/RegionSearch'
+import { GeoRegionCard } from '@/components/shared/GeoRegionCard/GeoRegionCard'
+import { RegionList } from '@/components/shared/RegionList/RegionList'
+import { RegionSearch } from '@/components/shared/RegionSearch/RegionSearch'
 import { Screen } from '@/components/layout/Screen/Screen'
 import { StepHeader } from '@/components/layout/StepHeader/StepHeader'
 import { StickyFooter } from '@/components/layout/StickyFooter/StickyFooter'
@@ -17,12 +17,11 @@ import type { DonationType } from '@/content/types'
 import { useGeolocation } from '@/hooks/useGeolocation'
 import { useBookingStore } from '@/store/booking'
 import { formatDayMonth, parseISODate } from '@/utils/format'
+import { matchesQuery } from '@/utils/search'
 
 import styles from './BookingTypeRegionPage.module.scss'
 
 const ACCUSATIVE: Record<DonationType, string> = { whole_blood: 'Цельную кровь', plasma: 'Плазму' }
-
-const normalize = (value: string) => value.trim().toLowerCase().replaceAll('ё', 'е')
 
 export const BookingTypeRegionPage = () => {
   const navigate = useNavigate()
@@ -40,7 +39,7 @@ export const BookingTypeRegionPage = () => {
   }, [geoRegion, regionId, setRegion])
 
   const filtered = useMemo(
-    () => (regions.data ?? []).filter((region) => normalize(region.name).includes(normalize(query))),
+    () => (regions.data ?? []).filter((region) => matchesQuery(region.name, query)),
     [regions.data, query],
   )
 

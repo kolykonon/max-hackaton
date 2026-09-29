@@ -1,0 +1,24 @@
+.region-row {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-3xs;
+    min-width: 0;
+  }
+
+  &__hint {
+    color: $color-accent;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    color: $color-text-tertiary;
+  }
+}
