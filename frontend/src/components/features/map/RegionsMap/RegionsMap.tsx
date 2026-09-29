@@ -1,13 +1,12 @@
 import type { ExpressionSpecification } from '@maplibre/maplibre-gl-style-spec'
 import type { FeatureCollection, Point } from 'geojson'
-import { type GeoJSONSource, type Map as MapLibreMap, Marker } from 'maplibre-gl'
+import { type GeoJSONSource, type LngLatBoundsLike, type Map as MapLibreMap, Marker } from 'maplibre-gl'
 import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 
 import { BaseMap } from '@/components/shared/BaseMap/BaseMap'
 import { geometryBounds, RUSSIA_BOUNDS } from '@/components/shared/BaseMap/bounds'
-import type { MapCenter } from '@/api/types'
 import { STATUS_COLORS } from '@/content/status'
-import type { BloodGroup, StockStatus } from '@/content/types'
+import type { StockStatus } from '@/content/types'
 import type { RegionFeature } from '@/hooks/useRussiaGeo'
 
 import styles from './RegionsMap.module.scss'
@@ -17,6 +16,16 @@ export interface RegionsMapHandle {
   zoomOut: () => void
   /** Приблизить карту к региону целиком. */
   focusRegion: (code: string) => void
+  /** Перелететь к точке. */
+  flyTo: (lon: number, lat: number, zoom: number) => void
+}
+
+/** Метка центра крови: цвет по светофору. */
+export interface MapPoint {
+  id: number
+  lon: number
+  lat: number
+  status: StockStatus
 }
 
 interface RegionsMapProps {
@@ -28,9 +37,10 @@ interface RegionsMapProps {
   userLocation: { lat: number; lon: number } | null
   /** Приблизить к этому региону один раз, как только карта загрузится (регион пользователя). */
   initialFocusCode?: string | null
-  /** Центры крови — метки при приближении, цвет по выбранной группе. */
-  centers?: MapCenter[]
-  group: BloodGroup | null
+  /** Центры крови — метки при приближении. */
+  centers?: MapPoint[]
+  /** Что показать при открытии, по умолчанию вся Россия. */
+  bounds?: LngLatBoundsLike
   selectedCenterId: number | null
   onSelectCenter: (id: number) => void
   /** Кнопки поверх карты. */
@@ -48,17 +58,13 @@ const CENTER_SELECTED = 'centers-selected'
 /** С какого зума видны метки центров: на всю страну их слишком много. */
 const CENTERS_MIN_ZOOM = 5
 
-/** Цвет метки: статус выбранной группы, а без выбора — худший. */
-const centersGeoJson = (centers: MapCenter[], group: BloodGroup | null): FeatureCollection<Point> => ({
+const centersGeoJson = (centers: MapPoint[]): FeatureCollection<Point> => ({
   type: 'FeatureCollection',
-  features: centers.map((center) => {
-    const status: StockStatus = (group ? center.statuses[group] : center.worst) ?? 'none'
-    return {
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [center.lon, center.lat] },
-      properties: { id: center.id, color: STATUS_COLORS[status] },
-    }
-  }),
+  features: centers.map((center) => ({
+    type: 'Feature',
+    geometry: { type: 'Point', coordinates: [center.lon, center.lat] },
+    properties: { id: center.id, color: STATUS_COLORS[center.status] },
+  })),
 })
 
 const selectedCenterFilter = (id: number | null): ExpressionSpecification => ['==', ['get', 'id'], id ?? -1]
@@ -82,7 +88,7 @@ export const RegionsMap = ({
   userLocation,
   initialFocusCode,
   centers,
-  group,
+  bounds = RUSSIA_BOUNDS,
   selectedCenterId,
   onSelectCenter,
   children,
@@ -91,7 +97,7 @@ export const RegionsMap = ({
   const [map, setMap] = useState<MapLibreMap | null>(null)
   const onSelectRef = useRef(onSelect)
   const onSelectCenterRef = useRef(onSelectCenter)
-  const centersData = useMemo(() => centersGeoJson(centers ?? [], group), [centers, group])
+  const centersData = useMemo(() => centersGeoJson(centers ?? []), [centers])
   const initial = useRef({ statuses, selectedCode, centersData, selectedCenterId })
 
   useEffect(() => {
@@ -221,11 +227,16 @@ export const RegionsMap = ({
 
   useImperativeHandle(
     ref,
-    () => ({ zoomIn: () => map?.zoomIn(), zoomOut: () => map?.zoomOut(), focusRegion }),
+    () => ({
+      zoomIn: () => map?.zoomIn(),
+      zoomOut: () => map?.zoomOut(),
+      focusRegion,
+      flyTo: (lon, lat, zoom) => map?.flyTo({ center: [lon, lat], zoom }),
+    }),
   )
 
   return (
-    <BaseMap bounds={RUSSIA_BOUNDS} onReady={onReady} label="Карта России с донорским светофором" className={styles['regions-map']}>
+    <BaseMap bounds={bounds} onReady={onReady} label="Карта России с донорским светофором" className={styles['regions-map']}>
       {children}
     </BaseMap>
   )

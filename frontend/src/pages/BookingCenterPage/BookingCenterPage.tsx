@@ -3,6 +3,7 @@ import { lazy, Suspense, useMemo, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 import { useBookingCenters } from '@/api/hooks/booking'
+import { useMe } from '@/api/hooks/me'
 import { useRegions } from '@/api/hooks/regions'
 import type { BookingCenter } from '@/api/types'
 import { CenterCard } from '@/components/features/booking-center/CenterCard/CenterCard'
@@ -18,7 +19,6 @@ import { SegmentedControlItem } from '@/components/shared/SegmentedControl/Segme
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { Toast } from '@/components/shared/Toast/Toast'
 import { useGeolocation } from '@/hooks/useGeolocation'
-import { useRussiaGeo } from '@/hooks/useRussiaGeo'
 import { useToast } from '@/hooks/useToast'
 import { useBookingStore } from '@/store/booking'
 
@@ -47,7 +47,7 @@ export const BookingCenterPage = () => {
     pinCenterId: rescheduleId ? center?.id : undefined,
   })
   const regions = useRegions()
-  const russia = useRussiaGeo()
+  const me = useMe()
   const [view, setView] = useState<View>('list')
 
   if (regionId === null || date === null) return <Navigate to="/home" replace />
@@ -55,8 +55,6 @@ export const BookingCenterPage = () => {
   const selectedCenter = centers.data?.find((item) => item.id === center?.id)
   const select = (item: BookingCenter) => setCenter({ id: item.id, name: item.name, address: item.address })
   const region = regions.data?.find((item) => item.id === regionId)
-  const regionFeature = russia.data?.features.find((item) => item.properties.code === region?.code) ?? null
-  const regionName = region?.name ?? ''
 
   const renderCenters = () => {
     if (centers.isPending) return [120, 120, 120].map((height, i) => <Skeleton key={i} height={height} />)
@@ -80,8 +78,8 @@ export const BookingCenterPage = () => {
       <div className={styles['booking-center__map']}>
         <Suspense fallback={<Skeleton height={420} radius="s" />}>
           <CenterMap
-            region={regionFeature}
-            regionName={regionName}
+            regionCode={region?.code ?? null}
+            group={me.data?.blood.group ?? null}
             centers={centers.data}
             selectedId={center?.id ?? null}
             onSelect={select}

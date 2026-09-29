@@ -23,8 +23,14 @@ interface BookingState {
   date: string | null
   center: SelectedCenter | null
   slot: SelectedSlot | null
+  /** Центр выбран заранее на карте — шаг 3 пропускаем, пока пользователь сам не захочет другой. */
+  presetCenter: boolean
 
   startNew: () => void
+  /** Запись из карточки центра на карте: регион и центр уже известны. */
+  startFromCenter: (center: SelectedCenter, regionId: number) => void
+  /** Пользователь хочет выбрать другой центр — дальше шаг 3 как обычно. */
+  releaseCenter: () => void
   startReschedule: (appointment: Appointment) => void
   setDonationType: (donationType: DonationType) => void
   setRegion: (regionId: number) => void
@@ -40,6 +46,7 @@ const initial = {
   date: null,
   center: null,
   slot: null,
+  presetCenter: false,
 }
 
 /** Мастер записи. При смене шага сбрасываем всё, что от него зависит (ТЗ §9, общие правила записи). */
@@ -47,6 +54,10 @@ export const useBookingStore = create<BookingState>()((set, get) => ({
   ...initial,
 
   startNew: () => set(initial),
+
+  startFromCenter: (center, regionId) => set({ ...initial, regionId, center, presetCenter: true }),
+
+  releaseCenter: () => set({ presetCenter: false }),
 
   startReschedule: (appointment) =>
     set({
@@ -58,13 +69,17 @@ export const useBookingStore = create<BookingState>()((set, get) => ({
     }),
 
   setDonationType: (donationType) => {
-    if (donationType !== get().donationType) set({ donationType, date: null, center: null, slot: null })
+    if (donationType === get().donationType) return
+    // Центр с карты сохраняем: если в нём нет такого вида донации, увидим это на шаге времени
+    set({ donationType, date: null, slot: null, center: get().presetCenter ? get().center : null })
   },
   setRegion: (regionId) => {
-    if (regionId !== get().regionId) set({ regionId, date: null, center: null, slot: null })
+    if (regionId !== get().regionId) set({ regionId, date: null, center: null, slot: null, presetCenter: false })
   },
   setDate: (date) => {
-    if (date !== get().date) set({ date, slot: null, center: get().rescheduleId ? get().center : null })
+    if (date === get().date) return
+    const { rescheduleId, presetCenter, center } = get()
+    set({ date, slot: null, center: rescheduleId || presetCenter ? center : null })
   },
   setCenter: (center) => {
     if (center.id !== get().center?.id) set({ center, slot: null })

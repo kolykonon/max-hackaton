@@ -23,7 +23,7 @@ const firstOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(
 
 export const BookingDatePage = () => {
   const navigate = useNavigate()
-  const { donationType, regionId, date, rescheduleId, setDate } = useBookingStore()
+  const { donationType, regionId, date, rescheduleId, presetCenter, setDate } = useBookingStore()
   const dates = useBookingDates(regionId, donationType)
   const [shownMonth, setShownMonth] = useState<Date | null>(null)
 
@@ -88,7 +88,7 @@ export const BookingDatePage = () => {
       }
       footer={
         <StickyFooter>
-          <Button size="large" stretched disabled={!date} onClick={() => navigate('/booking/center')}>
+          <Button size="large" stretched disabled={!date} onClick={() => navigate(presetCenter ? '/booking/time' : '/booking/center')}>
             Далее
           </Button>
         </StickyFooter>

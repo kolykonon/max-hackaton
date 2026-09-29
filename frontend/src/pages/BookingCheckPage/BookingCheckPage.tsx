@@ -34,7 +34,7 @@ const ERROR_TEXT: Partial<Record<string, string>> = {
 export const BookingCheckPage = () => {
   const navigate = useNavigate()
   const toast = useToast()
-  const { donationType, date, center, slot, rescheduleId } = useBookingStore()
+  const { donationType, date, center, slot, rescheduleId, releaseCenter } = useBookingStore()
   const donor = usePersonalData()
   const create = useCreateAppointment()
   const reschedule = useRescheduleAppointment()
@@ -92,7 +92,10 @@ export const BookingCheckPage = () => {
           label="Центр"
           value={center.name}
           caption={center.address}
-          onEdit={() => navigate('/booking/center')}
+          onEdit={() => {
+            releaseCenter()
+            navigate('/booking/center')
+          }}
         />
         <SummarySection
           label="Дата и время"
