@@ -14,7 +14,7 @@ export interface DonationTypeInfo {
   sections: InfoSection[]
 }
 
-const PREPARATION_ITEMS = [
+export const PREPARATION_ITEMS = [
   'За 2 дня не пейте алкоголь',
   'Накануне и в день донации не ешьте жирное, жареное, острое и копчёное',
   'За 3 дня не принимайте аспирин и обезболивающие с ним',
