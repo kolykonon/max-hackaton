@@ -2,6 +2,7 @@ import { Avatar } from "@maxhub/max-ui";
 import {
   ArrowRight,
   Award,
+  BookOpen,
   ChevronRight,
   Clock,
   Copy,
@@ -37,6 +38,7 @@ interface AccountDesktopProps {
   onOpenType: (kind: DonationKind) => void;
   onOpenHonorary: () => void;
   onOpenReferrals: () => void;
+  onOpenGuide: () => void;
 }
 
 const KINDS: DonationKind[] = ["whole_blood", "plasma", "mixed"];
@@ -68,6 +70,7 @@ export const AccountDesktop = ({
   onOpenType,
   onOpenHonorary,
   onOpenReferrals,
+  onOpenGuide,
 }: AccountDesktopProps) => {
   const { total, honorary } = progress;
   const { blood } = me;
@@ -365,6 +368,21 @@ export const AccountDesktop = ({
         <span className={styles.tile__text}>
           <b>История донаций</b>
           <small>Все сдачи крови и плазмы с датами и центрами</small>
+        </span>
+        <ArrowRight size={22} className={styles.tile__arrow} />
+      </button>
+
+      <button
+        type="button"
+        className={cn(styles.tile, styles.appear)}
+        onClick={onOpenGuide}
+      >
+        <span className={cn(styles.tile__icon, styles["tile__icon--blue"])}>
+          <BookOpen size={26} />
+        </span>
+        <span className={styles.tile__text}>
+          <b>Как стать донором</b>
+          <small>Подготовка, сдача крови и польза для донора</small>
         </span>
         <ArrowRight size={22} className={styles.tile__arrow} />
       </button>
