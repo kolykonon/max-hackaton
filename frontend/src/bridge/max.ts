@@ -40,7 +40,7 @@ export const getInitData = (): string => webApp()?.initData ?? ''
 // Роутер убирает ?startapp= при первом же переходе — запоминаем адрес запуска
 const launchSearch = window.location.search
 
-/** Параметр запуска: `appointment`, `ref_<code>`, `grp_<code>` или `rest_<donation_id>`. Вне MAX читаем ?startapp= для отладки. */
+/** Параметр запуска: `appointment`, `book`, `ref_<code>`, `grp_<code>` или `rest_<donation_id>`. Вне MAX читаем ?startapp= для отладки. */
 export const getStartParam = (): string | null =>
   webApp()?.initDataUnsafe.start_param ?? new URLSearchParams(launchSearch).get('startapp')
 
