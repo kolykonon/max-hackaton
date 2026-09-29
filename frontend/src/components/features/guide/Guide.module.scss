@@ -1,0 +1,346 @@
+// Стили гида изолированы CSS-модулем: глобальных селекторов и записи в body нет.
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  padding-block: $space-m $space-xs;
+  @include page-gutter;
+
+  &__row {
+    display: flex;
+    gap: $space-s;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    min-width: 0;
+    @include line-clamp(1);
+  }
+}
+
+.error {
+  display: block;
+  padding: 0 $page-gutter;
+  color: $color-text-negative;
+  text-align: center;
+}
+
+.guide {
+  // Контейнер для position:absolute внутри (скрытый input чекбокса): иначе он выпадает из прокрутки main и раздувает документ
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: $space-3xl;
+
+  // Переопределяют базовые стили Card и Typography, поэтому с префиксом .guide
+  .card__title {
+    display: block;
+    margin-bottom: $space-xs;
+  }
+
+  .step {
+    display: flex;
+    gap: $space-s;
+    align-items: flex-start;
+
+    &__number {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: $radius-round;
+      color: $color-text-themed;
+      font-size: 14px;
+      font-weight: 700;
+      @include soft-bg($color-tone-blue);
+    }
+
+    &__text {
+      flex: 1;
+      padding-top: $space-xs;
+    }
+  }
+
+  .fridge {
+    text-align: center;
+
+    > * {
+      display: block;
+    }
+
+    &__image {
+      width: min(100%, 200px);
+      aspect-ratio: 524 / 827;
+      margin: 0 auto $space-s;
+      overflow: hidden;
+
+      // постер и svg lottie заполняют блок, а не тянутся до натурального размера
+      > img,
+      > svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .paragraph + .paragraph {
+    margin-top: $space-xs;
+  }
+}
+
+// Плавная смена «сомнение → ответ»: оба варианта в одной ячейке, лишний уезжает и гаснет
+.swap {
+  display: grid;
+  overflow: hidden;
+
+  > * {
+    display: block;
+    grid-area: 1 / 1;
+    transition:
+      transform 0.5s ease,
+      opacity 0.5s ease;
+  }
+
+  > :last-child {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+.cover {
+  // --guide-view задаёт GuideScreen: высота видимой области main, чтобы обложка входила ровно
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: var(--guide-view, calc(100dvh - 150px));
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+
+  &--shown {
+    opacity: 1;
+    transform: none;
+  }
+
+  &__chip {
+    padding: $space-xs $space-m;
+    border-radius: $radius-round;
+    color: $color-text-themed;
+    font-size: 14px;
+    font-weight: 600;
+    @include soft-bg($color-tone-blue);
+  }
+
+  // заполняет пустое место между текстом и кнопкой
+  &__image {
+    flex: 1;
+    min-height: 0;
+    max-width: 70%;
+    align-self: center;
+    object-fit: contain;
+  }
+
+  &__title,
+  &__text {
+    font-size: clamp(28px, 5.4dvh, 46px);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-align: left;
+  }
+
+  &__title {
+    margin-top: $space-l;
+    color: $color-text;
+    transition: color 0.5s ease;
+  }
+
+  // сомнения серые и отступают на второй план, ответ — акцентным цветом
+  &__text {
+    // правая часть нижнего угла занята круглой кнопкой
+    width: 100%;
+    color: $color-text-tertiary;
+    opacity: 0.85;
+
+    > :last-child {
+      color: $color-text-themed;
+    }
+  }
+
+  &--answers &__title {
+    color: $color-text-tertiary;
+  }
+
+  &--answers &__text {
+    opacity: 1;
+  }
+
+  &--answers .swap > :first-child {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  &--answers .swap > :last-child {
+    opacity: 1;
+    transform: none;
+  }
+
+  &__button {
+    @include reset-button;
+    @include pressable;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    align-items: center;
+    justify-content: center;
+    width: 116px;
+    height: 116px;
+    border-radius: $radius-round;
+    background: $color-accent;
+    color: $color-text-inverse;
+    text-align: center;
+    box-shadow: 0 6px 16px color-mix(in srgb, #{$color-tone-blue} 35%, transparent);
+
+    > span {
+      max-width: 88px;
+    }
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__icon {
+    display: block;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+
+    > img,
+    > svg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+}
+
+// Термин с подсказкой: как TextLink, но внутри текста
+.term {
+  @include reset-button;
+  @include focus-ring;
+  display: inline;
+  color: $color-text-themed;
+  text-decoration: underline dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.breakfasts {
+  display: flex;
+  gap: $space-s;
+  margin-top: $space-xs;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  @include hide-scrollbar;
+
+  > li {
+    flex: 0 0 min(80%, 280px);
+    scroll-snap-align: start;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    margin-bottom: $space-s;
+  }
+}
+
+.use {
+  @include card;
+  overflow: hidden;
+
+  &__summary {
+    display: flex;
+    gap: $space-s;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-m;
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    color: $color-text-tertiary;
+    transition: transform $transition-base;
+  }
+
+  &[open] &__chevron {
+    transform: rotate(180deg);
+  }
+
+  &__body {
+    padding: 0 $space-m $space-m;
+
+    img {
+      display: block;
+      width: min(100%, 280px);
+      height: auto;
+      margin: $space-s auto 0;
+    }
+  }
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+}
+
+.final {
+  flex: none;
+  min-height: 60dvh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover,
+  .swap > *,
+  .use__chevron {
+    transition: none;
+  }
+}

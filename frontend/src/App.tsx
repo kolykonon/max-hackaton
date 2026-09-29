@@ -11,6 +11,7 @@ import { BookingTimePage } from '@/pages/BookingTimePage/BookingTimePage'
 import { BookingTypeRegionPage } from '@/pages/BookingTypeRegionPage/BookingTypeRegionPage'
 import { ConsentPage } from '@/pages/ConsentPage/ConsentPage'
 import { DonationInfoPage } from '@/pages/DonationInfoPage/DonationInfoPage'
+import { GuidePage } from '@/pages/GuidePage/GuidePage'
 import { HomePage } from '@/pages/HomePage/HomePage'
 import { GroupPage } from '@/pages/GroupPage/GroupPage'
 import { GroupsPage } from '@/pages/GroupsPage/GroupsPage'
@@ -25,6 +26,7 @@ const App = () => (
   <Routes>
     <Route path="/" element={<StartPage />} />
     <Route path="/onboarding" element={<OnboardingPage />} />
+    <Route path="/guide" element={<GuidePage />} />
     <Route path="/consent" element={<ConsentPage />} />
 
     <Route element={<TabLayout />}>

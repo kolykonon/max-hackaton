@@ -15,6 +15,7 @@ import {
 import { DonationHistorySheet } from "@/components/features/account/DonationHistorySheet/DonationHistorySheet";
 import { DonationTypeSheet } from "@/components/features/account/DonationTypeSheet/DonationTypeSheet";
 import { DonorLevelsSheet } from "@/components/features/account/DonorLevelsSheet/DonorLevelsSheet";
+import { GuideButton } from "@/components/features/account/GuideButton/GuideButton";
 import { GoalCard } from "@/components/features/account/GoalCard/GoalCard";
 import { HistoryButton } from "@/components/features/account/HistoryButton/HistoryButton";
 import { HonoraryAchievedCard } from "@/components/features/account/HonoraryAchievedCard/HonoraryAchievedCard";
@@ -167,6 +168,7 @@ export const AccountPage = () => {
           onOpenHonorary={() => navigate("/honorary")}
           onOpenReferrals={() => navigate("/referrals")}
           onOpenRegion={() => setSheet("region")}
+          onOpenGuide={() => navigate("/guide")}
         />
       ) : (
         <>
@@ -254,6 +256,7 @@ export const AccountPage = () => {
           </section>
 
           <HistoryButton onOpen={() => setSheet("history")} />
+          <GuideButton onOpen={() => navigate("/guide")} />
         </>
       )}
 

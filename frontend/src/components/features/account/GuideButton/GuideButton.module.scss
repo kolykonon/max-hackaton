@@ -1,0 +1,17 @@
+.guide-button {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+
+  &__icon {
+    color: $color-accent;
+  }
+
+  &__text {
+    flex: 1;
+  }
+
+  &__chevron {
+    color: $color-text-tertiary;
+  }
+}

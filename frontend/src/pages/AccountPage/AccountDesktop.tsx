@@ -2,6 +2,7 @@ import { Avatar } from "@maxhub/max-ui";
 import {
   ArrowRight,
   Award,
+  BookOpen,
   ChevronRight,
   Clock,
   Copy,
@@ -39,6 +40,7 @@ interface AccountDesktopProps {
   onOpenHonorary: () => void;
   onOpenReferrals: () => void;
   onOpenRegion: () => void;
+  onOpenGuide: () => void;
 }
 
 const KINDS: DonationKind[] = ["whole_blood", "plasma", "mixed"];
@@ -71,6 +73,7 @@ export const AccountDesktop = ({
   onOpenHonorary,
   onOpenReferrals,
   onOpenRegion,
+  onOpenGuide,
 }: AccountDesktopProps) => {
   const { total, honorary } = progress;
   const { blood } = me;
@@ -387,6 +390,19 @@ export const AccountDesktop = ({
               ? "Мой регион: сообщим, когда здесь не хватает вашей группы"
               : "Сообщим, когда в нём не хватает вашей группы крови"}
           </small>
+        </span>
+      </button>
+      <button
+        type="button"
+        className={cn(styles.tile, styles.appear)}
+        onClick={onOpenGuide}
+      >
+        <span className={cn(styles.tile__icon, styles["tile__icon--blue"])}>
+          <BookOpen size={26} />
+        </span>
+        <span className={styles.tile__text}>
+          <b>Как стать донором</b>
+          <small>Подготовка, сдача крови и польза для донора</small>
         </span>
         <ArrowRight size={22} className={styles.tile__arrow} />
       </button>
