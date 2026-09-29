@@ -53,3 +53,10 @@ REMINDER_MORNING_MESSAGE = (
     "Пейте больше жидкости. Не приходите натощак."
 )
 REMINDER_MORNING_BUTTON = "Открыть запись"
+
+# --- Сдать кровь вместе ---
+
+FRIEND_JOINED_MESSAGE = (
+    "{name} идёт сдавать кровь вместе с вами 🤝\n\n{date} в {time}, {center}"
+)
+FRIEND_JOINED_BUTTON = "Открыть запись"

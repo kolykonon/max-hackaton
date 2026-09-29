@@ -15,6 +15,7 @@ class ErrorCode(StrEnum):
     PERSONAL_DATA_INCOMPLETE = "personal_data_incomplete"
     APPOINTMENT_NOT_FOUND = "appointment_not_found"
     APPOINTMENT_NOT_ACTIVE = "appointment_not_active"
+    INVITE_NOT_FOUND = "invite_not_found"
     DEMO_DISABLED = "demo_disabled"
     INTERNAL_ERROR = "internal_error"
 

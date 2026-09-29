@@ -10,9 +10,9 @@ from app.core.config import settings
 from app.core.db import SessionDep
 from app.core.errors import AppError
 from app.core.utils.data_validate import InitDataError, validate_init_data
-from app.models import User
+from app.models import Appointment, User
 from app.schemas.common import ErrorCode
-from app.services.appointments import AppointmentService
+from app.services.appointments import INVITE_PREFIX, AppointmentService
 from app.services.booking import BookingService
 from app.services.demo import DemoService
 from app.services.demo_profile import create_demo_profile
@@ -51,13 +51,20 @@ def _profile_from_init_data(init_data: str) -> tuple[int, dict[str, Any], str | 
 async def _apply_referral(
     session: AsyncSession, user: User, start_param: str | None
 ) -> None:
-    if not start_param or not start_param.startswith(REF_PREFIX):
+    if not start_param:
         return
-    code = start_param.removeprefix(REF_PREFIX)
-    referrer_id = await session.scalar(
-        select(User.id).where(User.referral_code == code, User.id != user.id)
-    )
-    if referrer_id:
+    if start_param.startswith(REF_PREFIX):
+        query = select(User.id).where(
+            User.referral_code == start_param.removeprefix(REF_PREFIX)
+        )
+    elif start_param.startswith(INVITE_PREFIX):
+        query = select(Appointment.user_id).where(
+            Appointment.invite_code == start_param.removeprefix(INVITE_PREFIX)
+        )
+    else:
+        return
+    referrer_id = await session.scalar(query)
+    if referrer_id and referrer_id != user.id:
         user.referred_by_user_id = referrer_id
 
 

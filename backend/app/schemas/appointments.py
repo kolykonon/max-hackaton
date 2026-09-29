@@ -1,11 +1,17 @@
 import datetime as dt
 
+from pydantic import Field
+
 from app.models.enums import DonationType
 from app.schemas.common import LocalTime, Schema
 
 
 class SlotRequest(Schema):
     slot_id: int
+
+
+class CreateAppointmentRequest(SlotRequest):
+    invite_code: str | None = Field(default=None, max_length=16)
 
 
 class AppointmentCenter(Schema):
@@ -26,3 +32,15 @@ class Appointment(Schema):
 
 class AppointmentResponse(Schema):
     appointment: Appointment | None
+
+
+class InviteLink(Schema):
+    code: str
+    link: str
+
+
+class Invite(Schema):
+    code: str
+    inviter_name: str
+    is_own: bool
+    appointment: Appointment

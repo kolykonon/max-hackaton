@@ -1,7 +1,16 @@
 from fastapi import APIRouter
 
-from app.api.v1 import appointments, booking, demo, health, map, me, regions
+from app.api.v1 import (
+    appointments,
+    booking,
+    demo,
+    health,
+    invites,
+    map,
+    me,
+    regions,
+)
 
 api_router = APIRouter()
-for module in (me, regions, map, booking, appointments, demo, health):
+for module in (me, regions, map, booking, appointments, invites, demo, health):
     api_router.include_router(module.router)

@@ -1,7 +1,9 @@
 import logging
+from datetime import date
 from enum import StrEnum
 
 from app.bot import texts
+from app.core.utils.dates import format_day_month
 from app.integrations.max_api import MaxBotClient, link_keyboard
 
 log = logging.getLogger(__name__)
@@ -129,4 +131,32 @@ async def send_reminder_morning(client: MaxBotClient, max_user_id: int) -> None:
     except Exception:
         log.exception(
             "Не удалось отправить утреннее напоминание user_id=%s", max_user_id
+        )
+
+
+async def send_friend_joined(
+    client: MaxBotClient,
+    max_user_id: int,
+    friend_name: str,
+    local_date: date,
+    local_time: str,
+    center_name: str,
+) -> None:
+    try:
+        await client.send_message(
+            max_user_id,
+            texts.FRIEND_JOINED_MESSAGE.format(
+                name=friend_name,
+                date=format_day_month(local_date),
+                time=local_time,
+                center=center_name,
+            ),
+            attachments=link_keyboard(
+                texts.FRIEND_JOINED_BUTTON, start_param="appointment"
+            ),
+        )
+        log.info("Уведомление о друге отправлено user_id=%s", max_user_id)
+    except Exception:
+        log.exception(
+            "Не удалось отправить уведомление о друге user_id=%s", max_user_id
         )

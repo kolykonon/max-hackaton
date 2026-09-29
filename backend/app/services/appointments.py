@@ -6,6 +6,7 @@ partial unique index (uq_active_slot), гонка за активную запи
 """
 
 import logging
+import secrets
 from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 
@@ -13,6 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import settings
 from app.core.errors import AppError
 from app.core.utils.dates import today_msk
 from app.models import Appointment, Center, PersonalData, Region, Slot, User
@@ -20,11 +22,20 @@ from app.models.enums import AppointmentStatus, DonationType
 from app.schemas.appointments import (
     Appointment as AppointmentSchema,
     AppointmentCenter,
+    Invite,
+    InviteLink,
 )
 from app.schemas.common import ErrorCode
 from app.services.eligibility import get_next_allowed
 
 log = logging.getLogger(__name__)
+
+INVITE_PREFIX = "together_"
+
+
+def invite_link(code: str) -> str:
+    bot = settings.bot_settings.max_bot_username or "kaplya_bot"
+    return f"https://max.ru/{bot}?startapp={INVITE_PREFIX}{code}"
 
 
 def _to_schema(
@@ -64,12 +75,13 @@ class AppointmentService:
         return _to_schema(appointment, center, tz)
 
     async def create(
-        self, user: User, slot_id: int
+        self, user: User, slot_id: int, invite_code: str | None = None
     ) -> tuple[AppointmentSchema, Appointment, str]:
         slot = await self._load_free_slot(slot_id)
         await self._check_active_not_exists(user)
         await self._check_personal_data(user)
         await self._check_interval(user, slot)
+        inviting = await self._inviting_appointment(user, slot, invite_code)
 
         appointment = Appointment(
             user_id=user.id,
@@ -78,6 +90,7 @@ class AppointmentService:
             donation_type=slot.donation_type,
             starts_at=slot.starts_at,
             status=AppointmentStatus.ACTIVE,
+            invited_by_appointment_id=inviting.id if inviting else None,
         )
         self.session.add(appointment)
         await self._commit_or_slot_taken()
@@ -99,6 +112,8 @@ class AppointmentService:
         await self._check_interval(user, slot)
 
         old.status = AppointmentStatus.RESCHEDULED
+        invite_code, old.invite_code = old.invite_code, None
+        await self.session.flush()
 
         new = Appointment(
             user_id=user.id,
@@ -108,6 +123,7 @@ class AppointmentService:
             starts_at=slot.starts_at,
             status=AppointmentStatus.ACTIVE,
             rescheduled_from_id=old.id,
+            invite_code=invite_code,
         )
         self.session.add(new)
         await self._commit_or_slot_taken()
@@ -123,7 +139,76 @@ class AppointmentService:
         await self.session.commit()
         log.info("Отменена запись id=%s user_id=%s", appointment.id, user.id)
 
+    async def create_invite(self, user: User, appointment_id: int) -> InviteLink:
+        appointment = await self._load_active(user, appointment_id)
+        if appointment.invite_code is None:
+            appointment.invite_code = secrets.token_urlsafe(6)
+            await self.session.commit()
+            log.info(
+                "Приглашение создано appointment_id=%s user_id=%s",
+                appointment.id,
+                user.id,
+            )
+        return InviteLink(
+            code=appointment.invite_code, link=invite_link(appointment.invite_code)
+        )
+
+    async def get_invite(self, user: User, code: str) -> Invite:
+        appointment = await self._load_invite(code)
+        inviter = await self.session.get(User, appointment.user_id)
+        center, tz = await self._center_and_tz(appointment.center_id)
+        return Invite(
+            code=code,
+            inviter_name=inviter.first_name if inviter else "",
+            is_own=appointment.user_id == user.id,
+            appointment=_to_schema(appointment, center, tz),
+        )
+
+    async def get_inviter(self, appointment: Appointment) -> User | None:
+        if appointment.invited_by_appointment_id is None:
+            return None
+        inviting = await self.session.get(
+            Appointment, appointment.invited_by_appointment_id
+        )
+        if inviting is None:
+            return None
+        return await self.session.get(User, inviting.user_id)
+
     # ---------- helpers ----------
+
+    async def _load_invite(self, code: str) -> Appointment:
+        appointment = await self.session.scalar(
+            select(Appointment).where(Appointment.invite_code == code)
+        )
+        if (
+            appointment is None
+            or appointment.status != AppointmentStatus.ACTIVE
+            or appointment.starts_at <= datetime.now(timezone.utc)
+        ):
+            raise AppError(
+                404, ErrorCode.INVITE_NOT_FOUND, "Приглашение больше не действует"
+            )
+        return appointment
+
+    async def _inviting_appointment(
+        self, user: User, slot: Slot, invite_code: str | None
+    ) -> Appointment | None:
+        if not invite_code:
+            return None
+        try:
+            inviting = await self._load_invite(invite_code)
+        except AppError:
+            return None
+        if inviting.user_id == user.id or inviting.center_id != slot.center_id:
+            return None
+        _, tz_name = await self._center_and_tz(slot.center_id)
+        tz = ZoneInfo(tz_name)
+        if (
+            inviting.starts_at.astimezone(tz).date()
+            != slot.starts_at.astimezone(tz).date()
+        ):
+            return None
+        return inviting
 
     async def _load_free_slot(self, slot_id: int) -> Slot:
         slot = await self.session.get(Slot, slot_id)
