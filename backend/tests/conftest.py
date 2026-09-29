@@ -169,3 +169,64 @@ async def slot_free_2(session: AsyncSession, center: Center) -> Slot:
     session.add(s)
     await session.flush()
     return s
+
+
+class FakeBot:
+    """Подмена MaxBotClient: запоминает, что бот бы отправил."""
+
+    def __init__(self, fail: bool = False) -> None:
+        self.fail = fail
+        self.messages: list[dict] = []
+        self.files: list[dict] = []
+        self.answers: list[dict] = []
+
+    async def send_message(self, user_id, text, *, attachments=None):
+        if self.fail:
+            raise RuntimeError("bot down")
+        self.messages.append(
+            {"user_id": user_id, "text": text, "attachments": attachments}
+        )
+        return {}
+
+    async def send_file(
+        self, user_id, text, *, filename, content, mime, attachments=None
+    ):
+        if self.fail:
+            raise RuntimeError("bot down")
+        self.files.append(
+            {
+                "user_id": user_id,
+                "text": text,
+                "filename": filename,
+                "content": content,
+                "mime": mime,
+            }
+        )
+        return {}
+
+    async def answer_callback(self, callback_id, *, notification=None, message=None):
+        self.answers.append(
+            {
+                "callback_id": callback_id,
+                "notification": notification,
+                "message": message,
+            }
+        )
+        return {}
+
+
+@pytest.fixture
+def bot() -> FakeBot:
+    return FakeBot()
+
+
+@pytest.fixture
+def session_factory(session):
+    """Фабрика, отдающая тестовую сессию (для кода, который открывает сессию сам)."""
+    from contextlib import asynccontextmanager
+
+    @asynccontextmanager
+    async def factory():
+        yield session
+
+    return factory

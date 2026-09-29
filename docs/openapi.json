@@ -616,6 +616,769 @@
         }
       }
     },
+    "/api/v1/me/region": {
+      "put": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Регион донора (для пушей о дефиците крови)",
+        "operationId": "update_region",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/impact": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Вклад: литры и сколько людям могли помочь",
+        "operationId": "get_impact",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Impact"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/share-card": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Карточка «Я сдал кровь» / «Мой уровень» для shareMaxContent",
+        "operationId": "get_share_card",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ShareCardKind",
+              "default": "donation"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareCard"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/after-donation": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Последняя донация за год: документы и статус дня отдыха",
+        "operationId": "get_after_donation",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfterDonationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/donations/{donation_id}/after": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Документы и день отдыха по конкретной донации",
+        "operationId": "get_donation_after",
+        "parameters": [
+          {
+            "name": "donation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Donation Id"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfterDonation"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/donations/{donation_id}/rest-day": {
+      "put": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Отметить, использован ли доп. день отдыха",
+        "operationId": "update_rest_day",
+        "parameters": [
+          {
+            "name": "donation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Donation Id"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RestDayUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfterDonation"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/donations/{donation_id}/leave-application": {
+      "post": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Скачать заявление на доп. день отдыха (PDF или DOCX)",
+        "operationId": "download_leave_application",
+        "parameters": [
+          {
+            "name": "donation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Donation Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/DocFormat",
+              "default": "pdf"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveApplicationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Файл заявления",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/donations/{donation_id}/leave-application/send": {
+      "post": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Прислать заявление файлом в чат с ботом",
+        "operationId": "send_leave_application",
+        "parameters": [
+          {
+            "name": "donation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Donation Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/DocFormat",
+              "default": "pdf"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveApplicationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Бот не смог отправить сообщение",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/regions": {
       "get": {
         "tags": [
@@ -1722,6 +2485,378 @@
         }
       }
     },
+    "/api/v1/groups": {
+      "post": {
+        "tags": [
+          "groups"
+        ],
+        "summary": "Создать групповую донацию",
+        "operationId": "create_group",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Group"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups/my": {
+      "get": {
+        "tags": [
+          "groups"
+        ],
+        "summary": "Мои предстоящие групповые донации",
+        "operationId": "my_groups",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Group"
+                  },
+                  "title": "Response My Groups"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups/{code}": {
+      "get": {
+        "tags": [
+          "groups"
+        ],
+        "summary": "Группа по коду из ссылки grp_<code>",
+        "operationId": "get_group",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Code"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Group"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups/{code}/join": {
+      "post": {
+        "tags": [
+          "groups"
+        ],
+        "summary": "Присоединиться к группе",
+        "operationId": "join_group",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Code"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Group"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/demo/reset": {
       "post": {
         "tags": [
@@ -1994,6 +3129,274 @@
         }
       }
     },
+    "/api/v1/demo/appointments/{appointment_id}/ask-donated": {
+      "post": {
+        "tags": [
+          "demo"
+        ],
+        "summary": "Спросить «Сдали кровь?» сразу",
+        "operationId": "demo_ask_donated",
+        "parameters": [
+          {
+            "name": "appointment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Appointment Id"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/demo/pushes/{kind}": {
+      "post": {
+        "tags": [
+          "demo"
+        ],
+        "summary": "Прислать проактивный пуш сейчас (без проверки условий)",
+        "operationId": "demo_push",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DemoPushKind"
+            }
+          },
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/demo/pushes-run": {
+      "post": {
+        "tags": [
+          "demo"
+        ],
+        "summary": "Прогнать ежедневную рассылку пушей сейчас",
+        "operationId": "demo_run_daily",
+        "parameters": [
+          {
+            "name": "x-max-init-data",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Max-Init-Data"
+            }
+          },
+          {
+            "name": "x-dev-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Dev-User-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyRunResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или невалидна initData",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/health": {
       "get": {
         "tags": [
@@ -2018,6 +3421,74 @@
   },
   "components": {
     "schemas": {
+      "AfterDonation": {
+        "properties": {
+          "donation_id": {
+            "type": "integer",
+            "title": "Donation Id"
+          },
+          "donation_type": {
+            "$ref": "#/components/schemas/DonationType"
+          },
+          "donated_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Donated On"
+          },
+          "center_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Center Name"
+          },
+          "documents": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Documents",
+            "description": "Что взять в центре крови"
+          },
+          "rest_day": {
+            "$ref": "#/components/schemas/RestDay"
+          }
+        },
+        "type": "object",
+        "required": [
+          "donation_id",
+          "donation_type",
+          "donated_on",
+          "center_name",
+          "documents",
+          "rest_day"
+        ],
+        "title": "AfterDonation",
+        "description": "Что делать после донации: документы и доп. день отдыха (ст. 186 ТК РФ)."
+      },
+      "AfterDonationResponse": {
+        "properties": {
+          "after_donation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AfterDonation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "after_donation"
+        ],
+        "title": "AfterDonationResponse"
+      },
       "Appointment": {
         "properties": {
           "id": {
@@ -2348,6 +3819,36 @@
         ],
         "title": "BookingSlots"
       },
+      "DailyRunResult": {
+        "properties": {
+          "sent": {
+            "type": "integer",
+            "title": "Sent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sent"
+        ],
+        "title": "DailyRunResult"
+      },
+      "DemoPushKind": {
+        "type": "string",
+        "enum": [
+          "interval_open",
+          "deficit",
+          "rest_day"
+        ],
+        "title": "DemoPushKind"
+      },
+      "DocFormat": {
+        "type": "string",
+        "enum": [
+          "pdf",
+          "docx"
+        ],
+        "title": "DocFormat"
+      },
       "Donation": {
         "properties": {
           "id": {
@@ -2502,6 +4003,10 @@
           "appointment_not_found",
           "appointment_not_active",
           "demo_disabled",
+          "donation_not_found",
+          "group_not_found",
+          "group_closed",
+          "bot_send_failed",
           "internal_error"
         ],
         "title": "ErrorCode"
@@ -2517,6 +4022,181 @@
           "error"
         ],
         "title": "ErrorResponse"
+      },
+      "Group": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "center": {
+            "$ref": "#/components/schemas/GroupCenter"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "donation_type": {
+            "$ref": "#/components/schemas/DonationType"
+          },
+          "owner_name": {
+            "type": "string",
+            "title": "Owner Name"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/GroupMember"
+            },
+            "type": "array",
+            "title": "Members"
+          },
+          "members_count": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Members Count"
+          },
+          "is_member": {
+            "type": "boolean",
+            "title": "Is Member"
+          },
+          "is_owner": {
+            "type": "boolean",
+            "title": "Is Owner"
+          },
+          "is_booked": {
+            "type": "boolean",
+            "title": "Is Booked",
+            "description": "Текущий пользователь уже записан"
+          },
+          "is_past": {
+            "type": "boolean",
+            "title": "Is Past"
+          },
+          "free_slots": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Free Slots",
+            "description": "Свободных слотов в центре на дату"
+          },
+          "link": {
+            "type": "string",
+            "title": "Link",
+            "description": "https://max.ru/<бот>?startapp=grp_<code>"
+          },
+          "share_text": {
+            "type": "string",
+            "title": "Share Text",
+            "description": "Текст для shareMaxContent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "center",
+          "date",
+          "donation_type",
+          "owner_name",
+          "members",
+          "members_count",
+          "is_member",
+          "is_owner",
+          "is_booked",
+          "is_past",
+          "free_slots",
+          "link",
+          "share_text"
+        ],
+        "title": "Group"
+      },
+      "GroupCenter": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "address",
+          "region_id"
+        ],
+        "title": "GroupCenter"
+      },
+      "GroupCreate": {
+        "properties": {
+          "center_id": {
+            "type": "integer",
+            "title": "Center Id"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date",
+            "description": "Локальная дата центра"
+          },
+          "donation_type": {
+            "$ref": "#/components/schemas/DonationType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "center_id",
+          "date",
+          "donation_type"
+        ],
+        "title": "GroupCreate"
+      },
+      "GroupMember": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Имя и первая буква фамилии: «Иван П.»"
+          },
+          "photo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photo Url"
+          },
+          "is_owner": {
+            "type": "boolean",
+            "title": "Is Owner"
+          },
+          "is_booked": {
+            "type": "boolean",
+            "title": "Is Booked",
+            "description": "Есть запись в этот центр на эту дату"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "photo_url",
+          "is_owner",
+          "is_booked"
+        ],
+        "title": "GroupMember"
       },
       "HTTPValidationError": {
         "properties": {
@@ -2657,6 +4337,86 @@
         ],
         "title": "HonoraryMixed"
       },
+      "Impact": {
+        "properties": {
+          "whole_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Whole Count"
+          },
+          "plasma_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Plasma Count"
+          },
+          "whole_liters": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Whole Liters",
+            "description": "0,45 л за донацию цельной крови"
+          },
+          "plasma_liters_max": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Plasma Liters Max",
+            "description": "До 0,75 л за донацию плазмы"
+          },
+          "total_liters_max": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Total Liters Max",
+            "description": "Верхняя оценка: кровь + плазма"
+          },
+          "patients_helped_max": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Patients Helped Max",
+            "description": "До 3 человек за донацию цельной крови; плазму не считаем"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/ImpactSource"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "whole_count",
+          "plasma_count",
+          "whole_liters",
+          "plasma_liters_max",
+          "total_liters_max",
+          "patients_helped_max",
+          "sources"
+        ],
+        "title": "Impact",
+        "description": "«Вклад»: литры и до скольких людей могли помочь донации."
+      },
+      "ImpactSource": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "claim": {
+            "type": "string",
+            "title": "Claim"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "url",
+          "claim"
+        ],
+        "title": "ImpactSource"
+      },
       "IntervalActive": {
         "properties": {
           "whole_blood": {
@@ -2674,6 +4434,94 @@
           "plasma"
         ],
         "title": "IntervalActive"
+      },
+      "LeaveApplicationInput": {
+        "properties": {
+          "employer_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employer Name",
+            "examples": [
+              "ООО «Ромашка»"
+            ]
+          },
+          "head_position": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Head Position",
+            "description": "Должность руководителя в дательном падеже",
+            "examples": [
+              "Генеральному директору"
+            ]
+          },
+          "head_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Head Name",
+            "description": "ФИО руководителя в дательном падеже",
+            "examples": [
+              "Петрову П. П."
+            ]
+          },
+          "employee_position": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employee Position",
+            "examples": [
+              "менеджер"
+            ]
+          },
+          "rest_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rest Date",
+            "description": "Желаемый день отдыха: после дня донации, в течение года"
+          },
+          "attach_to_vacation": {
+            "type": "boolean",
+            "title": "Attach To Vacation",
+            "description": "Присоединить к отпуску вместо rest_date",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "LeaveApplicationInput",
+        "description": "Реквизиты для заявления. Не сохраняются. Пустые поля — линии в документе."
       },
       "Level": {
         "properties": {
@@ -3049,6 +4897,17 @@
             "type": "integer",
             "minimum": 0.0,
             "title": "Referrals Count"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RegionShort"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Регион донора для пушей о дефиците"
           }
         },
         "type": "object",
@@ -3448,6 +5307,161 @@
           "has_centers"
         ],
         "title": "Region"
+      },
+      "RegionShort": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "RegionShort"
+      },
+      "RegionUpdate": {
+        "properties": {
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_id"
+        ],
+        "title": "RegionUpdate"
+      },
+      "RestDay": {
+        "properties": {
+          "deadline": {
+            "type": "string",
+            "format": "date",
+            "title": "Deadline",
+            "description": "До какой даты можно взять день отдыха"
+          },
+          "days_left": {
+            "type": "integer",
+            "title": "Days Left",
+            "description": "Дней до deadline, < 0 — срок прошёл"
+          },
+          "used": {
+            "type": "boolean",
+            "title": "Used"
+          },
+          "used_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Used At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "deadline",
+          "days_left",
+          "used",
+          "used_at"
+        ],
+        "title": "RestDay"
+      },
+      "RestDayUpdate": {
+        "properties": {
+          "used": {
+            "type": "boolean",
+            "title": "Used"
+          }
+        },
+        "type": "object",
+        "required": [
+          "used"
+        ],
+        "title": "RestDayUpdate"
+      },
+      "ShareCard": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/ShareCardKind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "subtitle": {
+            "type": "string",
+            "title": "Subtitle"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total"
+          },
+          "level": {
+            "$ref": "#/components/schemas/Level"
+          },
+          "patients_helped_max": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Patients Helped Max"
+          },
+          "last_donation_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Donation On"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "text для shareMaxContent"
+          },
+          "link": {
+            "type": "string",
+            "title": "Link",
+            "description": "link для shareMaxContent — реферальная ссылка"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "title",
+          "subtitle",
+          "total",
+          "level",
+          "patients_helped_max",
+          "last_donation_on",
+          "text",
+          "link"
+        ],
+        "title": "ShareCard",
+        "description": "Данные карточки «Я сдал кровь» / «Мой уровень» и текст для shareMaxContent."
+      },
+      "ShareCardKind": {
+        "type": "string",
+        "enum": [
+          "donation",
+          "level"
+        ],
+        "title": "ShareCardKind"
       },
       "Slot": {
         "properties": {

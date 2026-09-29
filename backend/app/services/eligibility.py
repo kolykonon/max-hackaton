@@ -87,3 +87,26 @@ async def get_next_allowed(
     stats = await load_stats(session, user_id)
     allowed = next_allowed(stats.last_whole, stats.last_plasma, today or today_msk())
     return allowed.for_type(donation_type)
+
+
+def interval_ends(
+    last_whole: dt.date | None, last_plasma: dt.date | None
+) -> dict[DonationType, dt.date | None]:
+    """Когда закончится интервал для каждого вида — без подрезки «сегодня».
+
+    None — ограничений нет (донаций не было). В отличие от next_allowed,
+    дата не «ползёт» вместе с today, поэтому по ней можно один раз прислать
+    пуш «интервал прошёл».
+    """
+    whole: list[dt.date] = []
+    plasma: list[dt.date] = []
+    if last_whole:
+        whole.append(last_whole + WHOLE_AFTER_WHOLE)
+        plasma.append(last_whole + PLASMA_AFTER_WHOLE)
+    if last_plasma:
+        whole.append(last_plasma + WHOLE_AFTER_PLASMA)
+        plasma.append(last_plasma + PLASMA_AFTER_PLASMA)
+    return {
+        DonationType.WHOLE_BLOOD: max(whole) if whole else None,
+        DonationType.PLASMA: max(plasma) if plasma else None,
+    }

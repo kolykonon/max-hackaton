@@ -80,6 +80,11 @@ class AppointmentService:
             status=AppointmentStatus.ACTIVE,
         )
         self.session.add(appointment)
+        if user.region_id is None:
+            # регион донора для пушей о дефиците — по центру первой записи
+            user.region_id = await self.session.scalar(
+                select(Center.region_id).where(Center.id == slot.center_id)
+            )
         await self._commit_or_slot_taken()
 
         center, tz = await self._center_and_tz(slot.center_id)

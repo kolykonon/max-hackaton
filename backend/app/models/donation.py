@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import date, datetime
 
-from sqlalchemy import Boolean, Date, ForeignKey, String, false
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, String, false
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
@@ -35,4 +35,15 @@ class Donation(Base, IDMixin):
         nullable=False,
         default=False,
         server_default=false(),
+    )
+    # Запись, по которой засчитана донация (для донаций из приложения)
+    appointment_id: Mapped[int | None] = mapped_column(
+        ForeignKey("appointments.id", ondelete="SET NULL"),
+        nullable=True,
+        unique=True,
+    )
+    # Когда донор отметил, что использовал доп. день отдыха (ст. 186 ТК РФ)
+    rest_day_used_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
     )

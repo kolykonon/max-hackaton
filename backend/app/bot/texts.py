@@ -53,3 +53,95 @@ REMINDER_MORNING_MESSAGE = (
     "Пейте больше жидкости. Не приходите натощак."
 )
 REMINDER_MORNING_BUTTON = "Открыть запись"
+
+# --- Проактивные пуши ---
+
+BOOK_BUTTON = "Записаться"
+# start_param для кнопки «Записаться»: фронт открывает запись с первого шага
+BOOK_START_PARAM = "book"
+
+DONATION_TYPE_ACC = {"whole_blood": "кровь", "plasma": "плазму"}
+
+
+def interval_open_message(types: list[str]) -> str:
+    what = " и ".join(DONATION_TYPE_ACC[t] for t in types)
+    return (
+        "Интервал после прошлой донации прошёл 🩸\n\n"
+        f"Можно снова сдавать {what}. Выберите удобный день — запись займёт минуту."
+    )
+
+
+def deficit_message(region_name: str, blood_group: str) -> str:
+    return (
+        f"В регионе «{region_name}» не хватает крови группы {blood_group} ❗\n\n"
+        "Интервал после прошлой донации у вас уже прошёл — "
+        "запишитесь, если есть возможность. Ваша кровь сейчас особенно нужна."
+    )
+
+
+# --- После донации ---
+
+ASK_DONATED_MESSAGE = (
+    "Как прошла донация?\n\n"
+    "Отметьте, если сдали кровь: пришлю, какие справки взять в центре, "
+    "и готовое заявление на дополнительный день отдыха."
+)
+ASK_DONATED_YES = "Да, сдал(а)"
+ASK_DONATED_NO = "Не получилось"
+DECLINED_MESSAGE = "Ничего страшного. Запись закрыта — можно выбрать другой день."
+ANSWER_THANKS = "Спасибо! Донация засчитана"
+ANSWER_ALREADY = "Уже отмечено"
+
+
+def after_donation_message(documents: list[str], deadline: str) -> str:
+    docs = "\n".join(f"• {d}" for d in documents)
+    return (
+        "Спасибо, что сдали кровь! ❤️\n\n"
+        "По статье 186 Трудового кодекса в день донации вы освобождаетесь от работы, "
+        "а после него вам положен ещё один день отдыха. Оба дня оплачиваются "
+        "по среднему заработку. Дополнительный день можно взять "
+        f"до {deadline} или присоединить к отпуску.\n\n"
+        f"Что взять в центре крови:\n{docs}\n\n"
+        "Заявление работодателю уже готово — ФИО подставлено из ваших данных."
+    )
+
+
+APPLICATION_PDF_BUTTON = "Заявление PDF"
+APPLICATION_DOCX_BUTTON = "Заявление DOCX"
+APPLICATION_FILL_BUTTON = "Заполнить в приложении"
+REST_USED_BUTTON = "Я уже взял(а) день отдыха"
+REST_USED_ANSWER = "Отметили: день отдыха использован"
+APPLICATION_CAPTION = (
+    "Заявление на дополнительный день отдыха. Впишите реквизиты работодателя "
+    "и дату, подпишите и отдайте в отдел кадров вместе со справкой № 402/у."
+)
+APPLICATION_SENDING = "Готовлю заявление…"
+APPLICATION_ERROR = "Не удалось отправить файл, попробуйте в приложении"
+
+
+def rest_day_reminder_message(
+    donated_on: str, deadline: str, days_left: int | None
+) -> str:
+    head = (
+        f"До {deadline} осталось {days_left} дн., чтобы использовать день отдыха"
+        if days_left is not None
+        else "Напоминаем про дополнительный день отдыха"
+    )
+    return (
+        f"{head} за донацию {donated_on} (ст. 186 ТК РФ).\n\n"
+        "Его можно взять в любой день до этой даты или присоединить к отпуску. "
+        "Если уже использовали — отметьте, и я перестану напоминать."
+    )
+
+
+# --- Групповая донация ---
+
+
+def group_joined_message(name: str, center: str, date: str, count: int) -> str:
+    return (
+        f"{name} присоединяется к вашей групповой донации {date} в «{center}» 🙌\n\n"
+        f"Участников: {count}."
+    )
+
+
+GROUP_OPEN_BUTTON = "Открыть группу"

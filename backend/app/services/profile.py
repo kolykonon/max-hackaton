@@ -4,17 +4,21 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
+from app.core.errors import AppError
 from app.core.utils.dates import now_msk, today_msk
 from app.models import Donation as DonationModel
 from app.models import PersonalData as PersonalDataModel
-from app.models import User
+from app.models import Region, User
 from app.models.enums import DonationType
+from app.schemas.common import ErrorCode
 from app.schemas.profile import (
     BloodInfo,
     Donation,
     DonationHistory,
     DonationYear,
     Eligibility,
+    Impact,
+    ImpactSource,
     IntervalActive,
     Me,
     NextAllowed,
@@ -23,8 +27,12 @@ from app.schemas.profile import (
     PersonalDataInput,
     Progress,
     Referrals,
+    RegionShort,
+    ShareCard,
+    ShareCardKind,
 )
 from app.services.eligibility import DonationStats, next_allowed
+from app.services.impact import SOURCES, ImpactNumbers
 from app.services.progress import get_honorary, get_level
 
 REQUIRED_FIELDS = [f for f in PersonalDataField if f != PersonalDataField.MIDDLE_NAME]
@@ -32,6 +40,14 @@ REQUIRED_FIELDS = [f for f in PersonalDataField if f != PersonalDataField.MIDDLE
 
 def _missing_fields(row: PersonalDataModel | None) -> list[PersonalDataField]:
     return [f for f in REQUIRED_FIELDS if not (row and getattr(row, f.value))]
+
+
+def _donations_word(n: int) -> str:
+    if n % 10 == 1 and n % 100 != 11:
+        return "донация"
+    if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14:
+        return "донации"
+    return "донаций"
 
 
 def referral_link(user: User) -> str:
@@ -94,6 +110,75 @@ class ProfileService:
                 donor_code=user.donor_code,
             ),
             referrals_count=await self._referrals_count(user),
+            region=await self._region(user),
+        )
+
+    async def set_region(self, user: User, region_id: int) -> Me:
+        if await self.session.get(Region, region_id) is None:
+            raise AppError(404, ErrorCode.NOT_FOUND, "Регион не найден")
+        user.region_id = region_id
+        await self.session.commit()
+        return await self.get_me(user)
+
+    async def _region(self, user: User) -> RegionShort | None:
+        if not user.region_id:
+            return None
+        region = await self.session.get(Region, user.region_id)
+        return RegionShort(id=region.id, name=region.name) if region else None
+
+    async def get_impact(self, user: User) -> Impact:
+        stats = await self.get_stats(user.id)
+        n = ImpactNumbers(
+            whole_count=stats.whole_count, plasma_count=stats.plasma_count
+        )
+        return Impact(
+            whole_count=n.whole_count,
+            plasma_count=n.plasma_count,
+            whole_liters=n.whole_liters,
+            plasma_liters_max=n.plasma_liters_max,
+            total_liters_max=n.total_liters_max,
+            patients_helped_max=n.patients_helped_max,
+            sources=[ImpactSource(**vars(s)) for s in SOURCES],
+        )
+
+    async def get_share_card(self, user: User, kind: ShareCardKind) -> ShareCard:
+        stats = await self.get_stats(user.id)
+        level = get_level(stats.total)
+        helped = ImpactNumbers(
+            stats.whole_count, stats.plasma_count
+        ).patients_helped_max
+        last = max(filter(None, (stats.last_whole, stats.last_plasma)), default=None)
+        link = referral_link(user)
+        if kind == ShareCardKind.DONATION:
+            title = "Я сдал(а) кровь"
+            subtitle = f"Уже {stats.total} {_donations_word(stats.total)} в «Капле»"
+            text = (
+                f"Я сдал(а) кровь — это уже {stats.total} {_donations_word(stats.total)}. "
+                "Стать донором просто: запись в центр крови прямо в MAX. Присоединяйся!"
+            )
+        else:
+            title = f"Мой уровень: {level.name}"
+            subtitle = (
+                f"До уровня «{level.next.name}» — {level.next.remaining} "
+                f"{_donations_word(level.next.remaining)}"
+                if level.next
+                else "Максимальный уровень донора"
+            )
+            text = (
+                f"Мой уровень донора в «Капле» — «{level.name}», "
+                f"{stats.total} {_donations_word(stats.total)}. "
+                "Записаться на донацию можно прямо в MAX. Присоединяйся!"
+            )
+        return ShareCard(
+            kind=kind,
+            title=title,
+            subtitle=subtitle,
+            total=stats.total,
+            level=level,
+            patients_helped_max=helped,
+            last_donation_on=last,
+            text=text,
+            link=link,
         )
 
     async def complete_onboarding(self, user: User) -> None:
