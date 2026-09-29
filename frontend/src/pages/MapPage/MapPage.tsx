@@ -2,19 +2,12 @@ import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useMe } from '@/api/hooks/me'
-import { useLocateRegion, useMapCenters, useMapStatus, useRegions } from '@/api/hooks/regions'
+import { useLocateRegion, useRegions } from '@/api/hooks/regions'
 import { BloodGroupStrip } from '@/components/features/map/BloodGroupStrip/BloodGroupStrip'
 import { CenterInfoCard } from '@/components/features/map/CenterInfoCard/CenterInfoCard'
-import { MapControls } from '@/components/features/map/MapControls/MapControls'
-import {
-  fillStatuses,
-  getZoneStatus,
-  groupZonesByCenters,
-  hasZoneData,
-  zoneAt,
-  zoneStatusesFromCenters,
-  type ZoneStatus,
-} from '@/components/features/map/utils'
+import { MapControls } from '@/components/shared/MapControls/MapControls'
+import { useRegionsMapData } from '@/components/features/map/useRegionsMapData'
+import { fillStatuses, hasZoneData, zoneAt, type ZoneStatus } from '@/components/features/map/utils'
 import { ZonePanel } from '@/components/features/map/ZonePanel/ZonePanel'
 import { PageHeader } from '@/components/layout/PageHeader/PageHeader'
 import { Screen } from '@/components/layout/Screen/Screen'
@@ -24,9 +17,8 @@ import type { RegionsMapHandle } from '@/components/features/map/RegionsMap/Regi
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { StatusLegend } from '@/components/shared/StatusLegend/StatusLegend'
 import { Toast } from '@/components/shared/Toast/Toast'
-import type { BloodGroup, StockStatus } from '@/content/types'
+import type { BloodGroup } from '@/content/types'
 import { useGeolocation } from '@/hooks/useGeolocation'
-import { useMoscowZones, useRussiaGeo } from '@/hooks/useRussiaGeo'
 import { useToast } from '@/hooks/useToast'
 import { useBookingStore } from '@/store/booking'
 import { formatDayMonth } from '@/utils/format'
@@ -45,21 +37,18 @@ export const MapPage = () => {
   const navigate = useNavigate()
   const toast = useToast()
   const mapRef = useRef<RegionsMapHandle>(null)
-  const geo = useRussiaGeo()
-  const moscowZones = useMoscowZones()
-  const status = useMapStatus()
-  const centers = useMapCenters()
-  const startNew = useBookingStore((state) => state.startNew)
-  const setBookingRegion = useBookingStore((state) => state.setRegion)
+  const startFromCenter = useBookingStore((state) => state.startFromCenter)
   const [selectedCenterId, setSelectedCenterId] = useState<number | null>(null)
   const regions = useRegions()
   const me = useMe()
   const location = useGeolocation()
   const located = useLocateRegion(location.status === 'granted' ? { lat: location.lat, lon: location.lon } : null)
-  const zones = useMemo(
-    () => (moscowZones.data ? groupZonesByCenters(moscowZones.data, centers.data ?? []) : []),
-    [moscowZones.data, centers.data],
-  )
+  const userGroup = me.data?.blood.group ?? null
+  // undefined — пользователь ещё не выбирал, берём его группу; null — выбор снят
+  const [pickedGroup, setPickedGroup] = useState<BloodGroup | null | undefined>(undefined)
+  const group = pickedGroup === undefined ? userGroup : pickedGroup
+  const { status, centers, zones, features, zonesByCode, statuses, points, ...mapData } = useRegionsMapData(group)
+
   // В Москве и области — группа районов, где стоит пользователь
   const userZone = location.status === 'granted' ? zoneAt(zones, location.lon, location.lat) : null
   const userRegionCode = userZone?.properties.code ?? located.data?.region?.code ?? null
@@ -68,23 +57,6 @@ export const MapPage = () => {
   const [pickedZone, setPickedZone] = useState<string | null>(null)
   const zoneCode = pickedZone ?? userRegionCode ?? getLastZone() ?? DEFAULT_ZONE
 
-  const userGroup = me.data?.blood.group ?? null
-  // undefined — пользователь ещё не выбирал, берём его группу; null — выбор снят
-  const [pickedGroup, setPickedGroup] = useState<BloodGroup | null | undefined>(undefined)
-  const group = pickedGroup === undefined ? userGroup : pickedGroup
-
-  // Москва и область на карте поделены на районы и округа — их статус считаем по центрам внутри
-  const mapFeatures = useMemo(() => {
-    const parents = new Set(zones.map((zone) => zone.properties.parent))
-    return [...(geo.data?.features ?? []).filter((region) => !parents.has(region.properties.code)), ...zones]
-  }, [geo.data, zones])
-  const zonesByCode = useMemo(
-    () =>
-      new Map(
-        [...(status.data?.regions ?? []), ...zoneStatusesFromCenters(zones, centers.data ?? [])].map((zone) => [zone.code, zone]),
-      ),
-    [status.data, zones, centers.data],
-  )
   const namesByCode = useMemo(
     () =>
       new Map([
@@ -95,13 +67,6 @@ export const MapPage = () => {
   )
   const parentOf = (code: string) => zones.find((zone) => zone.properties.code === code)?.properties.parent ?? code
   const zone = zonesByCode.get(zoneCode) ?? EMPTY_ZONE(zoneCode)
-  const statuses = useMemo(
-    () =>
-      Object.fromEntries(
-        [...zonesByCode.values()].map((item) => [item.code, getZoneStatus(item, group)]),
-      ) as Record<string, StockStatus>,
-    [zonesByCode, group],
-  )
   const userLocation = useMemo(
     () => (location.status === 'granted' ? { lat: location.lat, lon: location.lon } : null),
     [location],
@@ -128,11 +93,11 @@ export const MapPage = () => {
     setSelectedCenterId(id)
   }
 
-  // «Записаться» из карточки: мастер записи сразу с регионом центра
+  // «Записаться» из карточки: мастер записи сразу с этим центром, шаг выбора центра пропускаем
   const bookInCenter = () => {
     if (!selectedCenter) return
-    startNew()
-    setBookingRegion(selectedCenter.region_id)
+    const { id, name, address, region_id } = selectedCenter
+    startFromCenter({ id, name, address }, region_id)
     navigate('/donation-info')
   }
 
@@ -146,23 +111,21 @@ export const MapPage = () => {
   const toggleGroup = (value: BloodGroup) => setPickedGroup(group === value ? null : value)
 
   const renderMap = () => {
-    if (geo.isPending || status.isPending || moscowZones.isPending || centers.isPending) return <Skeleton height={320} radius="s" />
-    if (geo.isError || status.isError) {
-      const retry = () => Promise.all([geo.refetch(), status.refetch()])
-      return <ErrorState text="Не удалось загрузить карту" retrying={geo.isFetching || status.isFetching} onRetry={retry} />
+    if (mapData.isPending) return <Skeleton height={320} radius="s" />
+    if (mapData.isError) {
+      return <ErrorState text="Не удалось загрузить карту" retrying={mapData.isFetching} onRetry={mapData.refetch} />
     }
     return (
       <Suspense fallback={<Skeleton height={320} radius="s" />}>
         <RegionsMap
           ref={mapRef}
-          regions={mapFeatures}
+          regions={features}
           statuses={statuses}
           selectedCode={zoneCode}
           onSelect={selectZone}
           userLocation={userLocation}
           initialFocusCode={userRegionCode}
-          centers={centers.data}
-          group={group}
+          centers={points}
           selectedCenterId={selectedCenterId}
           onSelectCenter={selectCenter}
         >

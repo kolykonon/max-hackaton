@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Clock,
   Copy,
+  HeartHandshake,
   Users,
 } from "lucide-react";
 import type { CSSProperties } from "react";
@@ -13,8 +14,14 @@ import type { Me, Progress } from "@/api/types";
 import { DonationIcon } from "@/components/shared/DonationIcon/DonationIcon";
 import { getAbo, getRhesus } from "@/content/bloodGroups";
 import { DONATION_TYPE_INFO } from "@/content/donationTypes";
+import {
+  IMPACT_EXPLANATION,
+  PATIENTS_PER_WHOLE_BLOOD,
+  getHelpedPatients,
+} from "@/content/impact";
 import { DONOR_LEVELS, SCALE_LEVELS, getLevelIndex } from "@/content/levels";
 import type { DonationKind } from "@/content/types";
+import { useCountUp } from "@/hooks/useCountUp";
 import { cn } from "@/utils/cn";
 import { DONATION_FORMS, formatYearsMonths, plural } from "@/utils/format";
 
@@ -35,6 +42,11 @@ interface AccountDesktopProps {
 const KINDS: DonationKind[] = ["whole_blood", "plasma", "mixed"];
 const RING_R = 54;
 const RING_LEN = 2 * Math.PI * RING_R;
+const PATIENT_FORMS: [string, string, string] = [
+  "пациенту",
+  "пациентам",
+  "пациентам",
+];
 
 /** Доля пути по шкале 1 · 5 · 10 · 20 · 40, точки стоят на равном расстоянии. */
 const scalePercent = (total: number): number => {
@@ -68,6 +80,8 @@ export const AccountDesktop = ({
     plasma: honorary.plasma,
     mixed: honorary.mixed,
   };
+  const helped = getHelpedPatients(honorary.whole.count, honorary.plasma.count);
+  const helpedShown = useCountUp(helped);
 
   return (
     <div className={styles.desk}>
@@ -103,6 +117,25 @@ export const AccountDesktop = ({
               {DONOR_LEVELS[levelIndex].name}
               <ChevronRight size={16} />
             </button>
+          </div>
+          <div
+            className={styles.hero__impact}
+            title={IMPACT_EXPLANATION}
+            aria-label={
+              helped > 0
+                ? `Ваши донации помогли до ${helped} ${plural(helped, PATIENT_FORMS)}`
+                : `Первая донация поможет до ${PATIENTS_PER_WHOLE_BLOOD} пациентам`
+            }
+          >
+            <span className={styles["hero__impact-value"]} aria-hidden>
+              <HeartHandshake size={28} />
+              до {helped > 0 ? helpedShown : PATIENTS_PER_WHOLE_BLOOD}
+            </span>
+            <span className={styles["hero__total-label"]} aria-hidden>
+              {helped > 0
+                ? `${plural(helped, PATIENT_FORMS)} помогла ваша кровь`
+                : "пациентам поможет первая донация"}
+            </span>
           </div>
           <div className={styles.hero__total}>
             <span className={styles["hero__total-value"]}>{total}</span>

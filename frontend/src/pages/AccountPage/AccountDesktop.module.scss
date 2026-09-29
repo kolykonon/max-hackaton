@@ -120,6 +120,28 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     line-height: 1;
   }
 
+  // «Скольким помогла кровь» — рядом с числом донаций, отделено чертой
+  &__impact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: $space-xl;
+    border-right: 1px solid $color-border;
+    line-height: 1;
+    cursor: help;
+  }
+
+  &__impact-value {
+    display: inline-flex;
+    gap: $space-xs;
+    align-items: center;
+    color: $color-accent;
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
   &__total-value {
     font-size: 88px;
     font-weight: 800;
@@ -163,7 +185,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: $blood;
+    background: $color-accent;
     animation: fill 1.2s $ease-out 0.3s both;
   }
 
@@ -197,8 +219,8 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     background: $color-bg-card;
 
     .scale__point--done & {
-      border-color: $blood;
-      background: $blood;
+      border-color: $color-accent;
+      background: $color-accent;
     }
   }
 

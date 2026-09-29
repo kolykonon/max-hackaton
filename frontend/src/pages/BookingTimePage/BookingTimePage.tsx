@@ -21,10 +21,15 @@ const PERIOD_LABEL: Record<SlotPeriod, string> = { morning: 'Утро', day: 'Д
 /** Шаг 4 — время. */
 export const BookingTimePage = () => {
   const navigate = useNavigate()
-  const { donationType, date, center, slot, setSlot } = useBookingStore()
+  const { donationType, date, center, slot, presetCenter, setSlot, releaseCenter } = useBookingStore()
   const slots = useBookingSlots(center?.id ?? null, donationType, date)
 
   if (!center || !date) return <Navigate to="/home" replace />
+
+  const pickOtherCenter = () => {
+    releaseCenter()
+    navigate('/booking/center')
+  }
 
   const renderSlots = () => {
     if (slots.isPending) return <Skeleton height={260} />
@@ -39,7 +44,7 @@ export const BookingTimePage = () => {
             На этот день всё занято
           </Typography.Text>
           <div className={styles['booking-time__empty-actions']}>
-            <OutlineButton size="medium" onClick={() => navigate('/booking/center')}>
+            <OutlineButton size="medium" onClick={pickOtherCenter}>
               Другой центр
             </OutlineButton>
             <OutlineButton size="medium" onClick={() => navigate('/booking/date')}>
@@ -66,7 +71,13 @@ export const BookingTimePage = () => {
 
   return (
     <Screen
-      header={<StepHeader title="Выберите время" step={4} onBack={() => navigate('/booking/center')} />}
+      header={
+        <StepHeader
+          title="Выберите время"
+          step={4}
+          onBack={() => navigate(presetCenter ? '/booking/date' : '/booking/center')}
+        />
+      }
       footer={
         <StickyFooter>
           <Button size="large" stretched disabled={!slot} onClick={() => navigate('/booking/check')}>
