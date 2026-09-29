@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { TabLayout } from '@/components/layout/TabLayout/TabLayout'
 import { AccountPage } from '@/pages/AccountPage/AccountPage'
+import { AfterDonationPage } from '@/pages/AfterDonationPage/AfterDonationPage'
 import { BookingCenterPage } from '@/pages/BookingCenterPage/BookingCenterPage'
 import { BookingCheckPage } from '@/pages/BookingCheckPage/BookingCheckPage'
 import { BookingConfirmedPage } from '@/pages/BookingConfirmedPage/BookingConfirmedPage'
@@ -43,6 +44,7 @@ const App = () => (
     <Route path="/referrals" element={<ReferralsPage />} />
     <Route path="/honorary" element={<HonoraryPage />} />
     <Route path="/groups" element={<GroupsPage />} />
+    <Route path="/after-donation/:id" element={<AfterDonationPage />} />
     <Route path="/group/:code" element={<GroupPage />} />
 
     <Route path="*" element={<Navigate to="/home" replace />} />

@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCompleteOnboarding } from '@/api/hooks/me'
-import { getGroupCode } from '@/bridge/max'
 import { OnboardingBenefits } from '@/components/features/onboarding/OnboardingBenefits/OnboardingBenefits'
 import { OnboardingEligibility } from '@/components/features/onboarding/OnboardingEligibility/OnboardingEligibility'
 import { OnboardingGreeting } from '@/components/features/onboarding/OnboardingGreeting/OnboardingGreeting'
@@ -14,6 +13,7 @@ import { ConsentText } from '@/components/shared/ConsentText/ConsentText'
 import { ContraindicationsSheet } from '@/components/shared/ContraindicationsSheet/ContraindicationsSheet'
 import { ProgressSegments } from '@/components/shared/ProgressSegments/ProgressSegments'
 import { useSwipe } from '@/hooks/useSwipe'
+import { getStartRoute } from '@/utils/startRoute'
 
 import styles from './OnboardingPage.module.scss'
 
@@ -44,9 +44,8 @@ export const OnboardingPage = () => {
       setShowConsentHint(true)
       return
     }
-    const groupCode = getGroupCode()
     completeOnboarding.mutate(undefined, {
-      onSuccess: () => navigate(groupCode ? `/group/${groupCode}` : '/home', { replace: true }),
+      onSuccess: () => navigate(getStartRoute(), { replace: true }),
     })
   }
 

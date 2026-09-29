@@ -9,6 +9,10 @@ export interface MockDonation {
   type: DonationType
   date: string
   centerName: string
+  /** Засчитана через приложение (демо-кнопка) — для неё есть «После донации», как на бэке у не-демо донаций. */
+  fromApp?: boolean
+  /** Когда отметили, что день отдыха использован. */
+  restUsedAt?: string | null
 }
 
 export interface MockAppointment {

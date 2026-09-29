@@ -33,6 +33,7 @@ export const demoHandlers = [
       type: appointment.donationType,
       date: new Date(date).toISOString(),
       centerName: findCenter(centerId)?.name ?? '',
+      fromApp: true,
     })
     db.save()
     return noContent()

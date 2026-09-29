@@ -1,0 +1,10 @@
+.rest-day-status {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+
+  &__deadline {
+    display: block;
+    margin-top: $space-2xs;
+  }
+}

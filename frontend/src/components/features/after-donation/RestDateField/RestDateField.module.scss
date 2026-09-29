@@ -1,0 +1,24 @@
+.rest-date-field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2xs;
+
+  &__input {
+    border: 1px solid transparent;
+    border-radius: $radius-m;
+    transition: border-color $transition-fast;
+  }
+
+  &__hint {
+    display: block;
+    color: $color-text-tertiary;
+  }
+
+  &--invalid &__input {
+    border-color: $color-negative;
+  }
+
+  &--invalid &__hint {
+    color: $color-text-negative;
+  }
+}

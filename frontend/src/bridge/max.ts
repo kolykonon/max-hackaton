@@ -40,16 +40,24 @@ export const getInitData = (): string => webApp()?.initData ?? ''
 // Роутер убирает ?startapp= при первом же переходе — запоминаем адрес запуска
 const launchSearch = window.location.search
 
-/** Параметр запуска: `appointment`, `ref_<code>` или `grp_<code>`. Вне MAX читаем ?startapp= для отладки. */
+/** Параметр запуска: `appointment`, `ref_<code>`, `grp_<code>` или `rest_<donation_id>`. Вне MAX читаем ?startapp= для отладки. */
 export const getStartParam = (): string | null =>
   webApp()?.initDataUnsafe.start_param ?? new URLSearchParams(launchSearch).get('startapp')
 
 const GROUP_PREFIX = 'grp_'
+const REST_PREFIX = 'rest_'
 
 /** Код групповой донации, если приложение открыли по ссылке-приглашению. */
 export const getGroupCode = (): string | null => {
   const param = getStartParam()
   return param?.startsWith(GROUP_PREFIX) ? param.slice(GROUP_PREFIX.length) : null
+}
+
+/** Донация из кнопки бота «Заполнить в приложении» — открыть «После донации». */
+export const getRestDonationId = (): number | null => {
+  const param = getStartParam()
+  const id = param?.startsWith(REST_PREFIX) ? Number(param.slice(REST_PREFIX.length)) : NaN
+  return Number.isInteger(id) && id > 0 ? id : null
 }
 
 /** Внешняя ссылка: в MAX — во внешнем браузере, иначе в новой вкладке. */
