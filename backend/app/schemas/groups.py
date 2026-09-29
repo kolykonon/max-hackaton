@@ -3,7 +3,7 @@ import datetime as dt
 from pydantic import Field
 
 from app.models.enums import DonationType
-from app.schemas.common import Schema
+from app.schemas.common import LocalTime, Schema
 
 
 class GroupCreate(Schema):
@@ -24,6 +24,7 @@ class GroupMember(Schema):
     photo_url: str | None
     is_owner: bool
     is_booked: bool = Field(description="Есть запись в этот центр на эту дату")
+    booked_time: LocalTime | None = Field(description="Время записи участника")
 
 
 class Group(Schema):
@@ -34,6 +35,9 @@ class Group(Schema):
     owner_name: str
     members: list[GroupMember]
     members_count: int = Field(ge=1)
+    donated_count: int = Field(
+        ge=0, description="Участники, у которых донация в группе засчитана"
+    )
     is_member: bool
     is_owner: bool
     is_booked: bool = Field(description="Текущий пользователь уже записан")

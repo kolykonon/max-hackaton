@@ -26,7 +26,8 @@ const normalize = (value: string) => value.trim().toLowerCase().replaceAll('ё',
 
 export const BookingTypeRegionPage = () => {
   const navigate = useNavigate()
-  const { donationType, regionId, setDonationType, setRegion } = useBookingStore()
+  const { mode, donationType, regionId, setDonationType, setRegion } = useBookingStore()
+  const isGroup = mode === 'group'
   const regions = useRegions()
   const eligibility = useEligibility()
   const geo = useGeolocation()
@@ -58,7 +59,14 @@ export const BookingTypeRegionPage = () => {
 
   return (
     <Screen
-      header={<StepHeader title="Вид донации и регион" step={1} onBack={() => navigate('/personal-data')} />}
+      header={
+        <StepHeader
+          title="Вид донации и регион"
+          step={1}
+          total={isGroup ? 3 : undefined}
+          onBack={() => navigate(isGroup ? '/groups' : '/personal-data')}
+        />
+      }
       footer={
         <StickyFooter>
           <Button size="large" stretched disabled={regionId === null} onClick={() => navigate('/booking/date')}>

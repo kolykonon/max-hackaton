@@ -2,15 +2,12 @@ import logging
 
 from fastapi import APIRouter, BackgroundTasks, Request, status
 
-from app.api.deps import AppointmentServiceDep, CurrentUser
-from app.bot.handlers import send_appointment_confirmed, send_friend_joined
-from app.schemas.appointments import (
-    AppointmentResponse,
-    CreateAppointmentRequest,
-    InviteLink,
-    SlotRequest,
-)
+from app.api.deps import AppointmentServiceDep, CurrentUser, GroupServiceDep
+from app.bot import pushes
+from app.bot.handlers import send_appointment_confirmed
+from app.schemas.appointments import AppointmentResponse, SlotRequest
 from app.schemas.common import error_responses
+from app.services.groups import human_date
 from app.services.reminders import cancel_reminders, schedule_reminders
 
 log = logging.getLogger(__name__)
@@ -39,25 +36,28 @@ async def create_appointment(
     request: Request,
     user: CurrentUser,
     service: AppointmentServiceDep,
-    body: CreateAppointmentRequest,
+    groups: GroupServiceDep,
+    body: SlotRequest,
     background: BackgroundTasks,
 ) -> AppointmentResponse:
-    schema, orm, _tz_name = await service.create(user, body.slot_id, body.invite_code)
+    schema, orm, _tz_name = await service.create(user, body.slot_id)
 
     background.add_task(
         send_appointment_confirmed, request.app.state.max, user.max_user_id
     )
 
-    inviter = await service.get_inviter(orm)
-    if inviter is not None:
+    for owner_max_id, group in await groups.groups_of_booking(user, orm):
         background.add_task(
-            send_friend_joined,
+            pushes.send_group_booked,
             request.app.state.max,
-            inviter.max_user_id,
+            owner_max_id,
+            group.code,
             user.first_name,
-            schema.local_date,
+            group.center.name,
+            human_date(group.date),
             schema.local_time,
-            schema.center.name,
+            sum(member.is_booked for member in group.members),
+            group.members_count,
         )
 
     scheduler = getattr(request.app.state, "scheduler", None)
@@ -113,16 +113,3 @@ async def cancel_appointment(
         cancel_reminders(scheduler, appointment_id)
 
     return AppointmentResponse(appointment=None)
-
-
-@router.post(
-    "/{appointment_id}/invite",
-    summary="Ссылка «Сдать кровь вместе»",
-    responses=error_responses(404, 409),
-)
-async def create_invite(
-    user: CurrentUser,
-    service: AppointmentServiceDep,
-    appointment_id: int,
-) -> InviteLink:
-    return await service.create_invite(user, appointment_id)

@@ -30,5 +30,6 @@ export type SlotPeriod = Schemas['SlotPeriod']
 export type Appointment = Schemas['Appointment']
 /** Общий ответ current / create / reschedule / cancel. */
 export type AppointmentResponse = Schemas['AppointmentResponse']
-export type Invite = Schemas['Invite']
-export type InviteLink = Schemas['InviteLink']
+export type Group = Schemas['Group']
+export type GroupCreate = Schemas['GroupCreate']
+export type GroupMember = Schemas['GroupMember']

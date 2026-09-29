@@ -16,7 +16,16 @@ export interface MockAppointment {
   slotId: number
   donationType: DonationType
   status: 'active' | 'cancelled' | 'rescheduled' | 'completed'
-  inviteCode?: string
+}
+
+/** Групповая донация: свою группу пользователь создаёт, в демо-группу — вступает. */
+export interface MockGroup {
+  code: string
+  centerId: number
+  date: string
+  donationType: DonationType
+  isOwner: boolean
+  isMember: boolean
 }
 
 interface MockState {
@@ -25,6 +34,7 @@ interface MockState {
   isDemoData: boolean
   donations: MockDonation[]
   appointments: MockAppointment[]
+  groups: MockGroup[]
   nextId: number
 }
 
@@ -38,13 +48,19 @@ const initialState = (): MockState => ({
   isDemoData: true,
   donations: DONATIONS.map((d) => ({ id: d.id, type: d.type, date: d.date.toISOString(), centerName: d.centerName })),
   appointments: [],
+  groups: [],
   nextId: 1000,
 })
 
 const load = (): MockState => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw) as MockState
+    if (raw) {
+      const state = JSON.parse(raw) as MockState
+      // Сохранено до появления групп
+      state.groups ??= []
+      return state
+    }
   } catch {
     // повреждённое состояние — начинаем заново
   }

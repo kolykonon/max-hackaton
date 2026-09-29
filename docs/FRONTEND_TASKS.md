@@ -58,9 +58,10 @@
 
 - `POST /groups` `{center_id, date, donation_type}` → `Group` (201). 422 — дата вне окна 2 месяцев.
 - `GET /groups/{code}` → `Group`; 404 `group_not_found`.
-- `POST /groups/{code}/join` → `Group`; 409 `group_closed` — дата прошла. Бот сам уведомит создателя.
+- `POST /groups/{code}/join` → `Group`; 409 `group_closed` — дата прошла.
+- Создателю бот пишет, когда участник **записался** (`POST /appointments` на центр, день и вид группы), а не когда вступил. Повторный `POST /groups` с теми же центром, датой и видом возвращает ту же группу.
 - `GET /groups/my` → `Group[]` (предстоящие, где я участник).
-- `Group`: `center {id,name,address,region_id}`, `date`, `donation_type`, `owner_name`, `members[] {name, photo_url, is_owner, is_booked}`, `members_count`, `is_member`, `is_owner`, `is_booked`, `is_past`, `free_slots`, `link`, `share_text`.
+- `Group`: `center {id,name,address,region_id}`, `date`, `donation_type`, `owner_name`, `members[] {name, photo_url, is_owner, is_booked, booked_time}`, `members_count`, `is_member`, `is_owner`, `is_booked`, `is_past`, `free_slots`, `link`, `share_text`.
 
 Что сделать:
 - Кнопка «Позвать друзей/коллег» на экране подтверждения записи (BookingConfirmedPage) и на карточке активной записи: `POST /groups` с центром, датой и видом донации этой записи → `shareContent({text: group.share_text, link: group.link})` (уже есть в `bridge/max.ts`, внутри MAX это `shareMaxContent`).

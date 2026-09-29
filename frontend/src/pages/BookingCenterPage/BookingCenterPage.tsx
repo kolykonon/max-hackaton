@@ -19,6 +19,7 @@ import { SegmentedControlItem } from '@/components/shared/SegmentedControl/Segme
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { Toast } from '@/components/shared/Toast/Toast'
 import { useGeolocation } from '@/hooks/useGeolocation'
+import { useFinishGroupCreation } from '@/hooks/useFinishGroupCreation'
 import { useToast } from '@/hooks/useToast'
 import { useBookingStore } from '@/store/booking'
 
@@ -35,7 +36,9 @@ const CenterMap = lazy(() =>
 export const BookingCenterPage = () => {
   const navigate = useNavigate()
   const toast = useToast()
-  const { donationType, regionId, date, center, rescheduleId, setCenter } = useBookingStore()
+  const { mode, donationType, regionId, date, center, rescheduleId, setCenter } = useBookingStore()
+  const isGroup = mode === 'group'
+  const group = useFinishGroupCreation(() => toast.show('Не удалось создать группу. Попробуйте ещё раз'))
   const geo = useGeolocation()
   const userLocation = useMemo(() => (geo.status === 'granted' ? { lat: geo.lat, lon: geo.lon } : null), [geo])
   const coords = userLocation ?? {}
@@ -98,11 +101,24 @@ export const BookingCenterPage = () => {
 
   return (
     <Screen
-      header={<StepHeader title="Выберите центр" step={3} onBack={() => navigate('/booking/date')} />}
+      header={
+        <StepHeader
+          title="Выберите центр"
+          step={3}
+          total={isGroup ? 3 : undefined}
+          onBack={() => navigate('/booking/date')}
+        />
+      }
       footer={
         <StickyFooter>
-          <Button size="large" stretched disabled={!selectedCenter} onClick={() => navigate('/booking/time')}>
-            Далее
+          <Button
+            size="large"
+            stretched
+            disabled={!selectedCenter}
+            loading={group.isPending}
+            onClick={() => (isGroup ? group.finish() : navigate('/booking/time'))}
+          >
+            {isGroup ? 'Создать группу' : 'Далее'}
           </Button>
         </StickyFooter>
       }

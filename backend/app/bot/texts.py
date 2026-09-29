@@ -54,13 +54,6 @@ REMINDER_MORNING_MESSAGE = (
 )
 REMINDER_MORNING_BUTTON = "Открыть запись"
 
-# --- Сдать кровь вместе ---
-
-FRIEND_JOINED_MESSAGE = (
-    "{name} идёт сдавать кровь вместе с вами 🤝\n\n{date} в {time}, {center}"
-)
-FRIEND_JOINED_BUTTON = "Открыть запись"
-
 # --- Проактивные пуши ---
 
 BOOK_BUTTON = "Записаться"
@@ -144,10 +137,12 @@ def rest_day_reminder_message(
 # --- Групповая донация ---
 
 
-def group_joined_message(name: str, center: str, date: str, count: int) -> str:
+def group_booked_message(
+    name: str, center: str, date: str, time: str, booked: int, count: int
+) -> str:
     return (
-        f"{name} присоединяется к вашей групповой донации {date} в «{center}» 🙌\n\n"
-        f"Участников: {count}."
+        f"{name} идёт на вашу групповую донацию {date} в {time}, «{center}» 🙌\n\n"
+        f"Уже записаны: {booked} из {count}."
     )
 
 

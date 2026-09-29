@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCompleteOnboarding } from '@/api/hooks/me'
-import { getInviteCode } from '@/bridge/max'
+import { getGroupCode } from '@/bridge/max'
 import { OnboardingBenefits } from '@/components/features/onboarding/OnboardingBenefits/OnboardingBenefits'
 import { OnboardingEligibility } from '@/components/features/onboarding/OnboardingEligibility/OnboardingEligibility'
 import { OnboardingGreeting } from '@/components/features/onboarding/OnboardingGreeting/OnboardingGreeting'
@@ -44,9 +44,9 @@ export const OnboardingPage = () => {
       setShowConsentHint(true)
       return
     }
-    const inviteCode = getInviteCode()
+    const groupCode = getGroupCode()
     completeOnboarding.mutate(undefined, {
-      onSuccess: () => navigate(inviteCode ? `/invite/${inviteCode}` : '/home', { replace: true }),
+      onSuccess: () => navigate(groupCode ? `/group/${groupCode}` : '/home', { replace: true }),
     })
   }
 

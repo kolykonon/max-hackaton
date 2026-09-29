@@ -24,23 +24,3 @@ def add_months(d: dt.date, months: int) -> dt.date:
 
 def days_between(start: dt.date, end: dt.date) -> list[dt.date]:
     return [start + dt.timedelta(days=i) for i in range((end - start).days + 1)]
-
-
-MONTHS_GENITIVE = (
-    "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря",
-)
-
-
-def format_day_month(d: dt.date) -> str:
-    return f"{d.day} {MONTHS_GENITIVE[d.month - 1]}"

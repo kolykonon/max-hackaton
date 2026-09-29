@@ -23,7 +23,7 @@ const PERIOD_LABEL: Record<SlotPeriod, string> = { morning: 'Утро', day: 'Д
 /** Шаг 4 — время. */
 export const BookingTimePage = () => {
   const navigate = useNavigate()
-  const { donationType, date, center, slot, presetCenter, invite, setSlot, releaseCenter } = useBookingStore()
+  const { donationType, date, center, slot, presetCenter, group, setSlot, releaseCenter } = useBookingStore()
   const slots = useBookingSlots(center?.id ?? null, donationType, date)
 
   if (!center || !date) return <Navigate to="/home" replace />
@@ -94,13 +94,13 @@ export const BookingTimePage = () => {
           {formatDayMonthWeekday(parseISODate(date))}
         </Typography.Text>
       </div>
-      {invite && invite.date === date && invite.centerId === center.id && (
+      {group && group.date === date && group.centerId === center.id && group.booked.length > 0 && (
         <InfoRow
           icon={HeartHandshake}
           tone="red"
-          title={`${invite.inviterName} придёт к ${invite.time}`}
-          description="Выберите время рядом — пойдёте вместе"
-          className={styles['booking-time__invite']}
+          title={group.booked.map((member) => `${member.name} — ${member.time}`).join(', ')}
+          description="Уже записаны из вашей группы. Выберите время рядом"
+          className={styles['booking-time__group']}
         />
       )}
       {renderSlots()}

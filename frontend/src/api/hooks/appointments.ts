@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '../client'
 import { queryKeys } from '../queryKeys'
-import type { AppointmentResponse, Invite, InviteLink } from '../types'
+import type { AppointmentResponse } from '../types'
 
 export const useCurrentAppointment = () =>
   useQuery({
@@ -19,7 +19,11 @@ const useUpdateAppointmentCache = () => {
   return {
     onSuccess: (data: AppointmentResponse) => {
       queryClient.setQueryData(queryKeys.currentAppointment, data)
-      return queryClient.invalidateQueries({ queryKey: ['booking'] })
+      // Слоты и даты — занятость изменилась; группы — кто из участников записан
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['booking'] }),
+        queryClient.invalidateQueries({ queryKey: ['groups'] }),
+      ])
     },
     // 404 / 409 appointment_not_active — запись уже изменилась, показываем актуальную
     onError: () => queryClient.invalidateQueries({ queryKey: queryKeys.currentAppointment }),
@@ -28,12 +32,11 @@ const useUpdateAppointmentCache = () => {
 
 /**
  * Ошибки: 404 slot_not_found, 409 slot_taken / active_exists, 422 interval_not_passed / personal_data_incomplete.
- * inviteCode — запись по приглашению «Сдать кровь вместе»: бэк свяжет её с записью друга, если центр и день совпали.
+ * Если пользователь в группе на этот центр и день, бэк сам напишет создателю группы.
  */
 export const useCreateAppointment = () =>
   useMutation({
-    mutationFn: ({ slotId, inviteCode }: { slotId: number; inviteCode?: string | null }) =>
-      api.post<AppointmentResponse>('/appointments', { slot_id: slotId, invite_code: inviteCode ?? null }),
+    mutationFn: (slotId: number) => api.post<AppointmentResponse>('/appointments', { slot_id: slotId }),
     ...useUpdateAppointmentCache(),
   })
 
@@ -50,17 +53,4 @@ export const useCancelAppointment = () =>
   useMutation({
     mutationFn: (appointmentId: number) => api.post<AppointmentResponse>(`/appointments/${appointmentId}/cancel`),
     ...useUpdateAppointmentCache(),
-  })
-
-/** Ссылка «Сдать кровь вместе» для активной записи. Повторный вызов возвращает ту же ссылку. */
-export const useCreateInvite = () =>
-  useMutation({
-    mutationFn: (appointmentId: number) => api.post<InviteLink>(`/appointments/${appointmentId}/invite`),
-  })
-
-/** Приглашение друга. 404 invite_not_found — запись друга отменена или уже прошла. */
-export const useInvite = (code: string) =>
-  useQuery({
-    queryKey: queryKeys.invite(code),
-    queryFn: () => api.get<Invite>(`/invites/${code}`),
   })

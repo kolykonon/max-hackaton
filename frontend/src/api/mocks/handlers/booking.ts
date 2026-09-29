@@ -8,8 +8,6 @@ import type {
   Appointment,
   AppointmentResponse,
   BookingCenter,
-  Invite,
-  InviteLink,
   BookingDates,
   BookingSlots,
   MapCenter,
@@ -37,13 +35,17 @@ const TIMES = Array.from({ length: 24 }, (_, i) => {
   return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
 })
 
-// Время подруги из демо-приглашения занято — как было бы на настоящем бэке
-let demoInviteSlotId: number | null = null
+// Время Марии из демо-группы занято — как было бы на настоящем бэке
+let demoGroupSlotId: number | null = null
+
+export const setDemoGroupSlot = (slotId: number | null) => {
+  demoGroupSlotId = slotId
+}
 
 const takenSlotIds = () =>
   new Set([
     ...db.state.appointments.filter((a) => a.status === 'active').map((a) => a.slotId),
-    ...(demoInviteSlotId ? [demoInviteSlotId] : []),
+    ...(demoGroupSlotId ? [demoGroupSlotId] : []),
   ])
 
 const isBusyByDemo = (centerId: number, date: string, time: string) => {
@@ -52,7 +54,7 @@ const isBusyByDemo = (centerId: number, date: string, time: string) => {
   return (centerId * 7 + day * 3 + Number(time.replace(':', ''))) % 3 === 0
 }
 
-const slotsFor = (centerId: number, donationType: DonationType, date: string) => {
+export const slotsFor = (centerId: number, donationType: DonationType, date: string) => {
   const taken = takenSlotIds()
   const isWorkday = parseISODate(date).getDay() !== 0
   return TIMES.map((time) => {
@@ -72,7 +74,7 @@ const periodOf = (time: string): SlotPeriod => {
   return hour < 17 ? 'day' : 'evening'
 }
 
-const freeSlotsCount = (centerId: number, donationType: DonationType, date: string) =>
+export const freeSlotsCount = (centerId: number, donationType: DonationType, date: string) =>
   slotsFor(centerId, donationType, date).filter((s) => s.is_free).length
 
 const toAppointment = (id: number, slotId: number, donationType: DonationType): Appointment => {
@@ -103,32 +105,6 @@ const checkBooking = (slotId: number, ignoreAppointmentId?: number) => {
   const missing = Object.values(db.state.personalData).some((value) => !String(value).trim())
   if (missing) return apiError(422, 'personal_data_incomplete', 'Заполните личные данные')
   return null
-}
-
-/** Демо-приглашение ?startapp=together_demo: подруга записалась в первый центр Москвы на ближайший день, когда можно и вам. */
-const DEMO_INVITE_CODE = 'demo'
-
-const demoInvite = (): Invite => {
-  demoInviteSlotId = null
-  const center = centersOf(MOSCOW_ID)[0]
-  const earliest = getNextAllowed(db.state.donations).whole_blood
-  let day = addDays(startOfDay(new Date()), 1)
-  if (day < earliest) day = earliest
-  for (;;) {
-    const date = toISODate(day)
-    const free = slotsFor(center.id, 'whole_blood', date).filter((slot) => slot.is_free)
-    // Нужен день, где у подруги есть время и рядом остаётся свободное
-    if (free.length > 1) {
-      demoInviteSlotId = free[0].id
-      return {
-        code: DEMO_INVITE_CODE,
-        inviter_name: 'Мария',
-        is_own: false,
-        appointment: toAppointment(1, free[0].id, 'whole_blood'),
-      }
-    }
-    day = addDays(day, 1)
-  }
 }
 
 export const bookingHandlers = [
@@ -268,7 +244,7 @@ export const bookingHandlers = [
 
   http.post(`${BASE}/appointments`, async ({ request }) => {
     await latency()
-    const { slot_id: slotId } = (await request.json()) as { slot_id: number; invite_code?: string | null }
+    const { slot_id: slotId } = (await request.json()) as { slot_id: number }
     if (db.activeAppointment()) return apiError(409, 'active_exists', 'У вас уже есть запись')
     const error = checkBooking(slotId)
     if (error) return error
@@ -288,13 +264,7 @@ export const bookingHandlers = [
     const error = checkBooking(slotId, current.id)
     if (error) return error
     current.status = 'rescheduled'
-    const appointment = {
-      id: db.nextId(),
-      slotId,
-      donationType: decodeSlot(slotId).donationType,
-      status: 'active' as const,
-      inviteCode: current.inviteCode,
-    }
+    const appointment = { id: db.nextId(), slotId, donationType: decodeSlot(slotId).donationType, status: 'active' as const }
     db.state.appointments.push(appointment)
     db.save()
     const result: AppointmentResponse = { appointment: toAppointment(appointment.id, slotId, appointment.donationType) }
@@ -309,34 +279,6 @@ export const bookingHandlers = [
     current.status = 'cancelled'
     db.save()
     const result: AppointmentResponse = { appointment: null }
-    return HttpResponse.json(result)
-  }),
-
-  http.post(`${BASE}/appointments/:id/invite`, async ({ params }) => {
-    await latency()
-    const current = db.state.appointments.find((a) => a.id === Number(params.id))
-    if (!current) return apiError(404, 'appointment_not_found', 'Запись не найдена')
-    if (current.status !== 'active') return apiError(409, 'appointment_not_active', 'Запись уже неактивна')
-    current.inviteCode ??= `me${current.id}`
-    db.save()
-    const result: InviteLink = {
-      code: current.inviteCode,
-      link: `https://max.ru/kaplya_bot?startapp=together_${current.inviteCode}`,
-    }
-    return HttpResponse.json(result)
-  }),
-
-  http.get(`${BASE}/invites/:code`, async ({ params }) => {
-    await latency()
-    if (params.code === DEMO_INVITE_CODE) return HttpResponse.json(demoInvite())
-    const own = db.state.appointments.find((a) => a.status === 'active' && a.inviteCode === params.code)
-    if (!own) return apiError(404, 'invite_not_found', 'Приглашение больше не действует')
-    const result: Invite = {
-      code: own.inviteCode!,
-      inviter_name: 'Иван',
-      is_own: true,
-      appointment: toAppointment(own.id, own.slotId, own.donationType),
-    }
     return HttpResponse.json(result)
   }),
 ]

@@ -83,6 +83,17 @@ class GroupService:
                 fields={"date": "Выберите дату в ближайшие 2 месяца"},
             )
 
+        existing = await self.session.scalar(
+            select(DonationGroup).where(
+                DonationGroup.owner_user_id == user.id,
+                DonationGroup.center_id == center.id,
+                DonationGroup.donation_type == body.donation_type,
+                DonationGroup.date == body.date,
+            )
+        )
+        if existing is not None:
+            return await self._to_schema(user, existing)
+
         code = _new_code()
         while await self.session.scalar(
             select(DonationGroup.id).where(DonationGroup.code == code)
@@ -119,24 +130,48 @@ class GroupService:
             joined = True
         return await self._to_schema(user, group), joined
 
-    async def my_groups(self, user: User) -> list[Group]:
+    async def my_groups(self, user: User, past: bool = False) -> list[Group]:
+        today = today_msk()
         groups = await self.session.scalars(
             select(DonationGroup)
             .join(DonationGroupMember, DonationGroupMember.group_id == DonationGroup.id)
             .where(
                 DonationGroupMember.user_id == user.id,
-                DonationGroup.date >= today_msk(),
+                DonationGroup.date < today if past else DonationGroup.date >= today,
             )
-            .order_by(DonationGroup.date, DonationGroup.id)
+            .order_by(
+                *(
+                    (DonationGroup.date.desc(), DonationGroup.id.desc())
+                    if past
+                    else (DonationGroup.date, DonationGroup.id)
+                )
+            )
         )
         return [await self._to_schema(user, g) for g in groups]
 
-    async def owner_max_user_id(self, code: str) -> int | None:
-        return await self.session.scalar(
-            select(User.max_user_id)
-            .join(DonationGroup, DonationGroup.owner_user_id == User.id)
-            .where(DonationGroup.code == code)
+    async def groups_of_booking(
+        self, user: User, appointment: Appointment
+    ) -> list[tuple[int, Group]]:
+        center = await self.session.get(Center, appointment.center_id)
+        region = await self.session.get(Region, center.region_id)
+        tz = ZoneInfo(region.timezone if region else "Europe/Moscow")
+        groups = await self.session.scalars(
+            select(DonationGroup)
+            .join(DonationGroupMember, DonationGroupMember.group_id == DonationGroup.id)
+            .where(
+                DonationGroupMember.user_id == user.id,
+                DonationGroup.owner_user_id != user.id,
+                DonationGroup.center_id == appointment.center_id,
+                DonationGroup.donation_type == appointment.donation_type,
+                DonationGroup.date == appointment.starts_at.astimezone(tz).date(),
+            )
         )
+        result = []
+        for group in groups:
+            owner = await self.session.get(User, group.owner_user_id)
+            if owner is not None:
+                result.append((owner.max_user_id, await self._to_schema(user, group)))
+        return result
 
     # ---------- helpers ----------
 
@@ -163,9 +198,11 @@ class GroupService:
             )
         ).all()
         member_ids = [m.id for m, _ in members]
-        booked = set(
-            await self.session.scalars(
-                select(Appointment.user_id).where(
+        appointments = (
+            await self.session.execute(
+                select(
+                    Appointment.user_id, Appointment.starts_at, Appointment.status
+                ).where(
                     Appointment.user_id.in_(member_ids),
                     Appointment.center_id == group.center_id,
                     Appointment.donation_type == group.donation_type,
@@ -176,7 +213,13 @@ class GroupService:
                     Appointment.starts_at <= day_end,
                 )
             )
-        )
+        ).all()
+        booked = {row.user_id: row.starts_at for row in appointments}
+        donated = {
+            row.user_id
+            for row in appointments
+            if row.status == AppointmentStatus.COMPLETED
+        }
         free_slots = await self.session.scalar(
             select(func.count(Slot.id)).where(
                 Slot.center_id == group.center_id,
@@ -207,10 +250,16 @@ class GroupService:
                     photo_url=m.photo_url,
                     is_owner=m.id == group.owner_user_id,
                     is_booked=m.id in booked,
+                    booked_time=(
+                        booked[m.id].astimezone(tz).strftime("%H:%M")
+                        if m.id in booked
+                        else None
+                    ),
                 )
                 for m, _ in members
             ],
             members_count=len(members),
+            donated_count=len(donated),
             is_member=user.id in member_ids,
             is_owner=user.id == group.owner_user_id,
             is_booked=user.id in booked,

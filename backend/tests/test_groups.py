@@ -12,8 +12,14 @@ from app.core.db import get_session
 from app.core.errors import AppError
 from app.core.utils.dates import today_msk
 from app.main import app
-from app.models import Slot, User
-from app.models.enums import DonationType
+from app.models import (
+    Appointment,
+    DonationGroup,
+    DonationGroupMember,
+    Slot,
+    User,
+)
+from app.models.enums import AppointmentStatus, DonationType
 from app.schemas.groups import GroupCreate
 from app.services.appointments import AppointmentService
 from app.services.groups import GroupService
@@ -46,6 +52,43 @@ async def test_create_join_and_booked(session, user, user2, center, slot_free):
     assert [m.is_booked for m in view.members] == [False, True]
     assert view.free_slots == 0
     assert [g.code for g in await service.my_groups(user2)] == [group.code]
+
+
+@pytest.mark.asyncio
+async def test_past_groups_and_donated_count(session, user, user2, center, slot_free):
+    past_day = today_msk() - dt.timedelta(days=10)
+    past = DonationGroup(
+        code="past0001",
+        owner_user_id=user.id,
+        center_id=center.id,
+        donation_type=DonationType.WHOLE_BLOOD,
+        date=past_day,
+    )
+    session.add(past)
+    await session.flush()
+    session.add_all(
+        [
+            DonationGroupMember(group_id=past.id, user_id=user.id),
+            DonationGroupMember(group_id=past.id, user_id=user2.id),
+            Appointment(
+                user_id=user2.id,
+                slot_id=slot_free.id,
+                center_id=center.id,
+                donation_type=DonationType.WHOLE_BLOOD,
+                starts_at=datetime.combine(past_day, dt.time(9), tzinfo=UTC),
+                status=AppointmentStatus.COMPLETED,
+            ),
+        ]
+    )
+    await session.flush()
+
+    service = GroupService(session)
+    upcoming = await service.create(user, _body(center))
+
+    assert [g.code for g in await service.my_groups(user)] == [upcoming.code]
+    [old] = await service.my_groups(user, past=True)
+    assert old.code == "past0001" and old.is_past
+    assert old.donated_count == 1 and old.members_count == 2
 
 
 @pytest.mark.asyncio
@@ -114,12 +157,33 @@ async def test_http_me_region_impact_share(client, region):
 
 
 @pytest.mark.asyncio
-async def test_http_groups_notify_owner(client, session, center, user, bot):
-    group = await GroupService(session).create(user, _body(center))
+async def test_http_groups_notify_owner_on_booking(client, session, center, user, bot):
+    date = today_msk() + dt.timedelta(days=1)
+    group = await GroupService(session).create(
+        user,
+        GroupCreate(center_id=center.id, date=date, donation_type=DonationType.PLASMA),
+    )
+    sent = len(bot.messages)
     r = await client.post(f"/groups/{group.code}/join")
     assert r.status_code == 200 and r.json()["members_count"] == 2
-    assert bot.messages[-1]["user_id"] == user.max_user_id
-    assert "Иван" in bot.messages[-1]["text"]
+    assert len(bot.messages) == sent
+
+    slot = Slot(
+        center_id=center.id,
+        donation_type=DonationType.PLASMA,
+        starts_at=datetime.combine(date, dt.time(9, 15), tzinfo=UTC),
+    )
+    session.add(slot)
+    await session.flush()
+    r = await client.post("/appointments", json={"slot_id": slot.id})
+    assert r.status_code == 201, r.text
+
+    owner_messages = [m for m in bot.messages if m["user_id"] == user.max_user_id]
+    assert "12:15" in owner_messages[-1]["text"]
+    assert "1 из 2" in owner_messages[-1]["text"]
+
+    view = (await client.get(f"/groups/{group.code}")).json()
+    assert [m["booked_time"] for m in view["members"]] == [None, "12:15"]
 
     created = await client.post(
         "/groups",
@@ -131,6 +195,14 @@ async def test_http_groups_notify_owner(client, session, center, user, bot):
     )
     assert created.status_code == 201
     assert len((await client.get("/groups/my")).json()) == 2
+
+
+@pytest.mark.asyncio
+async def test_create_group_twice_returns_same(session, user, center):
+    service = GroupService(session)
+    first = await service.create(user, _body(center))
+    second = await service.create(user, _body(center))
+    assert first.code == second.code
 
 
 @pytest.mark.asyncio

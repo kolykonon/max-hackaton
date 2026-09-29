@@ -1,7 +1,10 @@
 import { create } from 'zustand'
 
-import type { Appointment, Invite } from '@/api/types'
+import type { Appointment, Group } from '@/api/types'
 import type { DonationType } from '@/content/types'
+
+/** booking — обычная запись; group — те же шаги, но в конце создаётся групповая донация. */
+export type BookingMode = 'booking' | 'group'
 
 export interface SelectedCenter {
   id: number
@@ -14,16 +17,17 @@ export interface SelectedSlot {
   time: string
 }
 
-/** Запись по приглашению друга: к кому идём и на какое время он записан. */
-export interface BookingInvite {
+/** Запись с групповой донацией: кто уже записан и на какое время. */
+export interface BookingGroup {
   code: string
-  inviterName: string
+  ownerName: string
   date: string
-  time: string
   centerId: number
+  booked: { name: string; time: string }[]
 }
 
 interface BookingState {
+  mode: BookingMode
   /** Перенос: id записи, которую переносим. */
   rescheduleId: number | null
   donationType: DonationType
@@ -34,11 +38,15 @@ interface BookingState {
   slot: SelectedSlot | null
   /** Центр выбран заранее на карте — шаг 3 пропускаем, пока пользователь сам не захочет другой. */
   presetCenter: boolean
-  invite: BookingInvite | null
+  group: BookingGroup | null
 
   startNew: () => void
-  /** «Записаться рядом» по приглашению: вид донации, центр и день — как у друга. */
-  startFromInvite: (invite: Invite) => void
+  /** «Собрать группу»: вид донации → регион → дата → центр. */
+  startGroupCreation: () => void
+  /** «Собрать снова»: центр и вид донации как у прошедшей группы, выбрать только дату. */
+  startGroupAgain: (center: SelectedCenter, regionId: number, donationType: DonationType) => void
+  /** «Записаться с группой»: вид донации, центр и день — как у группы. */
+  startFromGroup: (group: Group) => void
   /** Запись из карточки центра на карте: регион и центр уже известны. */
   startFromCenter: (center: SelectedCenter, regionId: number) => void
   /** Пользователь хочет выбрать другой центр — дальше шаг 3 как обычно. */
@@ -52,6 +60,7 @@ interface BookingState {
 }
 
 const initial = {
+  mode: 'booking' as BookingMode,
   rescheduleId: null,
   donationType: 'whole_blood' as DonationType,
   regionId: null,
@@ -59,7 +68,7 @@ const initial = {
   center: null,
   slot: null,
   presetCenter: false,
-  invite: null,
+  group: null,
 }
 
 /** Мастер записи. При смене шага сбрасываем всё, что от него зависит (ТЗ §9, общие правила записи). */
@@ -68,20 +77,25 @@ export const useBookingStore = create<BookingState>()((set, get) => ({
 
   startNew: () => set(initial),
 
-  startFromInvite: ({ code, inviter_name: inviterName, appointment }) =>
+  startGroupCreation: () => set({ ...initial, mode: 'group' }),
+
+  startGroupAgain: (center, regionId, donationType) =>
+    set({ ...initial, mode: 'group', center, regionId, donationType, presetCenter: true }),
+
+  startFromGroup: ({ code, owner_name: ownerName, center, date, donation_type: donationType, members }) =>
     set({
       ...initial,
-      donationType: appointment.donation_type,
-      regionId: appointment.center.region_id,
-      date: appointment.local_date,
-      center: { id: appointment.center.id, name: appointment.center.name, address: appointment.center.address },
+      donationType,
+      regionId: center.region_id,
+      date,
+      center: { id: center.id, name: center.name, address: center.address },
       presetCenter: true,
-      invite: {
+      group: {
         code,
-        inviterName,
-        date: appointment.local_date,
-        time: appointment.local_time,
-        centerId: appointment.center.id,
+        ownerName,
+        date,
+        centerId: center.id,
+        booked: members.flatMap((member) => (member.booked_time ? [{ name: member.name, time: member.booked_time }] : [])),
       },
     }),
 
@@ -104,7 +118,7 @@ export const useBookingStore = create<BookingState>()((set, get) => ({
     set({ donationType, date: null, slot: null, center: get().presetCenter ? get().center : null })
   },
   setRegion: (regionId) => {
-    if (regionId !== get().regionId) set({ regionId, date: null, center: null, slot: null, presetCenter: false, invite: null })
+    if (regionId !== get().regionId) set({ regionId, date: null, center: null, slot: null, presetCenter: false, group: null })
   },
   setDate: (date) => {
     if (date === get().date) return

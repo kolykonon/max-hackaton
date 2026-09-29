@@ -167,21 +167,23 @@ async def send_rest_day_reminder(
     )
 
 
-async def send_group_joined(
+async def send_group_booked(
     client: MaxBotClient,
     max_user_id: int,
     code: str,
     name: str,
     center: str,
     date: str,
+    time: str,
+    booked: int,
     count: int,
 ) -> bool:
     return await _safe(
-        "Уведомление о новом участнике группы",
+        "Уведомление о записи участника группы",
         max_user_id,
         client.send_message(
             max_user_id,
-            texts.group_joined_message(name, center, date, count),
+            texts.group_booked_message(name, center, date, time, booked, count),
             attachments=link_keyboard(texts.GROUP_OPEN_BUTTON, start_group(code)),
         ),
     )

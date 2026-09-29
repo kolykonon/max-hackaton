@@ -49,7 +49,7 @@ export const PersonalDataPage = () => {
   const data = query.data ? fromApi(query.data) : null
   // Обязательные поля проверяет бэк: пустой missing_fields — можно идти дальше
   const complete = query.data?.missing_fields.length === 0
-  // Центр и день уже известны (приглашение друга) — сразу к выбору времени
+  // Центр и день уже известны (групповая донация) — сразу к выбору времени
   const nextStep = presetCenter && date ? '/booking/time' : '/booking/type'
   const editing = draft !== null
   const hasChanges = Boolean(draft && data && FIELD_ORDER.some((key) => draft[key] !== data[key]))

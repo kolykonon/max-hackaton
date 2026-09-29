@@ -1,0 +1,22 @@
+.group-member-item {
+  display: flex;
+  gap: $space-s;
+  align-items: center;
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__owner {
+    font-weight: 400;
+    color: $color-text-secondary;
+  }
+
+  &__check {
+    flex-shrink: 0;
+    color: $color-positive;
+  }
+}

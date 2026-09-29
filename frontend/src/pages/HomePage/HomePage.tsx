@@ -3,15 +3,17 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCancelAppointment, useCurrentAppointment } from '@/api/hooks/appointments'
+import { useMyGroups } from '@/api/hooks/groups'
 import { useEligibility } from '@/api/hooks/me'
 import { AppointmentCard } from '@/components/features/home/AppointmentCard/AppointmentCard'
+import { MyGroupsBanner } from '@/components/features/home/MyGroupsBanner/MyGroupsBanner'
 import { NoAppointmentCard } from '@/components/features/home/NoAppointmentCard/NoAppointmentCard'
 import { TrafficLightCard } from '@/components/features/home/TrafficLightCard/TrafficLightCard'
 import { Screen } from '@/components/layout/Screen/Screen'
 import { Card } from '@/components/shared/Card/Card'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog/ConfirmDialog'
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
-import { InviteFriendButton } from '@/components/shared/InviteFriendButton/InviteFriendButton'
+import { GroupInviteButton } from '@/components/shared/GroupInviteButton/GroupInviteButton'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { Toast } from '@/components/shared/Toast/Toast'
 import { useToast } from '@/hooks/useToast'
@@ -22,6 +24,7 @@ export const HomePage = () => {
   const navigate = useNavigate()
   const toast = useToast()
   const current = useCurrentAppointment()
+  const groups = useMyGroups()
   const eligibility = useEligibility()
   const cancel = useCancelAppointment()
   const startNew = useBookingStore((state) => state.startNew)
@@ -65,7 +68,7 @@ export const HomePage = () => {
             }}
             onCancel={() => setCancelOpen(true)}
           />
-          <InviteFriendButton appointment={appointment} onMessage={toast.show} />
+          <GroupInviteButton appointment={appointment} onMessage={toast.show} />
         </>
       )
     }
@@ -89,6 +92,7 @@ export const HomePage = () => {
   return (
     <Screen withTabBar>
       <TrafficLightCard onOpen={() => navigate('/map')} />
+      <MyGroupsBanner groups={groups.data} onOpen={() => navigate('/groups')} />
       {renderAppointment()}
       {appointment && (
         <ConfirmDialog

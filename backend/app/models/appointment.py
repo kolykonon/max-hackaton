@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Index, String, text
+from sqlalchemy import DateTime, ForeignKey, Index, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
@@ -30,10 +30,6 @@ class Appointment(Base, CreatedAtMixin):
     )
     rescheduled_from_id: Mapped[int | None] = mapped_column(
         ForeignKey("appointments.id")
-    )
-    invite_code: Mapped[str | None] = mapped_column(String(16), unique=True)
-    invited_by_appointment_id: Mapped[int | None] = mapped_column(
-        ForeignKey("appointments.id", ondelete="SET NULL"), index=True
     )
     reminder_sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

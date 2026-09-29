@@ -1,10 +1,8 @@
-from fastapi import APIRouter, BackgroundTasks, Request, status
+from fastapi import APIRouter, status
 
 from app.api.deps import CurrentUser, GroupServiceDep
-from app.bot import pushes
 from app.schemas.common import error_responses
 from app.schemas.groups import Group, GroupCreate
-from app.services.groups import human_date
 
 router = APIRouter(prefix="/groups", tags=["groups"], responses=error_responses(401))
 
@@ -21,9 +19,11 @@ async def create_group(
     return await service.create(user, body)
 
 
-@router.get("/my", summary="Мои предстоящие групповые донации")
-async def my_groups(user: CurrentUser, service: GroupServiceDep) -> list[Group]:
-    return await service.my_groups(user)
+@router.get("/my", summary="Мои групповые донации: предстоящие или прошедшие")
+async def my_groups(
+    user: CurrentUser, service: GroupServiceDep, past: bool = False
+) -> list[Group]:
+    return await service.my_groups(user, past)
 
 
 @router.get(
@@ -40,25 +40,6 @@ async def get_group(user: CurrentUser, service: GroupServiceDep, code: str) -> G
     summary="Присоединиться к группе",
     responses=error_responses(404, 409),
 )
-async def join_group(
-    request: Request,
-    background: BackgroundTasks,
-    user: CurrentUser,
-    service: GroupServiceDep,
-    code: str,
-) -> Group:
-    group, joined = await service.join(user, code)
-    if joined and not group.is_owner:
-        owner_max_id = await service.owner_max_user_id(code)
-        if owner_max_id is not None:
-            background.add_task(
-                pushes.send_group_joined,
-                request.app.state.max,
-                owner_max_id,
-                group.code,
-                user.first_name,
-                group.center.name,
-                human_date(group.date),
-                group.members_count,
-            )
+async def join_group(user: CurrentUser, service: GroupServiceDep, code: str) -> Group:
+    group, _ = await service.join(user, code)
     return group

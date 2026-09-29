@@ -11,8 +11,9 @@ import { BookingTypeRegionPage } from '@/pages/BookingTypeRegionPage/BookingType
 import { ConsentPage } from '@/pages/ConsentPage/ConsentPage'
 import { DonationInfoPage } from '@/pages/DonationInfoPage/DonationInfoPage'
 import { HomePage } from '@/pages/HomePage/HomePage'
+import { GroupPage } from '@/pages/GroupPage/GroupPage'
+import { GroupsPage } from '@/pages/GroupsPage/GroupsPage'
 import { HonoraryPage } from '@/pages/HonoraryPage/HonoraryPage'
-import { InvitePage } from '@/pages/InvitePage/InvitePage'
 import { MapPage } from '@/pages/MapPage/MapPage'
 import { OnboardingPage } from '@/pages/OnboardingPage/OnboardingPage'
 import { PersonalDataPage } from '@/pages/PersonalDataPage/PersonalDataPage'
@@ -41,7 +42,8 @@ const App = () => (
     <Route path="/booking/done" element={<BookingConfirmedPage />} />
     <Route path="/referrals" element={<ReferralsPage />} />
     <Route path="/honorary" element={<HonoraryPage />} />
-    <Route path="/invite/:code" element={<InvitePage />} />
+    <Route path="/groups" element={<GroupsPage />} />
+    <Route path="/group/:code" element={<GroupPage />} />
 
     <Route path="*" element={<Navigate to="/home" replace />} />
   </Routes>
