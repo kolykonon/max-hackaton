@@ -14,7 +14,7 @@ interface AppointmentSummaryProps {
   address: string
 }
 
-/** Детали записи на экране «Вы записаны». */
+/** Детали записи: экран «Вы записаны» и приглашение друга. */
 export const AppointmentSummary = ({ dateTime, donationType, centerName, address }: AppointmentSummaryProps) => (
   <Card variant="filled" padding="l" className={styles['appointment-summary']}>
     <DonationIcon kind={donationType} size={28} framed alt={DONATION_TYPE_LABEL[donationType]} />

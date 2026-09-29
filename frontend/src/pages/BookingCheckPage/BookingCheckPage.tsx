@@ -34,7 +34,7 @@ const ERROR_TEXT: Partial<Record<string, string>> = {
 export const BookingCheckPage = () => {
   const navigate = useNavigate()
   const toast = useToast()
-  const { donationType, date, center, slot, rescheduleId, releaseCenter } = useBookingStore()
+  const { donationType, date, center, slot, rescheduleId, invite, releaseCenter } = useBookingStore()
   const donor = usePersonalData()
   const create = useCreateAppointment()
   const reschedule = useRescheduleAppointment()
@@ -60,7 +60,7 @@ export const BookingCheckPage = () => {
   const submit = () => {
     const options = { onSuccess: () => navigate('/booking/done', { replace: true }), onError }
     if (isReschedule) reschedule.mutate({ appointmentId: rescheduleId, slotId: slot.id }, options)
-    else create.mutate(slot.id, options)
+    else create.mutate({ slotId: slot.id, inviteCode: invite?.code }, options)
   }
 
   const donorName = donor.data ? [donor.data.last_name, donor.data.first_name, donor.data.middle_name].filter(Boolean).join(' ') : '…'

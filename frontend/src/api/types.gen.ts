@@ -311,6 +311,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/appointments/{appointment_id}/invite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ссылка «Сдать кровь вместе» */
+        post: operations["create_invite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/invites/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Приглашение «Сдать кровь вместе» */
+        get: operations["get_invite"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/demo/reset": {
         parameters: {
             query?: never;
@@ -499,6 +533,13 @@ export interface components {
             /** Groups */
             groups: components["schemas"]["SlotGroup"][];
         };
+        /** CreateAppointmentRequest */
+        CreateAppointmentRequest: {
+            /** Slot Id */
+            slot_id: number;
+            /** Invite Code */
+            invite_code?: string | null;
+        };
         /** Donation */
         Donation: {
             /** Id */
@@ -553,7 +594,7 @@ export interface components {
          * ErrorCode
          * @enum {string}
          */
-        ErrorCode: "unauthorized" | "not_found" | "validation_error" | "slot_not_found" | "slot_taken" | "active_exists" | "interval_not_passed" | "personal_data_incomplete" | "appointment_not_found" | "appointment_not_active" | "demo_disabled" | "internal_error";
+        ErrorCode: "unauthorized" | "not_found" | "validation_error" | "slot_not_found" | "slot_taken" | "active_exists" | "interval_not_passed" | "personal_data_incomplete" | "appointment_not_found" | "appointment_not_active" | "invite_not_found" | "demo_disabled" | "internal_error";
         /** ErrorResponse */
         ErrorResponse: {
             error: components["schemas"]["ErrorBody"];
@@ -620,6 +661,23 @@ export interface components {
             whole_blood: boolean;
             /** Plasma */
             plasma: boolean;
+        };
+        /** Invite */
+        Invite: {
+            /** Code */
+            code: string;
+            /** Inviter Name */
+            inviter_name: string;
+            /** Is Own */
+            is_own: boolean;
+            appointment: components["schemas"]["Appointment"];
+        };
+        /** InviteLink */
+        InviteLink: {
+            /** Code */
+            code: string;
+            /** Link */
+            link: string;
         };
         /** Level */
         Level: {
@@ -1639,7 +1697,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SlotRequest"];
+                "application/json": components["schemas"]["CreateAppointmentRequest"];
             };
         };
         responses: {
@@ -1798,6 +1856,119 @@ export interface operations {
             };
             /** @description Конфликт */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_invite: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                appointment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InviteLink"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Конфликт */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_invite: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-max-init-data"?: string | null;
+                "x-dev-user-id"?: number | null;
+            };
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Invite"];
+                };
+            };
+            /** @description Нет или невалидна initData */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Не найдено */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

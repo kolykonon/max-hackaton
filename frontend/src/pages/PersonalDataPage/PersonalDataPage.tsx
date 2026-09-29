@@ -26,6 +26,7 @@ import { OutlineButton } from '@/components/shared/OutlineButton/OutlineButton'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { Toast } from '@/components/shared/Toast/Toast'
 import { useToast } from '@/hooks/useToast'
+import { useBookingStore } from '@/store/booking'
 
 import styles from './PersonalDataPage.module.scss'
 
@@ -37,6 +38,7 @@ const scrollToFirstError = () =>
 /** Экран «Проверьте данные» с режимом редактирования. */
 export const PersonalDataPage = () => {
   const navigate = useNavigate()
+  const { presetCenter, date } = useBookingStore()
   const toast = useToast()
   const query = usePersonalData()
   const save = useSavePersonalData()
@@ -47,6 +49,8 @@ export const PersonalDataPage = () => {
   const data = query.data ? fromApi(query.data) : null
   // Обязательные поля проверяет бэк: пустой missing_fields — можно идти дальше
   const complete = query.data?.missing_fields.length === 0
+  // Центр и день уже известны (приглашение друга) — сразу к выбору времени
+  const nextStep = presetCenter && date ? '/booking/time' : '/booking/type'
   const editing = draft !== null
   const hasChanges = Boolean(draft && data && FIELD_ORDER.some((key) => draft[key] !== data[key]))
 
@@ -141,7 +145,7 @@ export const PersonalDataPage = () => {
               <OutlineButton stretched disabled={!data} onClick={startEditing}>
                 Данные неверны
               </OutlineButton>
-              <Button size="large" stretched disabled={!complete} onClick={() => navigate('/booking/type')}>
+              <Button size="large" stretched disabled={!complete} onClick={() => navigate(nextStep)}>
                 Далее
               </Button>
             </>

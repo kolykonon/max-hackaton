@@ -15,4 +15,5 @@ export const queryKeys = {
   bookingCenters: (params: object) => ['booking', 'centers', params] as const,
   bookingSlots: (centerId: number, type: DonationType, date: string) => ['booking', 'slots', centerId, type, date] as const,
   currentAppointment: ['appointments', 'current'] as const,
+  invite: (code: string) => ['invites', code] as const,
 }

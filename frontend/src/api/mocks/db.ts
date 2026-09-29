@@ -16,6 +16,7 @@ export interface MockAppointment {
   slotId: number
   donationType: DonationType
   status: 'active' | 'cancelled' | 'rescheduled' | 'completed'
+  inviteCode?: string
 }
 
 interface MockState {

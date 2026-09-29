@@ -1,4 +1,5 @@
 import { Button, Typography } from '@maxhub/max-ui'
+import { HeartHandshake } from 'lucide-react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 import { useBookingSlots } from '@/api/hooks/booking'
@@ -9,6 +10,7 @@ import { Screen } from '@/components/layout/Screen/Screen'
 import { StepHeader } from '@/components/layout/StepHeader/StepHeader'
 import { StickyFooter } from '@/components/layout/StickyFooter/StickyFooter'
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
+import { InfoRow } from '@/components/shared/InfoRow/InfoRow'
 import { OutlineButton } from '@/components/shared/OutlineButton/OutlineButton'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { useBookingStore } from '@/store/booking'
@@ -21,7 +23,7 @@ const PERIOD_LABEL: Record<SlotPeriod, string> = { morning: 'Утро', day: 'Д
 /** Шаг 4 — время. */
 export const BookingTimePage = () => {
   const navigate = useNavigate()
-  const { donationType, date, center, slot, presetCenter, setSlot, releaseCenter } = useBookingStore()
+  const { donationType, date, center, slot, presetCenter, invite, setSlot, releaseCenter } = useBookingStore()
   const slots = useBookingSlots(center?.id ?? null, donationType, date)
 
   if (!center || !date) return <Navigate to="/home" replace />
@@ -92,6 +94,15 @@ export const BookingTimePage = () => {
           {formatDayMonthWeekday(parseISODate(date))}
         </Typography.Text>
       </div>
+      {invite && invite.date === date && invite.centerId === center.id && (
+        <InfoRow
+          icon={HeartHandshake}
+          tone="red"
+          title={`${invite.inviterName} придёт к ${invite.time}`}
+          description="Выберите время рядом — пойдёте вместе"
+          className={styles['booking-time__invite']}
+        />
+      )}
       {renderSlots()}
     </Screen>
   )

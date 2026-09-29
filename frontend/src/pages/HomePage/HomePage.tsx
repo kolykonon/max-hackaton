@@ -11,6 +11,7 @@ import { Screen } from '@/components/layout/Screen/Screen'
 import { Card } from '@/components/shared/Card/Card'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog/ConfirmDialog'
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
+import { InviteFriendButton } from '@/components/shared/InviteFriendButton/InviteFriendButton'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { Toast } from '@/components/shared/Toast/Toast'
 import { useToast } from '@/hooks/useToast'
@@ -52,17 +53,20 @@ export const HomePage = () => {
     }
     if (appointment) {
       return (
-        <AppointmentCard
-          dateTime={formatDateTimeShort(parseISODate(appointment.local_date), appointment.local_time)}
-          donationType={appointment.donation_type}
-          centerName={appointment.center.name}
-          address={appointment.center.address}
-          onReschedule={() => {
-            startReschedule(appointment)
-            navigate('/booking/date')
-          }}
-          onCancel={() => setCancelOpen(true)}
-        />
+        <>
+          <AppointmentCard
+            dateTime={formatDateTimeShort(parseISODate(appointment.local_date), appointment.local_time)}
+            donationType={appointment.donation_type}
+            centerName={appointment.center.name}
+            address={appointment.center.address}
+            onReschedule={() => {
+              startReschedule(appointment)
+              navigate('/booking/date')
+            }}
+            onCancel={() => setCancelOpen(true)}
+          />
+          <InviteFriendButton appointment={appointment} onMessage={toast.show} />
+        </>
       )
     }
     return (

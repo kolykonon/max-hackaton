@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { Appointment } from '@/api/types'
+import type { Appointment, Invite } from '@/api/types'
 import type { DonationType } from '@/content/types'
 
 export interface SelectedCenter {
@@ -14,6 +14,15 @@ export interface SelectedSlot {
   time: string
 }
 
+/** Запись по приглашению друга: к кому идём и на какое время он записан. */
+export interface BookingInvite {
+  code: string
+  inviterName: string
+  date: string
+  time: string
+  centerId: number
+}
+
 interface BookingState {
   /** Перенос: id записи, которую переносим. */
   rescheduleId: number | null
@@ -25,8 +34,11 @@ interface BookingState {
   slot: SelectedSlot | null
   /** Центр выбран заранее на карте — шаг 3 пропускаем, пока пользователь сам не захочет другой. */
   presetCenter: boolean
+  invite: BookingInvite | null
 
   startNew: () => void
+  /** «Записаться рядом» по приглашению: вид донации, центр и день — как у друга. */
+  startFromInvite: (invite: Invite) => void
   /** Запись из карточки центра на карте: регион и центр уже известны. */
   startFromCenter: (center: SelectedCenter, regionId: number) => void
   /** Пользователь хочет выбрать другой центр — дальше шаг 3 как обычно. */
@@ -47,6 +59,7 @@ const initial = {
   center: null,
   slot: null,
   presetCenter: false,
+  invite: null,
 }
 
 /** Мастер записи. При смене шага сбрасываем всё, что от него зависит (ТЗ §9, общие правила записи). */
@@ -54,6 +67,23 @@ export const useBookingStore = create<BookingState>()((set, get) => ({
   ...initial,
 
   startNew: () => set(initial),
+
+  startFromInvite: ({ code, inviter_name: inviterName, appointment }) =>
+    set({
+      ...initial,
+      donationType: appointment.donation_type,
+      regionId: appointment.center.region_id,
+      date: appointment.local_date,
+      center: { id: appointment.center.id, name: appointment.center.name, address: appointment.center.address },
+      presetCenter: true,
+      invite: {
+        code,
+        inviterName,
+        date: appointment.local_date,
+        time: appointment.local_time,
+        centerId: appointment.center.id,
+      },
+    }),
 
   startFromCenter: (center, regionId) => set({ ...initial, regionId, center, presetCenter: true }),
 
@@ -74,7 +104,7 @@ export const useBookingStore = create<BookingState>()((set, get) => ({
     set({ donationType, date: null, slot: null, center: get().presetCenter ? get().center : null })
   },
   setRegion: (regionId) => {
-    if (regionId !== get().regionId) set({ regionId, date: null, center: null, slot: null, presetCenter: false })
+    if (regionId !== get().regionId) set({ regionId, date: null, center: null, slot: null, presetCenter: false, invite: null })
   },
   setDate: (date) => {
     if (date === get().date) return

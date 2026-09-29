@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCompleteOnboarding } from '@/api/hooks/me'
+import { getInviteCode } from '@/bridge/max'
 import { OnboardingBenefits } from '@/components/features/onboarding/OnboardingBenefits/OnboardingBenefits'
 import { OnboardingEligibility } from '@/components/features/onboarding/OnboardingEligibility/OnboardingEligibility'
 import { OnboardingGreeting } from '@/components/features/onboarding/OnboardingGreeting/OnboardingGreeting'
@@ -43,7 +44,10 @@ export const OnboardingPage = () => {
       setShowConsentHint(true)
       return
     }
-    completeOnboarding.mutate(undefined, { onSuccess: () => navigate('/home', { replace: true }) })
+    const inviteCode = getInviteCode()
+    completeOnboarding.mutate(undefined, {
+      onSuccess: () => navigate(inviteCode ? `/invite/${inviteCode}` : '/home', { replace: true }),
+    })
   }
 
   const isLast = slide === SLIDES_COUNT

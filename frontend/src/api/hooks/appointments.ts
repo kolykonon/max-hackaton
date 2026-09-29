@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '../client'
 import { queryKeys } from '../queryKeys'
-import type { AppointmentResponse } from '../types'
+import type { AppointmentResponse, Invite, InviteLink } from '../types'
 
 export const useCurrentAppointment = () =>
   useQuery({
@@ -26,10 +26,14 @@ const useUpdateAppointmentCache = () => {
   }
 }
 
-/** Ошибки: 404 slot_not_found, 409 slot_taken / active_exists, 422 interval_not_passed / personal_data_incomplete. */
+/**
+ * Ошибки: 404 slot_not_found, 409 slot_taken / active_exists, 422 interval_not_passed / personal_data_incomplete.
+ * inviteCode — запись по приглашению «Сдать кровь вместе»: бэк свяжет её с записью друга, если центр и день совпали.
+ */
 export const useCreateAppointment = () =>
   useMutation({
-    mutationFn: (slotId: number) => api.post<AppointmentResponse>('/appointments', { slot_id: slotId }),
+    mutationFn: ({ slotId, inviteCode }: { slotId: number; inviteCode?: string | null }) =>
+      api.post<AppointmentResponse>('/appointments', { slot_id: slotId, invite_code: inviteCode ?? null }),
     ...useUpdateAppointmentCache(),
   })
 
@@ -46,4 +50,17 @@ export const useCancelAppointment = () =>
   useMutation({
     mutationFn: (appointmentId: number) => api.post<AppointmentResponse>(`/appointments/${appointmentId}/cancel`),
     ...useUpdateAppointmentCache(),
+  })
+
+/** Ссылка «Сдать кровь вместе» для активной записи. Повторный вызов возвращает ту же ссылку. */
+export const useCreateInvite = () =>
+  useMutation({
+    mutationFn: (appointmentId: number) => api.post<InviteLink>(`/appointments/${appointmentId}/invite`),
+  })
+
+/** Приглашение друга. 404 invite_not_found — запись друга отменена или уже прошла. */
+export const useInvite = (code: string) =>
+  useQuery({
+    queryKey: queryKeys.invite(code),
+    queryFn: () => api.get<Invite>(`/invites/${code}`),
   })

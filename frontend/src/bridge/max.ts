@@ -37,9 +37,20 @@ export const isInsideMax = (): boolean => Boolean(webApp()?.initData)
 
 export const getInitData = (): string => webApp()?.initData ?? ''
 
-/** Параметр запуска: `appointment` или `ref_<code>`. Вне MAX читаем ?startapp= для отладки. */
+// Роутер убирает ?startapp= при первом же переходе — запоминаем адрес запуска
+const launchSearch = window.location.search
+
+/** Параметр запуска: `appointment`, `ref_<code>` или `together_<code>`. Вне MAX читаем ?startapp= для отладки. */
 export const getStartParam = (): string | null =>
-  webApp()?.initDataUnsafe.start_param ?? new URLSearchParams(window.location.search).get('startapp')
+  webApp()?.initDataUnsafe.start_param ?? new URLSearchParams(launchSearch).get('startapp')
+
+const INVITE_PREFIX = 'together_'
+
+/** Код приглашения «Сдать кровь вместе», если приложение открыли по такой ссылке. */
+export const getInviteCode = (): string | null => {
+  const param = getStartParam()
+  return param?.startsWith(INVITE_PREFIX) ? param.slice(INVITE_PREFIX.length) : null
+}
 
 /** Внешняя ссылка: в MAX — во внешнем браузере, иначе в новой вкладке. */
 export const openLink = (url: string): void => {
