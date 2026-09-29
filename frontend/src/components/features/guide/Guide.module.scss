@@ -105,11 +105,12 @@
 }
 
 .cover {
+  // --guide-view задаёт GuideScreen: высота видимой области main, чтобы обложка входила ровно
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  min-height: calc(100dvh - 150px - env(safe-area-inset-top));
-  text-align: center;
+  align-items: flex-start;
+  height: var(--guide-view, calc(100dvh - 150px));
   opacity: 0;
   transform: translateY(24px);
   transition:
@@ -121,42 +122,82 @@
     transform: none;
   }
 
-  &--answers {
-    .swap > :first-child {
-      opacity: 0;
-      transform: translateY(-100%);
-    }
-
-    .swap > :last-child {
-      opacity: 1;
-      transform: none;
-    }
-
-    .cover__title {
-      color: $color-text-tertiary;
-    }
-  }
-
   &__chip {
     padding: $space-xs $space-m;
     border-radius: $radius-round;
     color: $color-text-themed;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     @include soft-bg($color-tone-blue);
   }
 
+  &__title,
+  &__text {
+    font-size: clamp(28px, 5.4dvh, 46px);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-align: left;
+  }
+
   &__title {
-    margin-top: $space-m;
+    margin-top: $space-l;
+    color: $color-text;
     transition: color 0.5s ease;
   }
 
+  // сомнения серые и отступают на второй план, ответ — акцентным цветом
   &__text {
-    margin-top: $space-2xs;
+    // правая часть нижнего угла занята круглой кнопкой
+    width: 100%;
+    color: $color-text-tertiary;
+    opacity: 0.85;
+
+    > :last-child {
+      color: $color-text-themed;
+    }
+  }
+
+  &--answers &__title {
+    color: $color-text-tertiary;
+  }
+
+  &--answers &__text {
+    opacity: 1;
+  }
+
+  &--answers .swap > :first-child {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  &--answers .swap > :last-child {
+    opacity: 1;
+    transform: none;
   }
 
   &__button {
-    margin-top: auto;
+    @include reset-button;
+    @include pressable;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    align-items: center;
+    justify-content: center;
+    width: 116px;
+    height: 116px;
+    border-radius: $radius-round;
+    background: $color-accent;
+    color: $color-text-inverse;
+    text-align: center;
+    box-shadow: 0 6px 16px color-mix(in srgb, #{$color-tone-blue} 35%, transparent);
+
+    > span {
+      max-width: 88px;
+    }
   }
 }
 

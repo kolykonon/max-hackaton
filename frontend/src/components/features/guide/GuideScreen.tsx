@@ -47,6 +47,20 @@ export const GuideScreen = ({ onboarding }: GuideScreenProps) => {
     return () => observer.disconnect()
   }, [])
 
+  // Обложка должна ровно занимать видимую область main: считаем её и на повороте/смене панелей MAX
+  useEffect(() => {
+    const scroller = root.current!.parentElement!
+    const measure = () => {
+      const style = getComputedStyle(scroller)
+      const height = scroller.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom)
+      root.current!.style.setProperty('--guide-view', `${height}px`)
+    }
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(scroller)
+    return () => observer.disconnect()
+  }, [])
+
   const closeSheet = () => setSheet(null)
   // history.state.idx ставит react-router: 0 — гид открыт первым экраном, назад некуда
   const leave = () => (window.history.state?.idx > 0 ? navigate(-1) : navigate('/home', { replace: true }))
