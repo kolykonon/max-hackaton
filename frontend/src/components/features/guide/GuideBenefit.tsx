@@ -6,7 +6,6 @@ import { Card } from '@/components/shared/Card/Card'
 import { DONATION_BENEFITS } from '@/content/benefits'
 import { BENEFIT } from '@/content/guide'
 
-import { FindCenter } from './FindCenter'
 import styles from './Guide.module.scss'
 import { GuideLottie } from './GuideLottie'
 import { GuideSection } from './GuideSection'
@@ -38,6 +37,5 @@ export const GuideBenefit = () => (
         </Card>
       ))}
     </div>
-    <FindCenter text={BENEFIT.find} />
   </GuideSection>
 )
