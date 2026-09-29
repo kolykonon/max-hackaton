@@ -77,6 +77,16 @@
       width: min(100%, 200px);
       aspect-ratio: 524 / 827;
       margin: 0 auto $space-s;
+      overflow: hidden;
+
+      // постер и svg lottie заполняют блок, а не тянутся до натурального размера
+      > img,
+      > svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
   }
 
@@ -129,6 +139,15 @@
     font-size: 14px;
     font-weight: 600;
     @include soft-bg($color-tone-blue);
+  }
+
+  // заполняет пустое место между текстом и кнопкой
+  &__image {
+    flex: 1;
+    min-height: 0;
+    max-width: 70%;
+    align-self: center;
+    object-fit: contain;
   }
 
   &__title,
@@ -305,13 +324,6 @@
       margin: $space-s auto 0;
     }
   }
-}
-
-.find {
-  display: flex;
-  flex-direction: column;
-  gap: $space-m;
-  text-align: center;
 }
 
 .sheet {

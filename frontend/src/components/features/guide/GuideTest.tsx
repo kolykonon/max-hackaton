@@ -4,7 +4,6 @@ import { ChevronDown } from 'lucide-react'
 import { Card } from '@/components/shared/Card/Card'
 import { TEST } from '@/content/guide'
 
-import { FindCenter } from './FindCenter'
 import styles from './Guide.module.scss'
 import { GuideSection } from './GuideSection'
 import type { GuideSheet } from './GuideSheets'
@@ -72,6 +71,5 @@ export const GuideTest = ({ onOpen }: { onOpen: (sheet: GuideSheet) => void }) =
         </details>
       ))}
     </div>
-    <FindCenter text={TEST.find} />
   </GuideSection>
 )

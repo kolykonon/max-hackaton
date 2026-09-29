@@ -9,7 +9,6 @@ import { OutlineButton } from '@/components/shared/OutlineButton/OutlineButton'
 import { PREPARATION_ITEMS } from '@/content/donationTypes'
 import { CHECKLIST_PATH, PREP } from '@/content/guide'
 
-import { FindCenter } from './FindCenter'
 import styles from './Guide.module.scss'
 import { GuideLottie } from './GuideLottie'
 import { GuideSection } from './GuideSection'
@@ -102,6 +101,5 @@ export const GuidePrep = ({ onOpen }: { onOpen: (sheet: GuideSheet) => void }) =
         {PREP.checklist}
       </OutlineButton>
     </div>
-    <FindCenter text={PREP.find} />
   </GuideSection>
 )

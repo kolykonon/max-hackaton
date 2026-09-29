@@ -3,7 +3,6 @@ import { Typography } from '@maxhub/max-ui'
 import { Card } from '@/components/shared/Card/Card'
 import { CIRCLES, DONATION, type CircleId } from '@/content/guide'
 
-import { FindCenter } from './FindCenter'
 import styles from './Guide.module.scss'
 import { GuideSection } from './GuideSection'
 import type { GuideSheet } from './GuideSheets'
@@ -40,6 +39,5 @@ export const GuideDonation = ({ onOpen }: { onOpen: (sheet: GuideSheet) => void 
         </Card>
       ))}
     </div>
-    <FindCenter text={DONATION.find} />
   </GuideSection>
 )
