@@ -62,7 +62,8 @@ export const BaseMap = ({ bounds, onReady, label, children, className }: BaseMap
       touchPitch: false,
     })
     map.touchZoomRotate.disableRotation()
-    map.on('load', () => {
+    // style.load, а не load: load ждёт ещё и тайлы подложки, и при медленной сети слои не появились бы вовсе
+    map.once('style.load', () => {
       localizeLabels(map)
       onReadyRef.current(map)
     })

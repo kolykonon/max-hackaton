@@ -52,6 +52,8 @@ export const BookingCenterPage = () => {
   const regions = useRegions()
   const me = useMe()
   const [view, setView] = useState<View>('list')
+  // Открытую карту не размонтируем при переключении на список: пересоздание MapLibre заново качает стиль и тайлы
+  const [mapOpened, setMapOpened] = useState(false)
 
   if (regionId === null || date === null) return <Navigate to="/home" replace />
 
@@ -76,26 +78,30 @@ export const BookingCenterPage = () => {
         </div>
       )
     }
-    if (view === 'list') return <CenterList centers={centers.data} selectedId={center?.id ?? null} onSelect={select} />
     return (
-      <div className={styles['booking-center__map']}>
-        <Suspense fallback={<Skeleton height={420} radius="s" />}>
-          <CenterMap
-            regionCode={region?.code ?? null}
-            group={me.data?.blood.group ?? null}
-            centers={centers.data}
-            selectedId={center?.id ?? null}
-            onSelect={select}
-            userLocation={userLocation}
-            onLocateFailed={() => toast.show('Не удалось определить местоположение')}
-          />
-        </Suspense>
-        {selectedCenter && (
-          <div className={styles['booking-center__map-card']}>
-            <CenterCard center={selectedCenter} selected onSelect={() => undefined} />
+      <>
+        {view === 'list' && <CenterList centers={centers.data} selectedId={center?.id ?? null} onSelect={select} />}
+        {mapOpened && (
+          <div className={styles['booking-center__map']} hidden={view !== 'map'}>
+            <Suspense fallback={<Skeleton height={420} radius="s" />}>
+              <CenterMap
+                regionCode={region?.code ?? null}
+                group={me.data?.blood.group ?? null}
+                centers={centers.data}
+                selectedId={center?.id ?? null}
+                onSelect={select}
+                userLocation={userLocation}
+                onLocateFailed={() => toast.show('Не удалось определить местоположение')}
+              />
+            </Suspense>
+            {selectedCenter && (
+              <div className={styles['booking-center__map-card']}>
+                <CenterCard center={selectedCenter} selected onSelect={() => undefined} />
+              </div>
+            )}
           </div>
         )}
-      </div>
+      </>
     )
   }
 
@@ -128,7 +134,10 @@ export const BookingCenterPage = () => {
         <SegmentedControlItem selected={view === 'list'} onSelect={() => setView('list')}>
           Список
         </SegmentedControlItem>
-        <SegmentedControlItem selected={view === 'map'} onSelect={() => setView('map')}>
+        <SegmentedControlItem selected={view === 'map'} onSelect={() => {
+            setView('map')
+            setMapOpened(true)
+          }}>
           Карта
         </SegmentedControlItem>
       </SegmentedControl>

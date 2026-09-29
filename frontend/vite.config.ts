@@ -14,7 +14,7 @@ export default defineConfig({
   // Без моков (VITE_USE_MOCKS=false) запросы /api идут в локальный бэк
   server: {
     proxy: {
-      '/api': process.env.API_PROXY_TARGET ?? 'http://localhost:8000',
+      '/api': process.env.API_PROXY_TARGET ?? 'http://127.0.0.1:8000',
     },
   },
   css: {

@@ -51,7 +51,8 @@ export const useRegionsMapData = (group: BloodGroup | null) => {
     statuses,
     points,
     isPending: geo.isPending || status.isPending || moscowZones.isPending || centers.isPending,
-    isError: geo.isError || status.isError,
+    // Ошибку фонового рефетча при уже загруженных данных не показываем — иначе карта размонтируется
+    isError: (geo.isError && !geo.data) || (status.isError && !status.data),
     isFetching: geo.isFetching || status.isFetching,
     refetch: () => Promise.all([geo.refetch(), status.refetch()]),
   }
