@@ -9,11 +9,16 @@ from app.bot.handlers import (
     send_reminder_2d,
     send_reminder_morning,
 )
+from app.bot.pushes import send_donation_question
 from app.core.db import sessionmaker
 from app.integrations.max_api import MaxBotClient
 from app.models import Appointment, User
 
 log = logging.getLogger(__name__)
+
+# Через сколько после начала записи спросить «Сдали кровь?»
+ASK_DONATED_DELAY = timedelta(hours=3)
+KINDS = ("2d", "1d", "morning", "ask")
 
 
 def _job_id(kind: str, appointment_id: int) -> str:
@@ -26,7 +31,7 @@ def schedule_reminders(
     max_user_id: int,
     client: MaxBotClient,
 ) -> None:
-    """Регистрирует три отложенные задачи на запись."""
+    """Регистрирует отложенные задачи на запись: 3 напоминания и вопрос «сдали?»."""
     now = datetime.now(timezone.utc)
     starts_at = appointment.starts_at
 
@@ -66,6 +71,18 @@ def schedule_reminders(
             replace_existing=True,
         )
 
+    # Через 3 часа после начала — «Сдали кровь?» (дальше — документы и заявление)
+    run_ask = starts_at + ASK_DONATED_DELAY
+    if run_ask > now:
+        scheduler.add_job(
+            send_donation_question,
+            "date",
+            run_date=run_ask,
+            args=[client, max_user_id, appointment.id],
+            id=_job_id("ask", appointment.id),
+            replace_existing=True,
+        )
+
     log.info(
         "Напоминания запланированы для appointment_id=%s",
         appointment.id,
@@ -73,8 +90,8 @@ def schedule_reminders(
 
 
 def cancel_reminders(scheduler: AsyncIOScheduler, appointment_id: int) -> None:
-    """Снимает все три задачи при отмене или переносе записи."""
-    for kind in ("2d", "1d", "morning"):
+    """Снимает все задачи при отмене или переносе записи."""
+    for kind in KINDS:
         try:
             scheduler.remove_job(_job_id(kind, appointment_id))
         except Exception:
@@ -98,7 +115,8 @@ async def restore_reminders(
                 .join(User, User.id == Appointment.user_id)
                 .where(
                     Appointment.status == "active",
-                    Appointment.starts_at > now,
+                    # запас на вопрос «сдали?», который идёт после начала
+                    Appointment.starts_at > now - ASK_DONATED_DELAY,
                 )
             )
         ).all()

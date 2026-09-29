@@ -48,7 +48,7 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
     openapi_url="/api/openapi.json",
-    docs_url="/api/docs", # сваггер переехал с /docs на /api/docs
+    docs_url="/api/docs",  # сваггер переехал с /docs на /api/docs
     redoc_url=None,
     generate_unique_id_function=operation_id,
 )

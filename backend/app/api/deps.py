@@ -10,12 +10,13 @@ from app.core.config import settings
 from app.core.db import SessionDep
 from app.core.errors import AppError
 from app.core.utils.data_validate import InitDataError, validate_init_data
-from app.models import Appointment, User
+from app.models import Appointment, DonationGroup, User
 from app.schemas.common import ErrorCode
 from app.services.appointments import INVITE_PREFIX, AppointmentService
 from app.services.booking import BookingService
 from app.services.demo import DemoService
 from app.services.demo_profile import create_demo_profile
+from app.services.groups import GROUP_PREFIX, GroupService
 from app.services.map import MapService
 from app.services.profile import ProfileService
 from app.services.regions import RegionService
@@ -51,16 +52,18 @@ def _profile_from_init_data(init_data: str) -> tuple[int, dict[str, Any], str | 
 async def _apply_referral(
     session: AsyncSession, user: User, start_param: str | None
 ) -> None:
+    """Новый пользователь по ref_<код>, together_<код> или grp_<код> — засчитываем приглашение."""
     if not start_param:
         return
     if start_param.startswith(REF_PREFIX):
-        query = select(User.id).where(
-            User.referral_code == start_param.removeprefix(REF_PREFIX)
-        )
+        code = start_param.removeprefix(REF_PREFIX)
+        query = select(User.id).where(User.referral_code == code)
     elif start_param.startswith(INVITE_PREFIX):
-        query = select(Appointment.user_id).where(
-            Appointment.invite_code == start_param.removeprefix(INVITE_PREFIX)
-        )
+        code = start_param.removeprefix(INVITE_PREFIX)
+        query = select(Appointment.user_id).where(Appointment.invite_code == code)
+    elif start_param.startswith(GROUP_PREFIX):
+        code = start_param.removeprefix(GROUP_PREFIX)
+        query = select(DonationGroup.owner_user_id).where(DonationGroup.code == code)
     else:
         return
     referrer_id = await session.scalar(query)
@@ -136,6 +139,11 @@ async def get_map_service(session: SessionDep) -> MapService:
     return MapService(session)
 
 
+async def get_group_service(session: SessionDep) -> GroupService:
+    return GroupService(session)
+
+
+GroupServiceDep = Annotated[GroupService, Depends(get_group_service)]
 BookingServiceDep = Annotated[BookingService, Depends(get_booking_service)]
 AppointmentServiceDep = Annotated[AppointmentService, Depends(get_appointment_service)]
 RegionServiceDep = Annotated[RegionService, Depends(get_region_service)]

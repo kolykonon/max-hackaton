@@ -17,6 +17,10 @@ class ErrorCode(StrEnum):
     APPOINTMENT_NOT_ACTIVE = "appointment_not_active"
     INVITE_NOT_FOUND = "invite_not_found"
     DEMO_DISABLED = "demo_disabled"
+    DONATION_NOT_FOUND = "donation_not_found"
+    GROUP_NOT_FOUND = "group_not_found"
+    GROUP_CLOSED = "group_closed"
+    BOT_SEND_FAILED = "bot_send_failed"
     INTERNAL_ERROR = "internal_error"
 
 
@@ -46,6 +50,7 @@ def error_responses(*statuses: int) -> dict[int | str, dict]:
         404: "Не найдено",
         409: "Конфликт",
         422: "Ошибка валидации",
+        502: "Бот не смог отправить сообщение",
     }
     return {
         s: {"model": ErrorResponse, "description": descriptions.get(s, "Ошибка")}

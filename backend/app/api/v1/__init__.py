@@ -4,6 +4,7 @@ from app.api.v1 import (
     appointments,
     booking,
     demo,
+    groups,
     health,
     invites,
     map,
@@ -12,5 +13,5 @@ from app.api.v1 import (
 )
 
 api_router = APIRouter()
-for module in (me, regions, map, booking, appointments, invites, demo, health):
+for module in (me, regions, map, booking, appointments, invites, groups, demo, health):
     api_router.include_router(module.router)
