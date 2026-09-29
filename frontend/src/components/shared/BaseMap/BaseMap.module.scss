@@ -1,7 +1,8 @@
 .base-map {
   position: relative;
   flex: 1;
-  min-height: 300px;
+  // Контейнер может поменять через --base-map-min-height: переменная наследуется и не зависит от порядка стилей
+  min-height: var(--base-map-min-height, 300px);
   overflow: hidden;
   background: #f2f3f0;
 
