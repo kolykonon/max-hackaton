@@ -1,0 +1,175 @@
+# DATA-API 1.0 для собственного API «Капли».
+# Секреты здесь не хранятся. Для роли user платформа проверки подставляет заголовок
+# X-Max-Init-Data тестового пользователя; он передаётся на служебном слайде презентации.
+
+schemaVersion: "1.0"
+
+solution:
+  name: "Капля"
+
+api:
+  baseUrl: "https://max.akarmain.ru"
+  openapi: "./docs/openapi.json"
+  defaultHeaders:
+    Accept: "application/json"
+
+checks:
+  - id: "health"
+    name: "Доступность API"
+    method: "GET"
+    path: "/api/v1/health"
+    role: "public"
+    expected:
+      statusCodes: [200]
+      contentType: "application/json"
+      requiredFields: ["status"]
+    timeoutMs: 5000
+    repeatable: true
+
+  - id: "me"
+    name: "Профиль донора"
+    description: "При первом входе создаётся демо-профиль с историей донаций и регионом"
+    method: "GET"
+    path: "/api/v1/me"
+    role: "user"
+    expected:
+      statusCodes: [200]
+      contentType: "application/json"
+      requiredFields: ["id", "onboarding_completed", "blood", "region"]
+    timeoutMs: 5000
+    repeatable: true
+    extract:
+      regionId: "$.region.id"
+
+  - id: "onboarding"
+    name: "Согласие на обработку персональных данных"
+    method: "POST"
+    path: "/api/v1/me/onboarding"
+    role: "user"
+    dependsOn: ["me"]
+    request:
+      headers:
+        Content-Type: "application/json"
+      body:
+        consent: true
+    expected:
+      statusCodes: [204]
+    timeoutMs: 5000
+    repeatable: true
+
+  - id: "map-status"
+    name: "Карта-светофор запасов крови"
+    method: "GET"
+    path: "/api/v1/map/status"
+    role: "user"
+    expected:
+      statusCodes: [200]
+      contentType: "application/json"
+      requiredFields: ["updated_at", "regions"]
+    timeoutMs: 5000
+    repeatable: true
+
+  - id: "booking-dates"
+    name: "Календарь доступных дат"
+    method: "GET"
+    path: "/api/v1/booking/dates"
+    role: "user"
+    dependsOn: ["me"]
+    request:
+      query:
+        region_id: "${regionId}"
+        donation_type: "whole_blood"
+    expected:
+      statusCodes: [200]
+      contentType: "application/json"
+      requiredFields: ["from", "to", "earliest_allowed", "first_available", "days"]
+    timeoutMs: 5000
+    repeatable: true
+    extract:
+      date: "$.first_available"
+
+  - id: "booking-centers"
+    name: "Центры крови со свободными слотами"
+    method: "GET"
+    path: "/api/v1/booking/centers"
+    role: "user"
+    dependsOn: ["booking-dates"]
+    request:
+      query:
+        region_id: "${regionId}"
+        donation_type: "whole_blood"
+        date: "${date}"
+    expected:
+      statusCodes: [200]
+      contentType: "application/json"
+    timeoutMs: 5000
+    repeatable: true
+    extract:
+      centerId: "$[0].id"
+
+  - id: "booking-slots"
+    name: "Свободное время в центре"
+    method: "GET"
+    path: "/api/v1/booking/slots"
+    role: "user"
+    dependsOn: ["booking-centers"]
+    request:
+      query:
+        center_id: "${centerId}"
+        donation_type: "whole_blood"
+        date: "${date}"
+    expected:
+      statusCodes: [200]
+      contentType: "application/json"
+      requiredFields: ["center", "date", "groups"]
+    timeoutMs: 5000
+    repeatable: true
+    extract:
+      # Первый свободный слот на дату.
+      slotId: "$.groups[*].slots[?(@.is_free == true)].id"
+
+  - id: "create-appointment"
+    name: "Запись на донацию"
+    description: "У пользователя может быть одна активная запись, повторный вызов вернёт 409 active_exists"
+    method: "POST"
+    path: "/api/v1/appointments"
+    role: "user"
+    dependsOn: ["onboarding", "booking-slots"]
+    request:
+      headers:
+        Content-Type: "application/json"
+      body:
+        slot_id: "${slotId}"
+    expected:
+      statusCodes: [201]
+      contentType: "application/json"
+      requiredFields: ["appointment"]
+    timeoutMs: 5000
+    repeatable: false
+    extract:
+      appointmentId: "$.appointment.id"
+
+  - id: "current-appointment"
+    name: "Активная запись"
+    method: "GET"
+    path: "/api/v1/appointments/current"
+    role: "user"
+    dependsOn: ["create-appointment"]
+    expected:
+      statusCodes: [200]
+      contentType: "application/json"
+      requiredFields: ["appointment"]
+    timeoutMs: 5000
+    repeatable: true
+
+cleanup:
+  - id: "cancel-appointment"
+    method: "POST"
+    path: "/api/v1/appointments/{appointment_id}/cancel"
+    role: "user"
+    request:
+      path:
+        appointment_id: "${appointmentId}"
+    expected:
+      statusCodes: [200, 409]
+    timeoutMs: 5000
