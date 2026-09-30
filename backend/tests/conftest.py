@@ -171,6 +171,20 @@ async def slot_free_2(session: AsyncSession, center: Center) -> Slot:
     return s
 
 
+# Вымышленные данные для тестов
+DEMO_PD = dict(
+    last_name="Донорова",
+    first_name="Анна",
+    passport_series="0000",
+    passport_number="000000",
+    passport_issued_by="Тестовый отдел",
+    passport_division_code="000-000",
+    oms_number="0000000000000000",
+    phone="+79990000000",
+    email="donor@example.ru",
+)
+
+
 class FakeBot:
     """Подмена MaxBotClient: запоминает, что бот бы отправил."""
 

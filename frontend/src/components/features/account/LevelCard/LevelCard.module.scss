@@ -9,11 +9,6 @@
     align-items: center;
   }
 
-  &__icon {
-    flex-shrink: 0;
-    color: $color-status-urgent;
-  }
-
   &__title {
     flex: 1;
   }
@@ -24,5 +19,17 @@
 
   &__caption {
     display: block;
+  }
+
+  &__impact {
+    display: block;
+    padding-top: $space-s;
+    border-top: 1px solid $color-divider;
+  }
+
+  &__impact-value {
+    color: $color-drop-blood;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
   }
 }

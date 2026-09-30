@@ -13,20 +13,22 @@ import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
 import { InfoRow } from '@/components/shared/InfoRow/InfoRow'
 import { OutlineButton } from '@/components/shared/OutlineButton/OutlineButton'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
-import { useBookingStore } from '@/store/booking'
+import { bookingSteps, useBookingStore } from '@/store/booking'
 import { formatDayMonthWeekday, parseISODate } from '@/utils/format'
 
 import styles from './BookingTimePage.module.scss'
 
 const PERIOD_LABEL: Record<SlotPeriod, string> = { morning: 'Утро', day: 'День', evening: 'Вечер' }
 
-/** Шаг 4 — время. */
+/** Шаг 4 — время, только для плазмы: окна по 30 минут, одно окно — один человек. */
 export const BookingTimePage = () => {
   const navigate = useNavigate()
   const { donationType, date, center, slot, presetCenter, group, setSlot, releaseCenter } = useBookingStore()
   const slots = useBookingSlots(center?.id ?? null, donationType, date)
 
   if (!center || !date) return <Navigate to="/home" replace />
+  // У цельной крови время не выбирают
+  if (donationType !== 'plasma') return <Navigate to="/booking/check" replace />
 
   const pickOtherCenter = () => {
     releaseCenter()
@@ -77,6 +79,7 @@ export const BookingTimePage = () => {
         <StepHeader
           title="Выберите время"
           step={4}
+          total={bookingSteps(donationType)}
           onBack={() => navigate(presetCenter ? '/booking/date' : '/booking/center')}
         />
       }

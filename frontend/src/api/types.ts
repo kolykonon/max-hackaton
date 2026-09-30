@@ -13,8 +13,22 @@ export type PersonalDataInput = Schemas['PersonalDataInput']
 export type PersonalDataFieldName = Schemas['PersonalDataField']
 export type Eligibility = Schemas['Eligibility']
 export type Progress = Schemas['Progress']
-export type DonationHistory = Schemas['DonationHistory']
-export type Donation = Schemas['Donation']
+export type DonationType = Schemas['Donation']['donation_type'] | 'platelets'
+export type Donation = Omit<Schemas['Donation'], 'donation_type'> & {
+  donation_type: DonationType
+  donation_code?: string | null
+  is_completed?: boolean
+  has_analysis?: boolean
+  has_certificate?: boolean
+}
+export interface DonationHistory {
+  total: number
+  years: Array<{
+    year: number
+    count: number
+    items: Donation[]
+  }>
+}
 export type Referrals = Schemas['Referrals']
 
 export type Region = Schemas['Region']

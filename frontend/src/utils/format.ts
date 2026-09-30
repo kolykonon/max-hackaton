@@ -26,13 +26,17 @@ export const formatMonthYear = (date: Date): string =>
 export const formatDayMonthWeekday = (date: Date): string =>
   `${formatDayMonth(date)}, ${WEEKDAYS_FULL[date.getDay()]}`
 
-/** «14 октября, вт, 09:30» — короткий вариант для карточек */
-export const formatDateTimeShort = (date: Date, time: string): string =>
-  `${formatDayMonth(date)}, ${WEEKDAYS_SHORT[date.getDay()]}, ${time}`
+/** «14 октября, вт, 09:30» — короткий вариант для карточек. Без времени (цельная кровь) — только день. */
+export const formatDateTimeShort = (date: Date, time?: string | null): string =>
+  [formatDayMonth(date), WEEKDAYS_SHORT[date.getDay()], time].filter(Boolean).join(', ')
 
-/** «14 октября, вторник, 09:30» — полный вариант */
-export const formatDateTimeFull = (date: Date, time: string): string =>
-  `${formatDayMonthWeekday(date)}, ${time}`
+/** «14 октября, вторник, 09:30» — полный вариант. Без времени (цельная кровь) — только день. */
+export const formatDateTimeFull = (date: Date, time?: string | null): string =>
+  [formatDayMonthWeekday(date), time].filter(Boolean).join(', ')
+
+/** Время записи показываем только у плазмы: на цельную кровь приходят в любое время работы центра. */
+export const visibleTime = (appointment: { donation_type: string; local_time: string }): string | null =>
+  appointment.donation_type === 'plasma' ? appointment.local_time : null
 
 /** Склонение: plural(5, ['донация', 'донации', 'донаций']) → «донаций» */
 export const plural = (count: number, forms: [string, string, string]): string => {

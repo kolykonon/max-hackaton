@@ -8,7 +8,7 @@ import { zoneAt } from '@/components/features/map/utils'
 import { geometryBounds, RUSSIA_BOUNDS } from '@/components/shared/BaseMap/bounds'
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
 import { MapControls } from '@/components/shared/MapControls/MapControls'
-import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
+import { MapPlaceholder } from '@/components/shared/MapPlaceholder/MapPlaceholder'
 import type { BloodGroup } from '@/content/types'
 import type { RegionFeature } from '@/hooks/useRussiaGeo'
 
@@ -59,7 +59,7 @@ export const CenterMap = ({ regionCode, group, centers, selectedId, onSelect, us
   // Обводим зону (район Москвы) или регион выбранного центра
   const selectedCode = (selected && zoneAt(mapData.zones, selected.lon, selected.lat)?.properties.code) ?? regionCode
 
-  if (mapData.isPending) return <Skeleton height={420} radius="s" />
+  if (mapData.isPending) return <MapPlaceholder height={420} />
   if (mapData.isError) {
     return <ErrorState text="Не удалось загрузить карту" retrying={mapData.isFetching} onRetry={mapData.refetch} />
   }

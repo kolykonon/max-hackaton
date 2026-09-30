@@ -3645,7 +3645,7 @@
             "anyOf": [
               {
                 "type": "string",
-                "pattern": "^\\d{4}-\\d{4}$"
+                "pattern": "^\\d{20}$"
               },
               {
                 "type": "null"
@@ -3698,7 +3698,7 @@
           },
           "free_slots": {
             "type": "integer",
-            "minimum": 1.0,
+            "minimum": 0.0,
             "title": "Free Slots"
           },
           "distance_km": {
@@ -3721,6 +3721,11 @@
                 "type": "null"
               }
             ]
+          },
+          "is_usual": {
+            "type": "boolean",
+            "title": "Is Usual",
+            "default": false
           }
         },
         "type": "object",
@@ -5178,17 +5183,31 @@
       "PersonalDataInput": {
         "properties": {
           "last_name": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "^[A-Za-zА-Яа-яЁё-]+$",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 1,
+                "pattern": "^[A-Za-zА-Яа-яЁё-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Last Name"
           },
           "first_name": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "^[A-Za-zА-Яа-яЁё-]+$",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 1,
+                "pattern": "^[A-Za-zА-Яа-яЁё-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "First Name"
           },
           "middle_name": {
@@ -5204,74 +5223,113 @@
             "title": "Middle Name"
           },
           "passport_series": {
-            "type": "string",
-            "pattern": "^\\d{4}$",
-            "title": "Passport Series",
-            "examples": [
-              "4510"
-            ]
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}$",
+                "examples": [
+                  "4510"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passport Series"
           },
           "passport_number": {
-            "type": "string",
-            "pattern": "^\\d{6}$",
-            "title": "Passport Number",
-            "examples": [
-              "123456"
-            ]
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{6}$",
+                "examples": [
+                  "123456"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passport Number"
           },
           "passport_issued_by": {
-            "type": "string",
-            "maxLength": 512,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Passport Issued By"
           },
           "passport_division_code": {
-            "type": "string",
-            "pattern": "^\\d{3}-\\d{3}$",
-            "title": "Passport Division Code",
-            "examples": [
-              "770-001"
-            ]
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{3}-\\d{3}$",
+                "examples": [
+                  "770-001"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passport Division Code"
           },
           "oms_number": {
-            "type": "string",
-            "pattern": "^\\d{16}$",
-            "title": "Oms Number",
-            "examples": [
-              "1234567890123456"
-            ]
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{16}$",
+                "examples": [
+                  "1234567890123456"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oms Number"
           },
           "phone": {
-            "type": "string",
-            "pattern": "^\\+7\\d{10}$",
-            "title": "Phone",
-            "examples": [
-              "+79001234567"
-            ]
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\+7\\d{10}$",
+                "examples": [
+                  "+79001234567"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
           },
           "email": {
-            "type": "string",
-            "maxLength": 254,
-            "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
-            "title": "Email",
-            "examples": [
-              "ivanov@mail.ru"
-            ]
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 254,
+                "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+                "examples": [
+                  "ivanov@example.ru"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
           }
         },
         "type": "object",
-        "required": [
-          "last_name",
-          "first_name",
-          "passport_series",
-          "passport_number",
-          "passport_issued_by",
-          "passport_division_code",
-          "oms_number",
-          "phone",
-          "email"
-        ],
-        "title": "PersonalDataInput"
+        "title": "PersonalDataInput",
+        "description": "Сохраняется по разделам настроек: поля, которых нет в теле, не меняются."
       },
       "Progress": {
         "properties": {

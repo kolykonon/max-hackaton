@@ -57,7 +57,7 @@ class User(Base, IDMixin, CreatedAtMixin):
         nullable=True,
     )
     donor_code: Mapped[str | None] = mapped_column(
-        String(9),
+        String(20),
         nullable=True,
     )
 

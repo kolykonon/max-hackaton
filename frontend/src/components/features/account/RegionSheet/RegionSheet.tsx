@@ -17,10 +17,12 @@ interface RegionSheetProps {
   selectedId: number | null
   onSelect: (regionId: number) => void
   onClose: () => void
+  /** В записи — только регионы, где есть центры крови. */
+  requireCenters?: boolean
 }
 
 /** Выбор «Моего региона»: по геопозиции или поиском по списку. Подходит любой регион, не только с центрами. */
-export const RegionSheet = ({ open, selectedId, onSelect, onClose }: RegionSheetProps) => {
+export const RegionSheet = ({ open, selectedId, onSelect, onClose, requireCenters = false }: RegionSheetProps) => {
   const regions = useRegions()
   // Геопозицию спрашиваем, только когда шторку открыли
   const geo = useGeolocation(open)
@@ -37,7 +39,7 @@ export const RegionSheet = ({ open, selectedId, onSelect, onClose }: RegionSheet
     if (regions.isError) {
       return <ErrorState compact text="Не удалось загрузить регионы" retrying={regions.isFetching} onRetry={() => regions.refetch()} />
     }
-    return <RegionList regions={filtered} selectedId={selectedId} onSelect={onSelect} requireCenters={false} />
+    return <RegionList regions={filtered} selectedId={selectedId} onSelect={onSelect} requireCenters={requireCenters} />
   }
 
   return (
@@ -45,7 +47,7 @@ export const RegionSheet = ({ open, selectedId, onSelect, onClose }: RegionSheet
       open={open}
       onClose={onClose}
       title="Мой регион"
-      subtitle="Напишем в чат, когда здесь не хватает вашей группы крови и вам уже можно сдавать"
+      subtitle="Покажем центры крови региона и напишем в чат, когда здесь не хватает вашей группы крови"
     >
       <div className={styles['region-sheet']}>
         {geoRegion && (

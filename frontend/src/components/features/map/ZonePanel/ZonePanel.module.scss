@@ -16,19 +16,6 @@
     background: $color-border;
   }
 
-  &__head {
-    display: flex;
-    gap: $space-s;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
-  &__titles {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2xs;
-  }
-
   &__empty {
     display: block;
     text-align: center;

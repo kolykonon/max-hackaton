@@ -1,4 +1,4 @@
-import type { PersonalDataInput } from '@/api/types'
+import type { Donation, PersonalDataInput } from '@/api/types'
 import type { BloodGroup, DonationType } from '@/content/types'
 import { addDays, startOfDay } from '@/utils/format'
 
@@ -8,12 +8,12 @@ export const DEMO_USER = {
   bloodGroup: '2+' as BloodGroup,
   kell: 'K-' as const,
   phenotype: 'CcDee',
-  donorCode: '1234-5678',
-  referralsCount: 3,
+  donorCode: '7500121128576',
+  referralsCount: 4,
   referralLink: 'https://max.ru/kaplya_bot?startapp=ref_7K2P9Q',
 }
 
-/** Как в API: без маски. */
+/** Как в API: без маски. Все данные вымышленные. */
 export const DEMO_PERSONAL_DATA: PersonalDataInput = {
   last_name: 'Иванов',
   first_name: 'Иван',
@@ -24,8 +24,31 @@ export const DEMO_PERSONAL_DATA: PersonalDataInput = {
   passport_division_code: '770-001',
   oms_number: '1234567890123456',
   phone: '+79001234567',
-  email: 'ivanov@mail.ru',
+  email: 'ivanov@example.ru',
 }
+
+/** Демо истории донаций: расширенные сведения нужны только для визуала карточек. */
+export const DEMO_DONATION_HISTORY: Donation[] = [
+  {
+    id: 101,
+    donation_type: 'platelets',
+    donated_on: '2026-09-25',
+    center_name: 'ФГБУ «НМИЦ ДГОИ им. Дмитрия Рогачева» Минздрава России',
+    is_completed: true,
+    has_analysis: true,
+    has_certificate: true,
+  },
+  {
+    id: 102,
+    donation_type: 'whole_blood',
+    donated_on: '2026-01-29',
+    center_name: 'ГБУЗ Московской области «Мытищинская областная клиническая больница»',
+    donation_code: '99ef4392-ee18-4f63-b0b3-37f8ee32cec1',
+    is_completed: true,
+    has_analysis: true,
+    has_certificate: false,
+  },
+]
 
 export interface FixtureCenter {
   id: number

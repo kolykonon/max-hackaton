@@ -1,0 +1,54 @@
+.level-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-round;
+  color: #fff;
+
+  &--small {
+    width: 20px;
+    height: 20px;
+  }
+
+  &--medium {
+    width: 28px;
+    height: 28px;
+  }
+
+  &--large {
+    width: 44px;
+    height: 44px;
+  }
+
+  &--future {
+    color: $color-text-tertiary;
+    background: var(--button-secondary);
+  }
+
+  &--0 {
+    background: #d77b5c;
+  }
+
+  &--1 {
+    background: #9aa3b2;
+  }
+
+  &--2 {
+    background: #f2b61c;
+  }
+
+  &--3 {
+    background: $color-tone-blue;
+  }
+
+  &--4 {
+    background: $color-tone-purple;
+  }
+
+  // Состояние блокировки важнее собственного цвета уровня.
+  &--locked {
+    color: $color-text-tertiary;
+    background: var(--button-secondary);
+  }
+}

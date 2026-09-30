@@ -45,13 +45,16 @@ interface MockState {
 
 const STORAGE_KEY = 'kaplya:mock-db:v2'
 
+/** Регион по умолчанию — Москва. */
+export const MOSCOW_ID = REGIONS.find((r) => r.name === 'Москва')!.id
+
 export const toISO = toISODate
 
 const initialState = (): MockState => ({
   onboardingCompleted: false,
   personalData: { ...DEMO_PERSONAL_DATA },
   isDemoData: true,
-  regionId: null,
+  regionId: MOSCOW_ID,
   donations: DONATIONS.map((d) => ({ id: d.id, type: d.type, date: d.date.toISOString(), centerName: d.centerName })),
   appointments: [],
   groups: [],
@@ -65,7 +68,7 @@ const load = (): MockState => {
       const state = JSON.parse(raw) as MockState
       // Сохранено до появления групп
       state.groups ??= []
-      state.regionId ??= null
+      state.regionId ??= MOSCOW_ID
       return state
     }
   } catch {
@@ -93,8 +96,6 @@ export const db = {
   },
 }
 
-
-export const MOSCOW_ID = REGIONS.find((r) => r.name === 'Москва')!.id
 
 const regionCentroids = new Map<string, [number, number]>()
 

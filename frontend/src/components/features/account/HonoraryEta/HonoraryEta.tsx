@@ -16,7 +16,7 @@ export const HonoraryEta = ({ eta, onMore }: HonoraryEtaProps) => (
       До звания примерно <b>{eta}</b>
     </Typography.Text>
     <Typography.Text variant="description" color="tertiary">
-      Если сдавать кровь и плазму так часто, как разрешено
+      Если сдавать кровь или ее компаненты регулярно
     </Typography.Text>
     <OutlineButton size="medium" stretched className={styles['honorary-eta__button']} onClick={onMore}>
       Подробнее

@@ -1,15 +1,16 @@
 """Сервис записей на донацию: создание, перенос, отмена.
 
-Создание и перенос — в одной транзакции. Гонка за слот ловится
-partial unique index (uq_active_slot), гонка за активную запись
-пользователя — uq_active_user. Оба → IntegrityError → 409.
+Создание и перенос — в одной транзакции. На слот можно записать до
+slot.capacity человек: строку слота берём FOR UPDATE, поэтому двое не займут
+последнее место одновременно — второй дождётся коммита первого и увидит,
+что мест нет. Гонка за активную запись пользователя — uq_active_user → 409.
 """
 
 import logging
 from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -131,19 +132,20 @@ class AppointmentService:
     # ---------- helpers ----------
 
     async def _load_free_slot(self, slot_id: int) -> Slot:
-        slot = await self.session.get(Slot, slot_id)
+        # Блокировка держится до commit/rollback — конкуренты за этот слот ждут
+        slot = await self.session.get(Slot, slot_id, with_for_update=True)
         if slot is None:
             raise AppError(404, ErrorCode.SLOT_NOT_FOUND, "Слот не найден")
         if slot.is_blocked or slot.starts_at <= datetime.now(timezone.utc):
             raise AppError(404, ErrorCode.SLOT_NOT_FOUND, "Слот недоступен")
-        taken = await self.session.scalar(
-            select(Appointment.id).where(
+        booked = await self.session.scalar(
+            select(func.count(Appointment.id)).where(
                 Appointment.slot_id == slot_id,
                 Appointment.status == AppointmentStatus.ACTIVE,
             )
         )
-        if taken is not None:
-            raise AppError(409, ErrorCode.SLOT_TAKEN, "Слот уже занят")
+        if booked >= slot.capacity:
+            raise AppError(409, ErrorCode.SLOT_TAKEN, "Мест на это время не осталось")
         return slot
 
     async def _load_active(self, user: User, appointment_id: int) -> Appointment:

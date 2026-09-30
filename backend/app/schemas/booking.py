@@ -27,9 +27,12 @@ class BookingCenter(Schema):
     lat: float
     lon: float
     photo_url: str | None
-    free_slots: int = Field(ge=1)
+    # Свободных мест на дату. 0 бывает только у «вашего центра» (is_usual)
+    free_slots: int = Field(ge=0)
     distance_km: float | None
     group_status: StockStatus | None
+    # Центр, где донор сдавал чаще всего; идёт первым
+    is_usual: bool = False
 
 
 class SlotPeriod(StrEnum):

@@ -13,12 +13,14 @@ import { BulletList } from '@/components/shared/BulletList/BulletList'
 import { BulletListItem } from '@/components/shared/BulletList/BulletListItem'
 import { ContraindicationsSheet } from '@/components/shared/ContraindicationsSheet/ContraindicationsSheet'
 import { INTRO_BENEFITS, INTRO_CONTRAINDICATIONS, INTRO_ELIGIBILITY } from '@/content/eligibility'
+import { useBookingStore } from '@/store/booking'
 
 type Sheet = 'benefits' | 'restrictions' | 'contraindications' | null
 
-/** Экран «Запись на донорство»: льготы, ограничения и противопоказания перед записью. */
+/** Справка «Запись на донорство»: льготы, ограничения и противопоказания. В маршрут записи не входит — открывается с главной. */
 export const DonationInfoPage = () => {
   const navigate = useNavigate()
+  const startNew = useBookingStore((state) => state.startNew)
   const [sheet, setSheet] = useState<Sheet>(null)
   const closeSheet = () => setSheet(null)
 
@@ -27,7 +29,14 @@ export const DonationInfoPage = () => {
       header={<PageHeader title="Запись на донорство" align="center" onBack={() => navigate('/home')} />}
       footer={
         <StickyFooter>
-          <Button size="large" stretched onClick={() => navigate('/personal-data')}>
+          <Button
+            size="large"
+            stretched
+            onClick={() => {
+              startNew()
+              navigate('/booking/type')
+            }}
+          >
             Записаться
           </Button>
         </StickyFooter>

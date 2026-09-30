@@ -76,21 +76,37 @@ export const FIELDS: Record<FieldKey, FieldConfig> = {
   },
 }
 
-export const FIELD_ORDER: FieldKey[] = [
-  'last_name',
-  'first_name',
-  'middle_name',
-  'passport_series',
-  'passport_number',
-  'passport_issued_by',
-  'passport_division_code',
-  'oms_number',
-  'phone',
-  'email',
-]
+/** Разделы настроек: каждый сохраняется отдельно. */
+export type SectionKey = 'passport' | 'oms' | 'contacts'
 
-export const validateAll = (data: PersonalDataValues): FieldErrors =>
-  FIELD_ORDER.reduce<FieldErrors>((errors, key) => {
+export const SECTIONS: Record<SectionKey, { title: string; fields: FieldKey[] }> = {
+  passport: {
+    title: 'Паспорт РФ',
+    fields: [
+      'last_name',
+      'first_name',
+      'middle_name',
+      'passport_series',
+      'passport_number',
+      'passport_issued_by',
+      'passport_division_code',
+    ],
+  },
+  oms: { title: 'Полис ОМС', fields: ['oms_number'] },
+  contacts: { title: 'Контакты', fields: ['phone', 'email'] },
+}
+
+export const FIELD_ORDER: FieldKey[] = Object.values(SECTIONS).flatMap((section) => section.fields)
+
+export const sectionOf = (key: FieldKey): SectionKey =>
+  (Object.keys(SECTIONS) as SectionKey[]).find((section) => SECTIONS[section].fields.includes(key)) ?? 'passport'
+
+/** Раздел настроек, куда вернуться из записи: /settings?section=oms&return=/booking/check */
+export const settingsPath = (section: SectionKey, returnTo?: string) =>
+  `/settings?${new URLSearchParams({ section, ...(returnTo && { return: returnTo }) })}`
+
+export const validateAll = (data: PersonalDataValues, keys: FieldKey[] = FIELD_ORDER): FieldErrors =>
+  keys.reduce<FieldErrors>((errors, key) => {
     const error = FIELDS[key].validate?.(data[key])
     if (error) errors[key] = error
     return errors
@@ -109,16 +125,19 @@ export const fromApi = (data: PersonalData): PersonalDataValues => {
   }
 }
 
-/** Значения формы → тело PUT: без маски, как требует PersonalDataInput. */
-export const toApi = (values: PersonalDataValues): PersonalDataInput => ({
-  last_name: values.last_name.trim(),
-  first_name: values.first_name.trim(),
-  middle_name: values.middle_name.trim() || null,
-  passport_series: digits(values.passport_series),
-  passport_number: digits(values.passport_number),
-  passport_issued_by: values.passport_issued_by.trim(),
-  passport_division_code: MASKS.divisionCode(values.passport_division_code),
-  oms_number: digits(values.oms_number),
-  phone: `+7${digits(values.phone).slice(-10)}`,
-  email: values.email.trim(),
-})
+/** Значения формы → тело PUT: без маски, только поля раздела — остальные на бэке не меняются. */
+export const toApi = (values: PersonalDataValues, keys: FieldKey[] = FIELD_ORDER): PersonalDataInput => {
+  const all: Required<PersonalDataInput> = {
+    last_name: values.last_name.trim(),
+    first_name: values.first_name.trim(),
+    middle_name: values.middle_name.trim() || null,
+    passport_series: digits(values.passport_series),
+    passport_number: digits(values.passport_number),
+    passport_issued_by: values.passport_issued_by.trim(),
+    passport_division_code: MASKS.divisionCode(values.passport_division_code),
+    oms_number: digits(values.oms_number),
+    phone: `+7${digits(values.phone).slice(-10)}`,
+    email: values.email.trim(),
+  }
+  return Object.fromEntries(keys.map((key) => [key, all[key]]))
+}

@@ -7,11 +7,9 @@
     min-height: 320px;
   }
 
-  &__legend {
-    display: flex;
-    flex-direction: column;
-    gap: $space-xs;
-    padding: $space-s $page-gutter;
-    @include page-gutter;
+  // Ужатая шапка — больше места под карту
+  &__header {
+    padding-top: $space-3xs;
+    padding-bottom: 0;
   }
 }

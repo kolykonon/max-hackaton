@@ -4,8 +4,9 @@ import type { ExpressionSpecification } from '@maplibre/maplibre-gl-style-spec'
 import { type LngLatBoundsLike, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl'
 // MapLibre ищет воркер рядом со своим файлом, а после сборки Vite его там нет — собираем воркер сами
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
+import { MapPlaceholder } from '@/components/shared/MapPlaceholder/MapPlaceholder'
 import { cn } from '@/utils/cn'
 
 import styles from './BaseMap.module.scss'
@@ -44,6 +45,8 @@ export const BaseMap = ({ bounds, onReady, label, children, className }: BaseMap
   const containerRef = useRef<HTMLDivElement>(null)
   const onReadyRef = useRef(onReady)
   const boundsRef = useRef(bounds)
+  // До первой полной отрисовки (стиль + тайлы) поверх холста — фейковая карта; тайлы не пришли — так и остаётся
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     onReadyRef.current = onReady
@@ -62,17 +65,29 @@ export const BaseMap = ({ bounds, onReady, label, children, className }: BaseMap
       touchPitch: false,
     })
     map.touchZoomRotate.disableRotation()
+    // Компактная атрибуция при появлении раскрыта и закрывает карту — сворачиваем, остаётся кнопка «i»
+    const collapseAttribution = () => {
+      const attribution = map.getContainer().querySelector('.maplibregl-compact')
+      if (!attribution) return
+      attribution.classList.remove('maplibregl-compact-show')
+      map.off('styledata', collapseAttribution)
+      map.off('sourcedata', collapseAttribution)
+    }
+    map.on('styledata', collapseAttribution)
+    map.on('sourcedata', collapseAttribution)
     // style.load, а не load: load ждёт ещё и тайлы подложки, и при медленной сети слои не появились бы вовсе
     map.once('style.load', () => {
       localizeLabels(map)
       onReadyRef.current(map)
     })
+    map.once('load', () => setLoaded(true))
     return () => map.remove()
   }, [])
 
   return (
     <div className={cn(styles['base-map'], className)}>
       <div ref={containerRef} className={styles['base-map__canvas']} role="region" aria-label={label} />
+      {!loaded && <MapPlaceholder className={styles['base-map__placeholder']} />}
       {children}
     </div>
   )

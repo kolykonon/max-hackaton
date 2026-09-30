@@ -18,6 +18,7 @@ import type {
 import { REGIONS } from '../fixtures'
 import { centersOf, db, decodeSlot, encodeSlot, findCenter, MOSCOW_ID } from '../db'
 import { getNextAllowed } from '../logic'
+import { missingFields } from './me'
 import { apiError, BASE, latency } from '../utils'
 
 const WINDOW_DAYS = 61
@@ -30,43 +31,44 @@ const toRegion = (r: (typeof REGIONS)[number]): Region => ({
   has_centers: r.hasCenters,
 })
 
-const TIMES = Array.from({ length: 24 }, (_, i) => {
-  const minutes = 8 * 60 + i * 15
-  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
-})
+/** Плазма — окна по 30 минут на одного; цельная кровь — один слот на день, время не выбирают. */
+const TIMES: Record<DonationType, string[]> = {
+  plasma: Array.from({ length: 12 }, (_, i) => `${String(8 + Math.floor(i / 2)).padStart(2, '0')}:${i % 2 ? '30' : '00'}`),
+  whole_blood: ['08:00'],
+}
+export const CAPACITY: Record<DonationType, number> = { plasma: 1, whole_blood: 40 }
 
-// Время Марии из демо-группы занято — как было бы на настоящем бэке
+// Место Марии из демо-группы занято — как было бы на настоящем бэке
 let demoGroupSlotId: number | null = null
 
 export const setDemoGroupSlot = (slotId: number | null) => {
   demoGroupSlotId = slotId
 }
 
-const takenSlotIds = () =>
-  new Set([
-    ...db.state.appointments.filter((a) => a.status === 'active').map((a) => a.slotId),
-    ...(demoGroupSlotId ? [demoGroupSlotId] : []),
-  ])
+const bookedBy = (slotId: number, ignoreAppointmentId?: number) =>
+  db.state.appointments.filter((a) => a.status === 'active' && a.slotId === slotId && a.id !== ignoreAppointmentId).length +
+  (demoGroupSlotId === slotId ? 1 : 0)
 
-const isBusyByDemo = (centerId: number, date: string, time: string) => {
-  const day = parseISODate(date).getDate()
-  if (day === 7 || day === 21) return true
-  return (centerId * 7 + day * 3 + Number(time.replace(':', ''))) % 3 === 0
+/** Сколько мест уже занято не через приложение: детерминированно, 7-е, 21-е и воскресенья — всё занято. */
+const busyByDemo = (centerId: number, donationType: DonationType, date: string, time: string) => {
+  const capacity = CAPACITY[donationType]
+  const day = parseISODate(date)
+  if (day.getDate() === 7 || day.getDate() === 21 || day.getDay() === 0) return capacity
+  return (centerId * 7 + day.getDate() * 3 + Number(time.replace(':', ''))) % (capacity + 1)
 }
 
-export const slotsFor = (centerId: number, donationType: DonationType, date: string) => {
-  const taken = takenSlotIds()
-  const isWorkday = parseISODate(date).getDay() !== 0
-  return TIMES.map((time) => {
+const placesLeft = (slotId: number, ignoreAppointmentId?: number) => {
+  const { centerId, donationType, date, time } = decodeSlot(slotId)
+  const busy = busyByDemo(centerId, donationType, date, time) + bookedBy(slotId, ignoreAppointmentId)
+  return Math.max(CAPACITY[donationType] - busy, 0)
+}
+
+export const slotsFor = (centerId: number, donationType: DonationType, date: string) =>
+  TIMES[donationType].map((time) => {
     const id = encodeSlot(centerId, donationType, date, time)
-    return {
-      id,
-      starts_at: `${date}T${time}:00+03:00`,
-      local_time: time,
-      is_free: isWorkday && !isBusyByDemo(centerId, date, time) && !taken.has(id),
-    }
+    const places = placesLeft(id)
+    return { id, starts_at: `${date}T${time}:00+03:00`, local_time: time, is_free: places > 0, places_left: places }
   })
-}
 
 const periodOf = (time: string): SlotPeriod => {
   const hour = Number(time.slice(0, 2))
@@ -74,8 +76,20 @@ const periodOf = (time: string): SlotPeriod => {
   return hour < 17 ? 'day' : 'evening'
 }
 
+/** Свободных мест в центре на день. */
 export const freeSlotsCount = (centerId: number, donationType: DonationType, date: string) =>
-  slotsFor(centerId, donationType, date).filter((s) => s.is_free).length
+  slotsFor(centerId, donationType, date).reduce((sum, s) => sum + s.places_left, 0)
+
+/** «Ваш центр» — где донор сдавал чаще всего (история хранит только название). */
+const usualCenterId = (regionId: number) => {
+  const counts = new Map<number, number>()
+  const centers = centersOf(regionId)
+  db.state.donations.forEach((d) => {
+    const center = centers.find((c) => c.name === d.centerName)
+    if (center) counts.set(center.id, (counts.get(center.id) ?? 0) + 1)
+  })
+  return [...counts].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null
+}
 
 const toAppointment = (id: number, slotId: number, donationType: DonationType): Appointment => {
   const { centerId, date, time } = decodeSlot(slotId)
@@ -90,20 +104,17 @@ const toAppointment = (id: number, slotId: number, donationType: DonationType): 
   }
 }
 
-/** Проверки из ТЗ §5.5. Возвращает ответ с ошибкой или null. */
+/** Проверки из ТЗ §5.5 + вместимость слота. Возвращает ответ с ошибкой или null. */
 const checkBooking = (slotId: number, ignoreAppointmentId?: number) => {
   const { centerId, donationType, date, time } = decodeSlot(slotId)
-  if (!findCenter(centerId) || !TIMES.includes(time)) return apiError(404, 'slot_not_found', 'Слот не найден')
+  if (!findCenter(centerId) || !TIMES[donationType].includes(time)) return apiError(404, 'slot_not_found', 'Слот не найден')
   if (parseISODate(date) < startOfDay(new Date())) return apiError(404, 'slot_not_found', 'Слот в прошлом')
-  const takenByOther = db.state.appointments.some(
-    (a) => a.status === 'active' && a.slotId === slotId && a.id !== ignoreAppointmentId,
-  )
-  if (takenByOther || isBusyByDemo(centerId, date, time)) return apiError(409, 'slot_taken', 'Это время уже заняли')
+  // ponytail: в моках всё синхронно — гонки нет; на бэке место проверяется под блокировкой слота
+  if (placesLeft(slotId, ignoreAppointmentId) === 0) return apiError(409, 'slot_taken', 'Мест на это время не осталось')
   if (parseISODate(date) < getNextAllowed(db.state.donations)[donationType]) {
     return apiError(422, 'interval_not_passed', 'Интервал после прошлой донации ещё не прошёл')
   }
-  const missing = Object.values(db.state.personalData).some((value) => !String(value).trim())
-  if (missing) return apiError(422, 'personal_data_incomplete', 'Заполните личные данные')
+  if (missingFields().length > 0) return apiError(422, 'personal_data_incomplete', 'Заполните личные данные')
   return null
 }
 
@@ -198,6 +209,7 @@ export const bookingHandlers = [
     const type = url.searchParams.get('donation_type') as DonationType
     const hasGeo = url.searchParams.has('lat')
     const pinId = Number(url.searchParams.get('pin_center_id'))
+    const usualId = usualCenterId(regionId)
     const centers: BookingCenter[] = centersOf(regionId)
       .map((c) => ({
         id: c.id,
@@ -209,11 +221,14 @@ export const bookingHandlers = [
         free_slots: freeSlotsCount(c.id, type, date),
         distance_km: hasGeo ? c.distanceKm : null,
         group_status: c.groupStatus,
+        is_usual: c.id === usualId,
       }))
-      .filter((c) => c.free_slots > 0)
+      // «Ваш центр» показываем и без мест — с free_slots = 0
+      .filter((c) => c.free_slots > 0 || c.is_usual)
       .sort((a, b) => {
         if (a.id === pinId) return -1
         if (b.id === pinId) return 1
+        if (a.is_usual !== b.is_usual) return a.is_usual ? -1 : 1
         if ((a.group_status === 'urgent') !== (b.group_status === 'urgent')) return a.group_status === 'urgent' ? -1 : 1
         return hasGeo ? (a.distance_km ?? 0) - (b.distance_km ?? 0) : a.name.localeCompare(b.name, 'ru')
       })

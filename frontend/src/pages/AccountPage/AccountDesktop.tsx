@@ -1,7 +1,6 @@
-import { Avatar } from "@maxhub/max-ui";
+import { Avatar, IconButton } from "@maxhub/max-ui";
 import {
   ArrowRight,
-  Award,
   BookOpen,
   ChevronRight,
   Clock,
@@ -9,10 +8,12 @@ import {
   MapPin,
   HeartHandshake,
   Users,
+  Settings,
 } from "lucide-react";
 import type { CSSProperties } from "react";
 
 import type { Me, Progress } from "@/api/types";
+import { LevelBadge } from "@/components/features/account/LevelBadge/LevelBadge";
 import { DonationIcon } from "@/components/shared/DonationIcon/DonationIcon";
 import { getAbo, getRhesus } from "@/content/bloodGroups";
 import { DONATION_TYPE_INFO } from "@/content/donationTypes";
@@ -40,6 +41,7 @@ interface AccountDesktopProps {
   onOpenHonorary: () => void;
   onOpenReferrals: () => void;
   onOpenRegion: () => void;
+  onOpenSettings: () => void;
   onOpenGuide: () => void;
 }
 
@@ -73,6 +75,7 @@ export const AccountDesktop = ({
   onOpenHonorary,
   onOpenReferrals,
   onOpenRegion,
+  onOpenSettings,
   onOpenGuide,
 }: AccountDesktopProps) => {
   const { total, honorary } = progress;
@@ -113,13 +116,26 @@ export const AccountDesktop = ({
             </Avatar.Container>
           </button>
           <div className={styles.hero__who}>
-            <h1 className={styles.hero__name}>{name}</h1>
+            <div className={styles["hero__name-row"]}>
+              <h1 className={styles.hero__name}>{name}</h1>
+              <IconButton
+                size="medium"
+                variant="ghost"
+                aria-label="Настройки"
+                onClick={onOpenSettings}
+              >
+                <Settings size={24} />
+              </IconButton>
+            </div>
             <button
               type="button"
               className={styles.hero__level}
               onClick={onOpenLevels}
             >
-              <Award size={18} />
+              <LevelBadge
+                index={levelIndex > 0 ? levelIndex - 1 : undefined}
+                size="small"
+              />
               {DONOR_LEVELS[levelIndex].name}
               <ChevronRight size={16} />
             </button>
@@ -286,7 +302,7 @@ export const AccountDesktop = ({
                     {formatYearsMonths(honorary.eta.years, honorary.eta.months)}
                   </p>
                   <p className={styles.eta__note}>
-                    Если сдавать кровь и плазму так часто, как разрешено
+                    Если сдавать кровь или ее компаненты регулярно
                   </p>
                 </div>
                 <button
@@ -350,14 +366,13 @@ export const AccountDesktop = ({
           <Users size={26} />
         </span>
         <span className={styles.tile__text}>
-          <b>
-            {me.referrals_count > 0
-              ? `Вы пригласили ${me.referrals_count} ${plural(me.referrals_count, ["друга", "друзей", "друзей"])}`
-              : "Пригласите друзей"}
-          </b>
+          <b>Приглашённые друзья</b>
           <small>Одна донация может спасти до трёх жизней</small>
         </span>
-        <ArrowRight size={22} className={styles.tile__arrow} />
+        <span className={styles.tile__action}>
+          <span className={styles.tile__count}>{me.referrals_count}</span>
+          <ArrowRight size={22} className={styles.tile__arrow} />
+        </span>
       </button>
 
       <button

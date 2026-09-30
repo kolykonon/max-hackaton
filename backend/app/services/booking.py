@@ -3,11 +3,14 @@
 Окно записи — 2 месяца. День доступен, если в регионе есть свободный слот
 нужного вида и день >= next_allowed для этого вида.
 
-Свободен = не is_blocked и на него нет active-записи.
+Свободен = не is_blocked и active-записей меньше, чем slot.capacity.
+Плазма — окна по 30 минут на одного, цельная кровь — один слот на день
+(время донор не выбирает).
 """
 
 import logging
 from datetime import date, datetime, time, timedelta, timezone
+from types import SimpleNamespace
 from zoneinfo import ZoneInfo
 
 from sqlalchemy import func, select
@@ -16,18 +19,27 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.errors import AppError
 from app.core.utils.dates import add_months, days_between, today_msk
 from app.core.utils.geo import distance_km
-from app.models import Appointment, Center, CenterBloodStatus, Region, Slot
+from app.models import (
+    Appointment,
+    Center,
+    CenterBloodStatus,
+    Donation,
+    Region,
+    Slot,
+    User,
+)
 from app.models.enums import AppointmentStatus, DonationType, StockStatus
-from app.models import User
 from app.schemas.booking import (
     BookingCenter,
     BookingDates,
     BookingDay,
     BookingSlots,
-    Slot as SlotSchema,
     SlotGroup,
     SlotPeriod,
     SlotsCenter,
+)
+from app.schemas.booking import (
+    Slot as SlotSchema,
 )
 from app.schemas.common import ErrorCode
 from app.services.eligibility import get_next_allowed
@@ -35,6 +47,7 @@ from app.services.eligibility import get_next_allowed
 log = logging.getLogger(__name__)
 
 WINDOW_MONTHS = 2
+_CENTER_COLS = ("id", "name", "address", "lat", "lon", "photo_url")
 
 MORNING_START = time(0, 0)
 MORNING_END = time(12, 0)
@@ -61,16 +74,17 @@ def _day_bounds_utc(target: date, tz: ZoneInfo) -> tuple[datetime, datetime]:
     )
 
 
-def _taken_slot_exists():
-    """EXISTS: на слот есть active-запись."""
-    return (
-        select(Appointment.id)
+def _places_left():
+    """Сколько мест осталось на слоте: вместимость минус active-записи."""
+    booked = (
+        select(func.count(Appointment.id))
         .where(
             Appointment.slot_id == Slot.id,
             Appointment.status == AppointmentStatus.ACTIVE,
         )
-        .exists()
+        .scalar_subquery()
     )
+    return Slot.capacity - booked
 
 
 class BookingService:
@@ -107,7 +121,7 @@ class BookingService:
                     Slot.is_blocked.is_(False),
                     Slot.starts_at >= window_start_utc,
                     Slot.starts_at <= window_end_utc,
-                    ~_taken_slot_exists(),
+                    _places_left() > 0,
                 )
             )
         ).all()
@@ -158,7 +172,7 @@ class BookingService:
                     Center.lat,
                     Center.lon,
                     Center.photo_url,
-                    func.count(Slot.id).label("free_slots"),
+                    func.sum(_places_left()).label("free_slots"),
                 )
                 .join(Slot, Slot.center_id == Center.id)
                 .where(
@@ -167,7 +181,7 @@ class BookingService:
                     Slot.is_blocked.is_(False),
                     Slot.starts_at >= day_start_utc,
                     Slot.starts_at <= day_end_utc,
-                    ~_taken_slot_exists(),
+                    _places_left() > 0,
                 )
                 .group_by(
                     Center.id,
@@ -193,6 +207,13 @@ class BookingService:
             ).all()
             center_status = {cid: StockStatus(s) for cid, s in status_rows}
 
+        # «Ваш центр» — где донор сдавал чаще всего. Если на эту дату в нём
+        # мест нет, всё равно показываем первым, но с free_slots=0 — честно
+        usual_id = await self._usual_center_id(user, region_id)
+        if usual_id is not None and all(r.id != usual_id for r in rows):
+            c = await self.session.get(Center, usual_id)
+            rows = [*rows, SimpleNamespace(**{k: getattr(c, k) for k in _CENTER_COLS}, free_slots=0)]
+
         centers: list[BookingCenter] = []
         for r in rows:
             km: float | None = None
@@ -211,19 +232,33 @@ class BookingService:
                     free_slots=r.free_slots,
                     distance_km=km,
                     group_status=center_status.get(r.id),
+                    is_usual=r.id == usual_id,
                 )
             )
 
-        # Сортировка: сначала pinned, потом urgent для группы, потом расстояние,
-        # потом алфавит.
+        # Сортировка: сначала pinned, потом «ваш центр», потом urgent для группы,
+        # потом расстояние, потом алфавит.
         def sort_key(c: BookingCenter):
             pinned = 0 if c.id == pin_center_id else 1
+            usual = 0 if c.is_usual else 1
             urgent = 0 if c.group_status == StockStatus.URGENT else 1
             dist = c.distance_km if c.distance_km is not None else 1e9
-            return (pinned, urgent, dist, c.name)
+            return (pinned, usual, urgent, dist, c.name)
 
         centers.sort(key=sort_key)
         return centers
+
+    async def _usual_center_id(self, user: User, region_id: int) -> int | None:
+        """Центр региона, где у донора больше всего донаций (при равенстве — последний)."""
+        # ponytail: донации хранят только название центра — сверяем по имени
+        return await self.session.scalar(
+            select(Center.id)
+            .join(Donation, Donation.center_name == Center.name)
+            .where(Donation.user_id == user.id, Center.region_id == region_id)
+            .group_by(Center.id)
+            .order_by(func.count().desc(), func.max(Donation.donated_on).desc())
+            .limit(1)
+        )
 
     # ---------- slots ----------
 
@@ -248,7 +283,7 @@ class BookingService:
                     Slot.id,
                     Slot.starts_at,
                     Slot.is_blocked,
-                    _taken_slot_exists().label("taken"),
+                    _places_left().label("places_left"),
                 )
                 .where(
                     Slot.center_id == center_id,
@@ -269,7 +304,7 @@ class BookingService:
                     id=r.id,
                     starts_at=r.starts_at,
                     local_time=local_dt.strftime("%H:%M"),
-                    is_free=not r.is_blocked and not r.taken,
+                    is_free=not r.is_blocked and r.places_left > 0,
                 )
             )
 

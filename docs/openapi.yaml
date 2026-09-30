@@ -57,7 +57,7 @@ paths:
                 last_name: Иванов
                 photo_url: null
                 onboarding_completed: false
-                blood: { group: "2+", kell: "K-", phenotype: CcDee, donor_code: "1234-5678" }
+                blood: { group: "2+", kell: "K-", phenotype: CcDee, donor_code: "40211703000123456789" }
                 referrals_count: 3
         "401": { $ref: "#/components/responses/Unauthorized" }
 
@@ -751,7 +751,7 @@ components:
           type: [string, "null"]
           enum: ["K+", "K-", null]
         phenotype: { type: [string, "null"], examples: [CcDee] }
-        donor_code: { type: [string, "null"], pattern: "^\\d{4}-\\d{4}$" }
+        donor_code: { type: [string, "null"], pattern: "^\\d{20}$" }
 
     OnboardingRequest:
       type: object

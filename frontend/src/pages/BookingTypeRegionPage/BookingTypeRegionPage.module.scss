@@ -1,6 +1,29 @@
-.booking-type-region__region {
-  display: flex;
-  flex-direction: column;
-  gap: $space-s;
-  margin-top: $space-m;
+.booking-type-region {
+  &__types {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+    margin-bottom: $space-xs;
+  }
+
+  &__type {
+    display: flex;
+    gap: $space-s;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+  }
+
+  &__type-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: $space-3xs;
+    min-width: 0;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    color: $color-text-tertiary;
+  }
 }

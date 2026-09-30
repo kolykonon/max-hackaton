@@ -21,10 +21,10 @@ from app.models import (
     Slot,
     User,
 )
-from app.models.enums import AppointmentStatus
+from app.models.enums import AppointmentStatus, DonationType
 from app.schemas.common import ErrorCode
 from app.schemas.groups import Group, GroupCenter, GroupCreate, GroupMember
-from app.services.booking import WINDOW_MONTHS, _day_bounds_utc, _taken_slot_exists
+from app.services.booking import WINDOW_MONTHS, _day_bounds_utc, _places_left
 
 log = logging.getLogger(__name__)
 
@@ -221,13 +221,13 @@ class GroupService:
             if row.status == AppointmentStatus.COMPLETED
         }
         free_slots = await self.session.scalar(
-            select(func.count(Slot.id)).where(
+            select(func.coalesce(func.sum(_places_left()), 0)).where(
                 Slot.center_id == group.center_id,
                 Slot.donation_type == group.donation_type,
                 Slot.is_blocked.is_(False),
                 Slot.starts_at >= max(day_start, dt.datetime.now(dt.UTC)),
                 Slot.starts_at <= day_end,
-                ~_taken_slot_exists(),
+                _places_left() > 0,
             )
         )
         owner = next((m for m, _ in members if m.id == group.owner_user_id), None)
@@ -250,9 +250,11 @@ class GroupService:
                     photo_url=m.photo_url,
                     is_owner=m.id == group.owner_user_id,
                     is_booked=m.id in booked,
+                    # у цельной крови время не выбирают — только день
                     booked_time=(
                         booked[m.id].astimezone(tz).strftime("%H:%M")
                         if m.id in booked
+                        and group.donation_type == DonationType.PLASMA
                         else None
                     ),
                 )

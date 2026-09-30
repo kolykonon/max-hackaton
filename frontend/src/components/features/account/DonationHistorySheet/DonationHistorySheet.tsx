@@ -10,7 +10,6 @@ import { formatDonations } from '@/utils/format'
 
 import styles from './DonationHistorySheet.module.scss'
 import { HistoryItem } from './HistoryItem'
-import { HistoryYear } from './HistoryYear'
 
 interface DonationHistorySheetProps {
   open: boolean
@@ -44,13 +43,16 @@ export const DonationHistorySheet = ({ open, onClose }: DonationHistorySheetProp
         </div>
       )
     }
-    return donations.data.years.map((year) => (
-      <HistoryYear key={year.year} year={year.year} count={year.count}>
-        {year.items.map((item) => (
+    return (
+      <section className={styles['donation-history-sheet__completed']}>
+        <Typography.Text variant="subheader">Совершённые</Typography.Text>
+        <ul className={styles['donation-history-sheet__list']}>
+          {donations.data.years.flatMap((year) => year.items).map((item) => (
           <HistoryItem key={item.id} donation={item} />
-        ))}
-      </HistoryYear>
-    ))
+          ))}
+        </ul>
+      </section>
+    )
   }
 
   return (

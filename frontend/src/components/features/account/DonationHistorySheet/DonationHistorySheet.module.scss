@@ -6,6 +6,21 @@
   padding: $space-3xl 0;
 }
 
+.donation-history-sheet__completed {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+}
+
+.donation-history-sheet__list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .history-year {
   & + & {
     margin-top: $space-l;
@@ -29,23 +44,84 @@
 }
 
 .history-item {
-  display: flex;
-  gap: $space-m;
-  align-items: flex-start;
+  overflow: hidden;
 
-  &__text {
+  &__toggle {
+    @include reset-button;
+    @include focus-ring;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: $space-m;
+    align-items: center;
+    width: 100%;
+    padding: $space-m;
+    cursor: pointer;
+    color: $color-text;
+    text-align: left;
+  }
+
+  &__summary {
     display: flex;
     flex-direction: column;
     gap: $space-3xs;
     min-width: 0;
+  }
 
-    > span {
-      display: block;
+  &__chevron {
+    color: $color-text-tertiary;
+    transition: transform $transition-fast;
+
+    &--open {
+      transform: rotate(180deg);
     }
   }
 
-  &__center {
-    @include line-clamp(2);
+  &__details {
+    padding: $space-m;
+    border-top: 1px solid $color-divider;
+    background: $color-bg-secondary;
+  }
+
+  &__facts {
+    display: grid;
+    gap: $space-m;
+    margin: $space-m 0 0;
+
+    div {
+      display: grid;
+      gap: $space-3xs;
+    }
+
+    dt {
+      color: $color-text-tertiary;
+      @include text(detail);
+    }
+
+    dd {
+      margin: 0;
+      color: $color-text;
+      overflow-wrap: anywhere;
+      @include text(body);
+    }
+  }
+
+  &__code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+
+  &__documents {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-xs;
+    margin-top: $space-m;
+
+    span {
+      padding: $space-xs $space-s;
+      border-radius: $radius-round;
+      color: $color-accent;
+      background: color-mix(in srgb, #{$color-accent} 10%, transparent);
+      @include text(detail);
+    }
   }
 }
 

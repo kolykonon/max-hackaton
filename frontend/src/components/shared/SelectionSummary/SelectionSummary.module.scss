@@ -1,7 +1,9 @@
 .selection-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-xs $space-s;
+  // При переносе новая строка начинается от того же края, что и первая.
+  // Разделитель перед элементом оставлял дату с лишним отступом слева.
+  gap: $space-2xs $space-s;
   align-items: center;
   padding: $space-s $space-m;
   border-radius: $radius-l;
@@ -12,12 +14,6 @@
     white-space: nowrap;
     gap: $space-xs;
     align-items: center;
-
-    & + &::before {
-      content: '·';
-      margin-right: $space-2xs;
-      color: $color-text-tertiary;
-    }
   }
 
   &__icon {

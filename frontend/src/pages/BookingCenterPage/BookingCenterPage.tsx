@@ -1,4 +1,5 @@
 import { Button, Typography } from '@maxhub/max-ui'
+import { CalendarCheck, CalendarX } from 'lucide-react'
 import { lazy, Suspense, useMemo, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
@@ -13,6 +14,8 @@ import { StepHeader } from '@/components/layout/StepHeader/StepHeader'
 import { StickyFooter } from '@/components/layout/StickyFooter/StickyFooter'
 import { BookingSummary } from '@/components/shared/BookingSummary/BookingSummary'
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
+import { InfoRow } from '@/components/shared/InfoRow/InfoRow'
+import { MapPlaceholder } from '@/components/shared/MapPlaceholder/MapPlaceholder'
 import { OutlineButton } from '@/components/shared/OutlineButton/OutlineButton'
 import { SegmentedControl } from '@/components/shared/SegmentedControl/SegmentedControl'
 import { SegmentedControlItem } from '@/components/shared/SegmentedControl/SegmentedControlItem'
@@ -21,7 +24,8 @@ import { Toast } from '@/components/shared/Toast/Toast'
 import { useGeolocation } from '@/hooks/useGeolocation'
 import { useFinishGroupCreation } from '@/hooks/useFinishGroupCreation'
 import { useToast } from '@/hooks/useToast'
-import { useBookingStore } from '@/store/booking'
+import { bookingSteps, stepAfterCenter, useBookingStore } from '@/store/booking'
+import { formatDayMonth, parseISODate } from '@/utils/format'
 
 import styles from './BookingCenterPage.module.scss'
 
@@ -57,8 +61,16 @@ export const BookingCenterPage = () => {
 
   if (regionId === null || date === null) return <Navigate to="/home" replace />
 
-  const selectedCenter = centers.data?.find((item) => item.id === center?.id)
-  const select = (item: BookingCenter) => setCenter({ id: item.id, name: item.name, address: item.address })
+  // Центр без мест («ваш центр» на занятый день) выбрать нельзя
+  const selectedCenter = centers.data?.find((item) => item.id === center?.id && item.free_slots > 0)
+  const select = (item: BookingCenter) => {
+    if (item.free_slots === 0) return
+
+    setCenter({ id: item.id, name: item.name, address: item.address })
+    if (!isGroup) navigate(stepAfterCenter(donationType))
+  }
+  const usual = centers.data?.find((item) => item.is_usual)
+  const day = formatDayMonth(parseISODate(date))
   const region = regions.data?.find((item) => item.id === regionId)
 
   const renderCenters = () => {
@@ -66,7 +78,7 @@ export const BookingCenterPage = () => {
     if (centers.isError) {
       return <ErrorState text="Не удалось загрузить центры" retrying={centers.isFetching} onRetry={() => centers.refetch()} />
     }
-    if (centers.data.length === 0) {
+    if (centers.data.every((item) => item.free_slots === 0)) {
       return (
         <div className={styles['booking-center__empty']}>
           <Typography.Text variant="body" color="secondary">
@@ -80,10 +92,18 @@ export const BookingCenterPage = () => {
     }
     return (
       <>
+        {usual && (
+          <InfoRow
+            icon={usual.free_slots > 0 ? CalendarCheck : CalendarX}
+            tone={usual.free_slots > 0 ? 'green' : 'red'}
+            title={usual.free_slots > 0 ? `В вашем центре на ${day} есть места` : `В вашем центре на ${day} мест нет`}
+            description={usual.free_slots > 0 ? usual.name : 'Выберите другой центр или другую дату'}
+          />
+        )}
         {view === 'list' && <CenterList centers={centers.data} selectedId={center?.id ?? null} onSelect={select} />}
         {mapOpened && (
           <div className={styles['booking-center__map']} hidden={view !== 'map'}>
-            <Suspense fallback={<Skeleton height={420} radius="s" />}>
+            <Suspense fallback={<MapPlaceholder height={420} />}>
               <CenterMap
                 regionCode={region?.code ?? null}
                 group={me.data?.blood.group ?? null}
@@ -111,23 +131,23 @@ export const BookingCenterPage = () => {
         <StepHeader
           title="Выберите центр"
           step={3}
-          total={isGroup ? 3 : undefined}
+          total={isGroup ? 3 : bookingSteps(donationType)}
           onBack={() => navigate('/booking/date')}
         />
       }
-      footer={
+      footer={isGroup ? (
         <StickyFooter>
           <Button
             size="large"
             stretched
             disabled={!selectedCenter}
             loading={group.isPending}
-            onClick={() => (isGroup ? group.finish() : navigate('/booking/time'))}
+            onClick={() => group.finish()}
           >
-            {isGroup ? 'Создать группу' : 'Далее'}
+            Создать группу
           </Button>
         </StickyFooter>
-      }
+      ) : undefined}
     >
       <BookingSummary withDate />
       <SegmentedControl label="Вид списка центров">

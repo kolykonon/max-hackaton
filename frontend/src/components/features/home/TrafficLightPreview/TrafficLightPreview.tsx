@@ -4,8 +4,8 @@ import { lazy, Suspense, useMemo } from 'react'
 import { useMe } from '@/api/hooks/me'
 import { useMapCenters, useMapStatus } from '@/api/hooks/regions'
 import { getZoneStatus, toMapPoints } from '@/components/features/map/utils'
+import { MapPlaceholder } from '@/components/shared/MapPlaceholder/MapPlaceholder'
 import { DEFAULT_ZONE, getLastZone } from '@/components/shared/RussiaMap/lastZone'
-import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import type { StockStatus } from '@/content/types'
 import { useRussiaGeo } from '@/hooks/useRussiaGeo'
 
@@ -36,8 +36,8 @@ export const TrafficLightPreview = () => {
   )
   const points = useMemo(() => toMapPoints(centers.data ?? [], group), [centers.data, group])
 
-  const skeleton = <Skeleton height={200} radius="s" className={styles['traffic-light-preview']} />
-  if (geo.isPending || status.isPending) return skeleton
+  const placeholder = <MapPlaceholder />
+  if (geo.isPending || status.isPending) return placeholder
 
   // Карта не загрузилась — серый фон с иконкой, карточка остаётся нажимаемой (main_screen.md)
   if (geo.isError || status.isError) {
@@ -51,7 +51,7 @@ export const TrafficLightPreview = () => {
   // ponytail: превью не интерактивное (pointer-events: none) — тап уходит карточке и открывает экран «Карта»
   return (
     <div className={styles['traffic-light-preview']}>
-      <Suspense fallback={skeleton}>
+      <Suspense fallback={placeholder}>
         <RegionsMap
           regions={geo.data.features}
           statuses={statuses}

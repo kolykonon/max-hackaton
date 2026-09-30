@@ -26,42 +26,6 @@
     @include soft-bg($color-tone-blue, 8%);
   }
 
-  &__badge {
-    display: inline-flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: $radius-round;
-    color: #fff;
-
-    &--0 {
-      background: #d77b5c;
-    }
-
-    &--1 {
-      background: #9aa3b2;
-    }
-
-    &--2 {
-      background: #f2b61c;
-    }
-
-    &--3 {
-      background: $color-tone-blue;
-    }
-
-    &--4 {
-      background: $color-tone-purple;
-    }
-  }
-
-  &--locked &__badge {
-    background: var(--button-secondary);
-    color: $color-text-tertiary;
-  }
-
   &__text {
     display: flex;
     flex: 1;

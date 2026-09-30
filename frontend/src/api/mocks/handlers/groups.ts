@@ -20,11 +20,11 @@ const demoGroupDay = () => {
   if (day < earliest) day = earliest
   for (;;) {
     const date = toISODate(day)
-    const free = slotsFor(center.id, 'whole_blood', date).filter((slot) => slot.is_free)
-    // Нужен день, где у Марии есть время и рядом остаётся свободное
-    if (free.length > 1) {
-      setDemoGroupSlot(free[0].id)
-      return { centerId: center.id, date, time: free[0].local_time }
+    // Цельная кровь — один слот на день: нужен день, где после Марии остаются места
+    const [slot] = slotsFor(center.id, 'whole_blood', date)
+    if (slot.places_left > 1) {
+      setDemoGroupSlot(slot.id)
+      return { centerId: center.id, date }
     }
     day = addDays(day, 1)
   }
@@ -42,11 +42,14 @@ const myBookingIn = (group: { centerId: number; date: string; donationType: Dona
 const toGroup = (mock: MockGroup): Group => {
   const center = findCenter(mock.centerId)!
   const myTime = myBookingIn(mock)
-  const me = { name: 'Иван И.', photo_url: null, is_owner: mock.isOwner, is_booked: myTime !== null, booked_time: myTime }
+  // У цельной крови время не выбирают — только отметка «записан»
+  const bookedTime = mock.donationType === 'plasma' ? myTime : null
+  const me = { name: 'Иван И.', photo_url: null, is_owner: mock.isOwner, is_booked: myTime !== null, booked_time: bookedTime }
+  if (mock.code === DEMO_GROUP_CODE) demoGroupDay() // занимает место Марии
   const members =
     mock.code === DEMO_GROUP_CODE
       ? [
-          { name: 'Мария К.', photo_url: null, is_owner: true, is_booked: true, booked_time: demoGroupDay().time },
+          { name: 'Мария К.', photo_url: null, is_owner: true, is_booked: true, booked_time: null },
           { name: 'Пётр С.', photo_url: null, is_owner: false, is_booked: false, booked_time: null },
           ...(mock.isMember ? [me] : []),
         ]
@@ -76,19 +79,19 @@ const PAST_DEMO_CODE = 'office'
 const pastDemoGroup = (): Group => {
   const center = centersOf(MOSCOW_ID)[0]
   const date = toISODate(addDays(startOfDay(new Date()), -40))
-  const colleague = (name: string, time: string | null) => ({
+  const colleague = (name: string, booked: boolean) => ({
     name,
     photo_url: null,
     is_owner: false,
-    is_booked: time !== null,
-    booked_time: time,
+    is_booked: booked,
+    booked_time: null,
   })
   const members = [
-    { name: 'Иван И.', photo_url: null, is_owner: true, is_booked: true, booked_time: '09:00' },
-    colleague('Анна С.', '09:15'),
-    colleague('Олег В.', '09:30'),
-    colleague('Мария К.', '10:00'),
-    colleague('Дмитрий Р.', null),
+    { name: 'Иван И.', photo_url: null, is_owner: true, is_booked: true, booked_time: null },
+    colleague('Анна С.', true),
+    colleague('Олег В.', true),
+    colleague('Мария К.', true),
+    colleague('Дмитрий Р.', false),
   ]
   return {
     code: PAST_DEMO_CODE,

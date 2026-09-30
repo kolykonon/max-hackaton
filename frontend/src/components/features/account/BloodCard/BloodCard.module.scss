@@ -57,6 +57,11 @@
   }
 
   &__code-value {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
     color: $color-text;
     font-family: ui-monospace, 'SF Mono', Menlo, monospace;
     font-size: 20px;
@@ -65,5 +70,21 @@
 
   &__copy {
     color: $color-accent;
+  }
+}
+
+.donor-code-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: $space-l;
+  align-items: center;
+
+  &__value {
+    color: $color-text;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+    user-select: all;
   }
 }

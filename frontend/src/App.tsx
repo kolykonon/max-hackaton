@@ -18,8 +18,8 @@ import { GroupsPage } from '@/pages/GroupsPage/GroupsPage'
 import { HonoraryPage } from '@/pages/HonoraryPage/HonoraryPage'
 import { MapPage } from '@/pages/MapPage/MapPage'
 import { OnboardingPage } from '@/pages/OnboardingPage/OnboardingPage'
-import { PersonalDataPage } from '@/pages/PersonalDataPage/PersonalDataPage'
 import { ReferralsPage } from '@/pages/ReferralsPage/ReferralsPage'
+import { SettingsPage } from '@/pages/SettingsPage/SettingsPage'
 import { StartPage } from '@/pages/StartPage/StartPage'
 
 const App = () => (
@@ -36,7 +36,7 @@ const App = () => (
 
     <Route path="/map" element={<MapPage />} />
     <Route path="/donation-info" element={<DonationInfoPage />} />
-    <Route path="/personal-data" element={<PersonalDataPage />} />
+    <Route path="/settings" element={<SettingsPage />} />
     <Route path="/booking/type" element={<BookingTypeRegionPage />} />
     <Route path="/booking/date" element={<BookingDatePage />} />
     <Route path="/booking/center" element={<BookingCenterPage />} />

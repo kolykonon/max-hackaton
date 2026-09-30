@@ -71,6 +71,12 @@ const initial = {
   group: null,
 }
 
+/** Время выбирают только для плазмы; для цельной крови после центра — сразу проверка. */
+export const stepAfterCenter = (donationType: DonationType) => (donationType === 'plasma' ? '/booking/time' : '/booking/check')
+
+/** Шагов записи: вид донации → дата → центр → (время для плазмы) → проверка. */
+export const bookingSteps = (donationType: DonationType) => (donationType === 'plasma' ? 5 : 4)
+
 /** Мастер записи. При смене шага сбрасываем всё, что от него зависит (ТЗ §9, общие правила записи). */
 export const useBookingStore = create<BookingState>()((set, get) => ({
   ...initial,

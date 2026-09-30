@@ -8,7 +8,10 @@ import { type DemoPath, useDemoAction } from "@/api/hooks/demo";
 import { useMe, useProgress, useUpdateRegion } from "@/api/hooks/me";
 import { BloodCard } from "@/components/features/account/BloodCard/BloodCard";
 import { BloodStat } from "@/components/features/account/BloodCard/BloodStat";
-import { DonorCode } from "@/components/features/account/BloodCard/DonorCode";
+import {
+  DonorCode,
+  DonorCodeSheet,
+} from "@/components/features/account/BloodCard/DonorCode";
 import {
   DemoMenuSheet,
   type DemoAction,
@@ -22,11 +25,10 @@ import { GoalCard } from "@/components/features/account/GoalCard/GoalCard";
 import { HistoryButton } from "@/components/features/account/HistoryButton/HistoryButton";
 import { HonoraryAchievedCard } from "@/components/features/account/HonoraryAchievedCard/HonoraryAchievedCard";
 import { HonoraryEta } from "@/components/features/account/HonoraryEta/HonoraryEta";
-import { ImpactCard } from "@/components/features/account/ImpactCard/ImpactCard";
 import { LevelCard } from "@/components/features/account/LevelCard/LevelCard";
+import { getHelpedPatients } from "@/content/impact";
 import { ProfileHeader } from "@/components/features/account/ProfileHeader/ProfileHeader";
 import { ReferralBanner } from "@/components/features/account/ReferralBanner/ReferralBanner";
-import { RegionRow } from "@/components/features/account/RegionRow/RegionRow";
 import { RegionSheet } from "@/components/features/account/RegionSheet/RegionSheet";
 import { Screen } from "@/components/layout/Screen/Screen";
 import { ErrorState } from "@/components/shared/ErrorState/ErrorState";
@@ -40,7 +42,7 @@ import { formatYearsMonths } from "@/utils/format";
 import { AccountDesktop } from "./AccountDesktop";
 import styles from "./AccountPage.module.scss";
 
-type Sheet = "levels" | "history" | "demo" | "region" | null;
+type Sheet = "levels" | "history" | "demo" | "region" | "code" | null;
 
 const DEMO_MENU_TAPS = 5;
 
@@ -194,6 +196,7 @@ export const AccountPage = () => {
           onOpenHonorary={() => navigate("/honorary")}
           onOpenReferrals={() => navigate("/referrals")}
           onOpenRegion={() => setSheet("region")}
+          onOpenSettings={() => navigate("/settings")}
           onOpenGuide={() => navigate("/guide")}
         />
       ) : (
@@ -203,20 +206,21 @@ export const AccountPage = () => {
             lastName={me.data.last_name ?? ""}
             photoUrl={me.data.photo_url ?? undefined}
             onAvatarClick={onAvatarClick}
+            onOpenSettings={() => navigate("/settings")}
           />
-          <ImpactCard
-            whole={honorary.whole.count}
-            plasma={honorary.plasma.count}
-          />
-          <LevelCard total={total} onOpen={() => setSheet("levels")} />
-          <ReferralBanner
-            count={me.data.referrals_count}
-            onOpen={() => navigate("/referrals")}
+          <LevelCard
+            total={total}
+            helped={getHelpedPatients(honorary.whole.count, honorary.plasma.count)}
+            onOpen={() => setSheet("levels")}
           />
           <BloodCard
             footer={
               blood.donor_code && (
-                <DonorCode code={blood.donor_code} onCopy={copyCode} />
+                <DonorCode
+                  code={blood.donor_code}
+                  onOpen={() => setSheet("code")}
+                  onCopy={copyCode}
+                />
               )
             }
           >
@@ -234,10 +238,6 @@ export const AccountPage = () => {
             />
             <BloodStat label="Фенотип" value={blood.phenotype ?? undefined} />
           </BloodCard>
-          <RegionRow
-            regionName={me.data.region?.name}
-            onOpen={() => setSheet("region")}
-          />
           <section className={styles["account-page__honorary"]}>
             <Typography.Text variant="subheader">
               Путь к званию «Почётный донор России»
@@ -281,6 +281,10 @@ export const AccountPage = () => {
             )}
           </section>
 
+          <ReferralBanner
+            count={me.data.referrals_count}
+            onOpen={() => navigate("/referrals")}
+          />
           <HistoryButton onOpen={() => setSheet("history")} />
           <GuideButton onOpen={() => navigate("/guide")} />
         </>
@@ -292,6 +296,12 @@ export const AccountPage = () => {
         onClose={closeSheet}
       />
       <DonationHistorySheet open={sheet === "history"} onClose={closeSheet} />
+      <DonorCodeSheet
+        code={blood.donor_code}
+        open={sheet === "code"}
+        onClose={closeSheet}
+        onCopy={copyCode}
+      />
       <RegionSheet
         open={sheet === "region"}
         selectedId={me.data.region?.id ?? null}

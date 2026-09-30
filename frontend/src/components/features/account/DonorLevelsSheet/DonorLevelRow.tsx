@@ -1,9 +1,10 @@
 import { Typography } from '@maxhub/max-ui'
-import { Check, Lock, Star } from 'lucide-react'
+import { Check } from 'lucide-react'
 
 import { cn } from '@/utils/cn'
 import { formatDonations, plural } from '@/utils/format'
 
+import { LevelBadge } from '../LevelBadge/LevelBadge'
 import styles from './DonorLevelsSheet.module.scss'
 
 interface DonorLevelRowProps {
@@ -17,9 +18,7 @@ interface DonorLevelRowProps {
 
 export const DonorLevelRow = ({ index, name, threshold, status, remaining }: DonorLevelRowProps) => (
   <li className={cn(styles['donor-level-row'], styles[`donor-level-row--${status}`])}>
-    <span className={cn(styles['donor-level-row__badge'], styles[`donor-level-row__badge--${index}`])} aria-hidden>
-      {status === 'locked' ? <Lock size={20} /> : <Star size={22} fill="currentColor" />}
-    </span>
+    <LevelBadge index={index} locked={status === 'locked'} />
     <div className={styles['donor-level-row__text']}>
       <Typography.Text variant="title">{name}</Typography.Text>
       <Typography.Text variant="detail" color="tertiary">

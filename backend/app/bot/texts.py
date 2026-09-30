@@ -138,10 +138,11 @@ def rest_day_reminder_message(
 
 
 def group_booked_message(
-    name: str, center: str, date: str, time: str, booked: int, count: int
+    name: str, center: str, date: str, time: str | None, booked: int, count: int
 ) -> str:
+    when = f"{date} в {time}" if time else date
     return (
-        f"{name} идёт на вашу групповую донацию {date} в {time}, «{center}» 🙌\n\n"
+        f"{name} идёт на вашу групповую донацию {when}, «{center}» 🙌\n\n"
         f"Уже записаны: {booked} из {count}."
     )
 

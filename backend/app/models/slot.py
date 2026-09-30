@@ -1,11 +1,20 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, UniqueConstraint, false
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    ForeignKey,
+    SmallInteger,
+    UniqueConstraint,
+    false,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
 from app.models.enums import DonationType, donation_type_enum
 from app.models.mixins import IDMixin
+
+SLOT_CAPACITY = 1
 
 
 class Slot(Base, IDMixin):
@@ -24,6 +33,14 @@ class Slot(Base, IDMixin):
     starts_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
+    )
+    # Сколько человек можно записать на слот через приложение.
+    # Плазма — окно на одного, цельная кровь — один слот на весь день.
+    capacity: Mapped[int] = mapped_column(
+        SmallInteger(),
+        nullable=False,
+        default=SLOT_CAPACITY,
+        server_default=str(SLOT_CAPACITY),
     )
     is_blocked: Mapped[bool] = mapped_column(
         Boolean(),

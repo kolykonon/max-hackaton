@@ -17,10 +17,13 @@ import { ConfirmDialog } from '@/components/shared/ConfirmDialog/ConfirmDialog'
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
 import { GroupInviteButton } from '@/components/shared/GroupInviteButton/GroupInviteButton'
 import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
+import { TextLink } from '@/components/shared/TextLink/TextLink'
 import { Toast } from '@/components/shared/Toast/Toast'
 import { useToast } from '@/hooks/useToast'
 import { useBookingStore } from '@/store/booking'
-import { formatDateTimeShort, formatDayMonth, parseISODate } from '@/utils/format'
+import { formatDateTimeShort, formatDayMonth, parseISODate, visibleTime } from '@/utils/format'
+
+import styles from './HomePage.module.scss'
 
 export const HomePage = () => {
   const navigate = useNavigate()
@@ -62,7 +65,7 @@ export const HomePage = () => {
       return (
         <>
           <AppointmentCard
-            dateTime={formatDateTimeShort(parseISODate(appointment.local_date), appointment.local_time)}
+            dateTime={formatDateTimeShort(parseISODate(appointment.local_date), visibleTime(appointment))}
             donationType={appointment.donation_type}
             centerName={appointment.center.name}
             address={appointment.center.address}
@@ -84,11 +87,15 @@ export const HomePage = () => {
           stretched
           onClick={() => {
             startNew()
-            navigate('/donation-info')
+            navigate('/booking/type')
           }}
         >
           Записаться
         </Button>
+        {/* Льготы и противопоказания — справочно, вне маршрута записи */}
+        <TextLink onClick={() => navigate('/donation-info')} className={styles['home-page__info']}>
+          Льготы донора и кому можно сдавать
+        </TextLink>
       </>
     )
   }
@@ -108,7 +115,9 @@ export const HomePage = () => {
         <ConfirmDialog
           open={cancelOpen}
           title="Отменить запись?"
-          text={`${formatDayMonth(parseISODate(appointment.local_date))}, ${appointment.local_time}, ${appointment.center.name}`}
+          text={[formatDayMonth(parseISODate(appointment.local_date)), visibleTime(appointment), appointment.center.name]
+            .filter(Boolean)
+            .join(', ')}
           confirmText="Отменить запись"
           cancelText="Оставить"
           destructive

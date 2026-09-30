@@ -9,6 +9,10 @@
     align-items: center;
   }
 
+  &__title {
+    flex: 1;
+  }
+
   &__body {
     display: flex;
     flex-direction: column;

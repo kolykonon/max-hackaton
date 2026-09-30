@@ -5,8 +5,8 @@ const BOOK_PARAM = 'book'
 
 /** Куда вести после входа по параметру запуска: запись, группа, «После донации» или главная. */
 export const getStartRoute = (): string => {
-  // Как кнопка «Записаться» на главной: льготы → личные данные → вид и регион
-  if (getStartParam() === BOOK_PARAM) return '/donation-info'
+  // Как кнопка «Записаться» на главной: сразу выбор вида донации
+  if (getStartParam() === BOOK_PARAM) return '/booking/type'
   const groupCode = getGroupCode()
   if (groupCode) return `/group/${groupCode}`
   const donationId = getRestDonationId()

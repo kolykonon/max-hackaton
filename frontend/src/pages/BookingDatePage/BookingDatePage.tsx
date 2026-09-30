@@ -16,7 +16,7 @@ import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { Toast } from '@/components/shared/Toast/Toast'
 import { useFinishGroupCreation } from '@/hooks/useFinishGroupCreation'
 import { useToast } from '@/hooks/useToast'
-import { useBookingStore } from '@/store/booking'
+import { bookingSteps, stepAfterCenter, useBookingStore } from '@/store/booking'
 import { formatDayMonth, parseISODate, startOfDay, toISODate } from '@/utils/format'
 
 import styles from './BookingDatePage.module.scss'
@@ -33,7 +33,7 @@ export const BookingDatePage = () => {
   const group = useFinishGroupCreation(() => toast.show('Не удалось создать группу. Попробуйте ещё раз'))
   const next = () => {
     if (isGroup && presetCenter) group.finish()
-    else navigate(presetCenter ? '/booking/time' : '/booking/center')
+    else navigate(presetCenter ? stepAfterCenter(donationType) : '/booking/center')
   }
   const back = () => {
     if (rescheduleId) navigate('/home')
@@ -95,7 +95,12 @@ export const BookingDatePage = () => {
   return (
     <Screen
       header={
-        <StepHeader title="Выберите дату" step={2} total={isGroup ? 3 : undefined} onBack={back} />
+        <StepHeader
+          title="Когда планируете прийти"
+          step={2}
+          total={isGroup ? 3 : bookingSteps(donationType)}
+          onBack={back}
+        />
       }
       footer={
         <StickyFooter>

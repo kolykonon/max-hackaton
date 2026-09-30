@@ -14,7 +14,7 @@ import { Screen } from '@/components/layout/Screen/Screen'
 import { ErrorState } from '@/components/shared/ErrorState/ErrorState'
 import { DEFAULT_ZONE, getLastZone, setLastZone } from '@/components/shared/RussiaMap/lastZone'
 import type { RegionsMapHandle } from '@/components/features/map/RegionsMap/RegionsMap'
-import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
+import { MapPlaceholder } from '@/components/shared/MapPlaceholder/MapPlaceholder'
 import { StatusLegend } from '@/components/shared/StatusLegend/StatusLegend'
 import { Toast } from '@/components/shared/Toast/Toast'
 import type { BloodGroup } from '@/content/types'
@@ -52,10 +52,15 @@ export const MapPage = () => {
   // В Москве и области — группа районов, где стоит пользователь
   const userZone = location.status === 'granted' ? zoneAt(zones, location.lon, location.lat) : null
   const userRegionCode = userZone?.properties.code ?? located.data?.region?.code ?? null
+  // Геопозиция запрещена или не определилась — регион из профиля (настройки)
+  const profileRegionCode = regions.data?.find((region) => region.id === me.data?.region?.id)?.code ?? null
+  // Приближаем один раз, поэтому ждём ответа геолокации, иначе успел бы сработать регион профиля
+  const geoSettled = location.status === 'denied' || (location.status === 'granted' && (userZone !== null || !located.isPending))
+  const initialFocusCode = geoSettled ? (userRegionCode ?? profileRegionCode) : null
 
   // Без геопозиции — последняя выбранная зона, при первом запуске Москва (map.md, «Первое открытие»)
   const [pickedZone, setPickedZone] = useState<string | null>(null)
-  const zoneCode = pickedZone ?? userRegionCode ?? getLastZone() ?? DEFAULT_ZONE
+  const zoneCode = pickedZone ?? userRegionCode ?? profileRegionCode ?? getLastZone() ?? DEFAULT_ZONE
 
   const namesByCode = useMemo(
     () =>
@@ -98,7 +103,7 @@ export const MapPage = () => {
     if (!selectedCenter) return
     const { id, name, address, region_id } = selectedCenter
     startFromCenter({ id, name, address }, region_id)
-    navigate('/donation-info')
+    navigate('/booking/type')
   }
 
   const locate = () => {
@@ -111,12 +116,12 @@ export const MapPage = () => {
   const toggleGroup = (value: BloodGroup) => setPickedGroup(group === value ? null : value)
 
   const renderMap = () => {
-    if (mapData.isPending) return <Skeleton height={320} radius="s" />
+    if (mapData.isPending) return <MapPlaceholder height={320} />
     if (mapData.isError) {
       return <ErrorState text="Не удалось загрузить карту" retrying={mapData.isFetching} onRetry={mapData.refetch} />
     }
     return (
-      <Suspense fallback={<Skeleton height={320} radius="s" />}>
+      <Suspense fallback={<MapPlaceholder height={320} />}>
         <RegionsMap
           ref={mapRef}
           regions={features}
@@ -124,7 +129,7 @@ export const MapPage = () => {
           selectedCode={zoneCode}
           onSelect={selectZone}
           userLocation={userLocation}
-          initialFocusCode={userRegionCode}
+          initialFocusCode={initialFocusCode}
           centers={points}
           selectedCenterId={selectedCenterId}
           onSelectCenter={selectCenter}
@@ -148,18 +153,26 @@ export const MapPage = () => {
   }
 
   return (
-    <Screen header={<PageHeader title="Карта" onBack={() => navigate('/home')} />} flush contentClassName={styles['map-page']}>
+    <Screen
+      header={
+        <PageHeader
+          title="Карта"
+          subtitle={status.data && `Демо-данные (${formatDayMonth(new Date(status.data.updated_at))})`}
+          onBack={() => navigate('/home')}
+          className={styles['map-page__header']}
+        />
+      }
+      flush
+      contentClassName={styles['map-page']}
+    >
       <div className={styles['map-page__map']}>{renderMap()}</div>
-      <div className={styles['map-page__legend']}>
-        <StatusLegend withNoData />
-      </div>
       {status.data && (
         <ZonePanel
           name={namesByCode.get(zoneCode) ?? ''}
-          updatedAt={formatDayMonth(new Date(status.data.updated_at))}
           hasData={hasZoneData(zone)}
         >
           <BloodGroupStrip statuses={fillStatuses(zone)} selected={group} userGroup={userGroup} onToggle={toggleGroup} />
+          <StatusLegend withNoData />
         </ZonePanel>
       )}
       <Toast message={toast.message} />

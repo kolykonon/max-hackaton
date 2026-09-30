@@ -201,8 +201,9 @@ class ProfileService:
     async def save_personal_data(
         self, user: User, data: PersonalDataInput
     ) -> PersonalData:
-        values = data.model_dump()
-        values["middle_name"] = values["middle_name"] or None
+        values = data.model_dump(exclude_unset=True)
+        if "middle_name" in values:
+            values["middle_name"] = values["middle_name"] or None
         row = await self.session.get(PersonalDataModel, user.id)
         if row is None:
             row = PersonalDataModel(user_id=user.id)

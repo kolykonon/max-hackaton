@@ -37,7 +37,7 @@ export const GroupMemberItem = ({ member }: GroupMemberItemProps) => {
           )}
         </Typography.Text>
         <Typography.Text variant="detail" color="secondary">
-          {member.booked_time ? `Придёт в ${member.booked_time}` : 'Ещё выбирает время'}
+          {member.booked_time ? `Придёт в ${member.booked_time}` : member.is_booked ? 'Есть запись' : 'Пока без записи'}
         </Typography.Text>
       </div>
       {member.is_booked && <Check size={20} className={styles['group-member-item__check']} aria-label="Есть запись" />}

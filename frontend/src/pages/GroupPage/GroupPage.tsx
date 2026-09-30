@@ -20,7 +20,7 @@ import { Skeleton } from '@/components/shared/Skeleton/Skeleton'
 import { Toast } from '@/components/shared/Toast/Toast'
 import { DONATION_TYPE_LABEL } from '@/content/donationTypes'
 import { useToast } from '@/hooks/useToast'
-import { useBookingStore } from '@/store/booking'
+import { stepAfterCenter, useBookingStore } from '@/store/booking'
 import { formatDayMonth, formatDayMonthWeekday, parseISODate } from '@/utils/format'
 
 /** Экран групповой донации: пришли по ссылке ?startapp=grp_<code>. */
@@ -38,7 +38,7 @@ export const GroupPage = () => {
   const goBack = () => (group.data?.is_member ? navigate('/groups') : goHome())
   const bookAlone = () => {
     startNew()
-    navigate('/donation-info')
+    navigate('/booking/type')
   }
 
   const screen = (content: ReactNode, footer?: ReactNode) => (
@@ -155,7 +155,7 @@ export const GroupPage = () => {
   const bookOtherDay = () => {
     const { id, name, address, region_id: regionId } = data.center
     startFromCenter({ id, name, address }, regionId)
-    navigate('/donation-info')
+    navigate('/booking/type')
   }
 
   // Интервал после прошлой донации: в день группы вам ещё нельзя — предлагаем тот же центр позже
@@ -194,7 +194,8 @@ export const GroupPage = () => {
   const bookWithGroup = async () => {
     try {
       startFromGroup(data.is_member ? data : await join.mutateAsync(data.code))
-      navigate('/donation-info')
+      // Вид донации, центр и день — как у группы: плазме осталось выбрать время, крови — проверить запись
+      navigate(stepAfterCenter(data.donation_type))
     } catch (error) {
       toast.show(
         error instanceof ApiError && error.code === 'group_closed'

@@ -1,20 +1,20 @@
-import { IdCard, Phone, ShieldPlus } from 'lucide-react'
-
 import { DataField } from '@/components/shared/DataField/DataField'
 
 import { DataSection } from '../DataSection/DataSection'
-import { FIELDS, type FieldErrors, type FieldKey, type PersonalDataValues } from '../fields'
+import { FIELDS, SECTIONS, type FieldErrors, type FieldKey, type PersonalDataValues, type SectionKey } from '../fields'
+import { SECTION_ICONS } from '../PersonalDataView/PersonalDataView'
 import styles from './PersonalDataForm.module.scss'
 
 interface PersonalDataFormProps {
+  section: SectionKey
   data: PersonalDataValues
   errors: FieldErrors
   onChange: (key: FieldKey, value: string) => void
   onBlur: (key: FieldKey) => void
 }
 
-/** Режим редактирования: те же блоки, но с полями ввода. ФИО разбито на три поля. */
-export const PersonalDataForm = ({ data, errors, onChange, onBlur }: PersonalDataFormProps) => {
+/** Редактирование одного раздела настроек. ФИО разбито на три поля, серия и номер — в одну строку. */
+export const PersonalDataForm = ({ section, data, errors, onChange, onBlur }: PersonalDataFormProps) => {
   const renderField = (key: FieldKey, autoFocus = false) => {
     const field = FIELDS[key]
     return (
@@ -34,25 +34,22 @@ export const PersonalDataForm = ({ data, errors, onChange, onBlur }: PersonalDat
   }
 
   return (
-    <>
-      <DataSection icon={IdCard} title="Паспорт РФ">
-        {renderField('last_name', true)}
-        {renderField('first_name')}
-        {renderField('middle_name')}
-        <div className={styles['personal-data-form__row']}>
-          {renderField('passport_series')}
-          {renderField('passport_number')}
-        </div>
-        {renderField('passport_issued_by')}
-        {renderField('passport_division_code')}
-      </DataSection>
-      <DataSection icon={ShieldPlus} title="Полис ОМС">
-        {renderField('oms_number')}
-      </DataSection>
-      <DataSection icon={Phone} title="Контакты">
-        {renderField('phone')}
-        {renderField('email')}
-      </DataSection>
-    </>
+    <DataSection icon={SECTION_ICONS[section]} title={SECTIONS[section].title}>
+      {section === 'passport' ? (
+        <>
+          {renderField('last_name', true)}
+          {renderField('first_name')}
+          {renderField('middle_name')}
+          <div className={styles['personal-data-form__row']}>
+            {renderField('passport_series')}
+            {renderField('passport_number')}
+          </div>
+          {renderField('passport_issued_by')}
+          {renderField('passport_division_code')}
+        </>
+      ) : (
+        SECTIONS[section].fields.map((key, i) => renderField(key, i === 0))
+      )}
+    </DataSection>
   )
 }

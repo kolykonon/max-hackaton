@@ -3,9 +3,9 @@
 Правило из ТЗ:
 - пн–сб 08:00–14:00;
 - у части центров ещё 17:00–19:00;
-- 30–60% слотов занято;
-- 1–2 дня в каждом центре заняты полностью;
-- шаг между слотами — 15 минут (из §5.5).
+- плазма — окна по 30 минут, одно окно — один человек;
+- цельная кровь — один слот на день: время донор не выбирает;
+- часть мест занята, 1–2 дня в каждом центре заняты полностью.
 """
 
 import asyncio
@@ -19,17 +19,18 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from app.core.db import sessionmaker
-from app.models import Center, Region, Slot
+from app.models import Appointment, Center, Region, Slot
 
 log = logging.getLogger(__name__)
 
 DAYS_AHEAD = 60
-SLOT_STEP_MIN = 15
+PLASMA_STEP = timedelta(minutes=30)
+PLASMA_CAPACITY = 1
+WHOLE_BLOOD_DAY_CAPACITY = 40
 MORNING_START = time(8, 0)
 MORNING_END = time(14, 0)
 EVENING_START = time(17, 0)
 EVENING_END = time(19, 0)
-DONATION_TYPES = ["whole_blood", "plasma"]
 
 
 def _rng_for(center_id: int) -> random.Random:
@@ -47,25 +48,24 @@ def _fully_booked_days(center_id: int, today: date) -> set[date]:
 
 
 def _iter_slots_for_day(
-    center_id: int,
-    day: date,
-    tz: ZoneInfo,
-    has_evening: bool,
-) -> list[tuple[str, datetime]]:
-    slots: list[tuple[str, datetime]] = []
+    day: date, tz: ZoneInfo, has_evening: bool
+) -> list[tuple[str, datetime, int]]:
+    """(вид донации, начало в UTC, вместимость)."""
 
-    def _add_range(start: time, end: time) -> None:
-        current = datetime.combine(day, start, tzinfo=tz)
-        finish = datetime.combine(day, end, tzinfo=tz)
+    def at(t: time) -> datetime:
+        return datetime.combine(day, t, tzinfo=tz).astimezone(timezone.utc)
+
+    slots = [("whole_blood", at(MORNING_START), WHOLE_BLOOD_DAY_CAPACITY)]
+
+    def _add_plasma(start: time, end: time) -> None:
+        current, finish = at(start), at(end)
         while current < finish:
-            for dtype in DONATION_TYPES:
-                slots.append((dtype, current.astimezone(timezone.utc)))
-            current += timedelta(minutes=SLOT_STEP_MIN)
+            slots.append(("plasma", current, PLASMA_CAPACITY))
+            current += PLASMA_STEP
 
-    _add_range(MORNING_START, MORNING_END)
+    _add_plasma(MORNING_START, MORNING_END)
     if has_evening:
-        _add_range(EVENING_START, EVENING_END)
-
+        _add_plasma(EVENING_START, EVENING_END)
     return slots
 
 
@@ -74,8 +74,10 @@ async def generate_slots(reset: bool = True) -> None:
 
     async with sessionmaker() as session:
         if reset:
-            log.info("Удаляем все существующие слоты")
-            await session.execute(delete(Slot))
+            # ponytail: слоты с записями оставляем как есть (со старой вместимостью),
+            # иначе FK appointments_slot_id_fkey; новые на то же время пропустит on_conflict
+            log.info("Удаляем слоты без записей")
+            await session.execute(delete(Slot).where(Slot.id.not_in(select(Appointment.slot_id))))
             await session.commit()
         else:
             latest = await session.scalar(select(func.max(Slot.starts_at)))
@@ -116,20 +118,18 @@ async def generate_slots(reset: bool = True) -> None:
                     continue
 
                 full_day = day in booked_days
-                for dtype, starts_at_utc in _iter_slots_for_day(
-                    center_id, day, tz, has_evening
+                for dtype, starts_at_utc, capacity in _iter_slots_for_day(
+                    day, tz, has_evening
                 ):
-                    if full_day:
-                        is_blocked = True
-                    else:
-                        is_blocked = rng.random() < rng.uniform(0.3, 0.6)
-
+                    # ponytail: места, занятые не через приложение, моделируем
+                    # уменьшенной вместимостью; настоящий учёт — из МИС центра
                     all_values.append(
                         {
                             "center_id": center_id,
                             "donation_type": dtype,
                             "starts_at": starts_at_utc,
-                            "is_blocked": is_blocked,
+                            "capacity": rng.randint(0, capacity),
+                            "is_blocked": full_day,
                         }
                     )
 

@@ -17,6 +17,11 @@
     color: $color-accent;
   }
 
+  &__action {
+    flex-shrink: 0;
+    color: $color-accent;
+  }
+
   &__chevron {
     flex-shrink: 0;
     color: $color-text-tertiary;

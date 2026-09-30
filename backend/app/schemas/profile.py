@@ -12,7 +12,7 @@ class BloodInfo(Schema):
     group: BloodGroup | None
     kell: Literal["K+", "K-"] | None
     phenotype: str | None
-    donor_code: str | None = Field(pattern=r"^\d{4}-\d{4}$")
+    donor_code: str | None = Field(pattern=r"^\d{20}$")
 
 
 class Me(Schema):
@@ -70,22 +70,24 @@ Email = Annotated[
     Field(
         max_length=254,
         pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$",
-        examples=["ivanov@mail.ru"],
+        examples=["ivanov@example.ru"],
     ),
 ]
 
 
 class PersonalDataInput(Schema):
-    last_name: NamePart
-    first_name: NamePart
+    """Сохраняется по разделам настроек: поля, которых нет в теле, не меняются."""
+
+    last_name: NamePart | None = None
+    first_name: NamePart | None = None
     middle_name: str | None = Field(default=None, max_length=255)
-    passport_series: PassportSeries
-    passport_number: PassportNumber
-    passport_issued_by: str = Field(min_length=1, max_length=512)
-    passport_division_code: DivisionCode
-    oms_number: OmsNumber
-    phone: Phone
-    email: Email
+    passport_series: PassportSeries | None = None
+    passport_number: PassportNumber | None = None
+    passport_issued_by: str | None = Field(default=None, min_length=1, max_length=512)
+    passport_division_code: DivisionCode | None = None
+    oms_number: OmsNumber | None = None
+    phone: Phone | None = None
+    email: Email | None = None
 
 
 class PersonalData(Schema):

@@ -87,6 +87,12 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     min-width: 0;
   }
 
+  &__name-row {
+    display: flex;
+    gap: $space-xs;
+    align-items: center;
+  }
+
   &__name {
     margin: 0;
     font-size: 36px;
@@ -539,6 +545,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       font-size: 20px;
       font-weight: 600;
       letter-spacing: 0.06em;
+      overflow-wrap: anywhere;
     }
 
     small {
@@ -604,6 +611,21 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     transition:
       transform $transition-fast,
       color $transition-fast;
+  }
+
+  &__action {
+    display: flex;
+    flex-shrink: 0;
+    gap: $space-xs;
+    align-items: center;
+  }
+
+  &__count {
+    color: $color-text-secondary;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
 
   &:hover &__arrow {

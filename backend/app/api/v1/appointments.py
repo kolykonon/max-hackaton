@@ -5,6 +5,7 @@ from fastapi import APIRouter, BackgroundTasks, Request, status
 from app.api.deps import AppointmentServiceDep, CurrentUser, GroupServiceDep
 from app.bot import pushes
 from app.bot.handlers import send_appointment_confirmed
+from app.models.enums import DonationType
 from app.schemas.appointments import AppointmentResponse, SlotRequest
 from app.schemas.common import error_responses
 from app.services.groups import human_date
@@ -55,7 +56,8 @@ async def create_appointment(
             user.first_name,
             group.center.name,
             human_date(group.date),
-            schema.local_time,
+            # у цельной крови время не выбирали — пишем только день
+            schema.local_time if schema.donation_type == DonationType.PLASMA else None,
             sum(member.is_booked for member in group.members),
             group.members_count,
         )

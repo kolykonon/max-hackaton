@@ -736,6 +736,11 @@ export interface components {
             /** Distance Km */
             distance_km: number | null;
             group_status: components["schemas"]["StockStatus"] | null;
+            /**
+             * Is Usual
+             * @default false
+             */
+            is_usual: boolean;
         };
         /** BookingDates */
         BookingDates: {
@@ -1257,46 +1262,31 @@ export interface components {
          * @enum {string}
          */
         PersonalDataField: "last_name" | "first_name" | "middle_name" | "passport_series" | "passport_number" | "passport_issued_by" | "passport_division_code" | "oms_number" | "phone" | "email";
-        /** PersonalDataInput */
+        /**
+         * PersonalDataInput
+         * @description Сохраняется по разделам настроек: поля, которых нет в теле, не меняются.
+         */
         PersonalDataInput: {
             /** Last Name */
-            last_name: string;
+            last_name?: string | null;
             /** First Name */
-            first_name: string;
+            first_name?: string | null;
             /** Middle Name */
             middle_name?: string | null;
-            /**
-             * Passport Series
-             * @example 4510
-             */
-            passport_series: string;
-            /**
-             * Passport Number
-             * @example 123456
-             */
-            passport_number: string;
+            /** Passport Series */
+            passport_series?: string | null;
+            /** Passport Number */
+            passport_number?: string | null;
             /** Passport Issued By */
-            passport_issued_by: string;
-            /**
-             * Passport Division Code
-             * @example 770-001
-             */
-            passport_division_code: string;
-            /**
-             * Oms Number
-             * @example 1234567890123456
-             */
-            oms_number: string;
-            /**
-             * Phone
-             * @example +79001234567
-             */
-            phone: string;
-            /**
-             * Email
-             * @example ivanov@mail.ru
-             */
-            email: string;
+            passport_issued_by?: string | null;
+            /** Passport Division Code */
+            passport_division_code?: string | null;
+            /** Oms Number */
+            oms_number?: string | null;
+            /** Phone */
+            phone?: string | null;
+            /** Email */
+            email?: string | null;
         };
         /** Progress */
         Progress: {

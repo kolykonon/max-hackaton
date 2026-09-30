@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw'
 
 import type { DonationHistory, Me, PersonalData, PersonalDataFieldName, PersonalDataInput } from '../../types'
 import { db } from '../db'
-import { DEMO_USER, REGIONS } from '../fixtures'
+import { DEMO_DONATION_HISTORY, DEMO_USER, REGIONS } from '../fixtures'
 import { getEligibility, getProgress } from '../logic'
 import { apiError, BASE, latency } from '../utils'
 
@@ -18,28 +18,45 @@ const REQUIRED_FIELDS: PersonalDataFieldName[] = [
   'email',
 ]
 
+export const missingFields = () => REQUIRED_FIELDS.filter((key) => !db.state.personalData[key]?.trim())
+
 const personalData = (): PersonalData => ({
+  last_name: null,
+  first_name: null,
+  passport_series: null,
+  passport_number: null,
+  passport_issued_by: null,
+  passport_division_code: null,
+  oms_number: null,
+  phone: null,
+  email: null,
   ...db.state.personalData,
   middle_name: db.state.personalData.middle_name ?? null,
   is_demo: db.state.isDemoData,
-  missing_fields: REQUIRED_FIELDS.filter((key) => !db.state.personalData[key]?.trim()),
+  missing_fields: missingFields(),
 })
 
-/** Правила — паттерны PersonalDataInput из openapi.yaml, тексты — из confirming.md. */
-const validate = (data: PersonalDataInput): Record<string, string> => {
-  const name = /^[A-Za-zА-Яа-яЁё-]+$/
-  const errors: Record<string, string> = {}
-  if (!name.test(data.last_name ?? '')) errors.last_name = 'Введите фамилию'
-  if (!name.test(data.first_name ?? '')) errors.first_name = 'Введите имя'
-  if (!/^\d{4}$/.test(data.passport_series ?? '')) errors.passport_series = 'Серия — 4 цифры'
-  if (!/^\d{6}$/.test(data.passport_number ?? '')) errors.passport_number = 'Номер — 6 цифр'
-  if (!data.passport_issued_by?.trim()) errors.passport_issued_by = 'Укажите, кем выдан паспорт'
-  if (!/^\d{3}-\d{3}$/.test(data.passport_division_code ?? '')) errors.passport_division_code = 'Код подразделения — 6 цифр'
-  if (!/^\d{16}$/.test(data.oms_number ?? '')) errors.oms_number = 'Номер полиса — 16 цифр'
-  if (!/^\+7\d{10}$/.test(data.phone ?? '')) errors.phone = 'Введите номер телефона полностью'
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email ?? '')) errors.email = 'Проверьте адрес почты'
-  return errors
+/** Правила — паттерны PersonalDataInput из openapi, тексты — из confirming.md. */
+const RULES: Partial<Record<PersonalDataFieldName, [RegExp, string]>> = {
+  last_name: [/^[A-Za-zА-Яа-яЁё-]+$/, 'Введите фамилию'],
+  first_name: [/^[A-Za-zА-Яа-яЁё-]+$/, 'Введите имя'],
+  passport_series: [/^\d{4}$/, 'Серия — 4 цифры'],
+  passport_number: [/^\d{6}$/, 'Номер — 6 цифр'],
+  passport_issued_by: [/\S/, 'Укажите, кем выдан паспорт'],
+  passport_division_code: [/^\d{3}-\d{3}$/, 'Код подразделения — 6 цифр'],
+  oms_number: [/^\d{16}$/, 'Номер полиса — 16 цифр'],
+  phone: [/^\+7\d{10}$/, 'Введите номер телефона полностью'],
+  email: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Проверьте адрес почты'],
 }
+
+/** Сохраняем по разделам: проверяем и меняем только пришедшие поля. */
+const validate = (data: PersonalDataInput): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(data).flatMap(([key, value]) => {
+      const rule = RULES[key as PersonalDataFieldName]
+      return rule && !rule[0].test(String(value ?? '')) ? [[key, rule[1]]] : []
+    }),
+  )
 
 const toMe = (): Me => {
   const region = REGIONS.find((r) => r.id === db.state.regionId)
@@ -89,7 +106,7 @@ export const meHandlers = [
     const body = (await request.json()) as PersonalDataInput
     const fields = validate(body)
     if (Object.keys(fields).length > 0) return apiError(422, 'validation_error', 'Проверьте данные', fields)
-    db.state.personalData = body
+    db.state.personalData = { ...db.state.personalData, ...body }
     db.state.isDemoData = false
     db.save()
     return HttpResponse.json(personalData())
@@ -107,16 +124,10 @@ export const meHandlers = [
 
   http.get(`${BASE}/me/donations`, async () => {
     await latency()
-    const sorted = [...db.state.donations].sort((a, b) => b.date.localeCompare(a.date))
-    const years = new Map<number, DonationHistory['years'][number]>()
-    sorted.forEach((d) => {
-      const year = new Date(d.date).getFullYear()
-      const group = years.get(year) ?? { year, count: 0, items: [] }
-      group.count += 1
-      group.items.push({ id: d.id, donation_type: d.type, donated_on: d.date.slice(0, 10), center_name: d.centerName })
-      years.set(year, group)
-    })
-    const result: DonationHistory = { total: sorted.length, years: [...years.values()] }
+    const result: DonationHistory = {
+      total: DEMO_DONATION_HISTORY.length,
+      years: [{ year: 2026, count: DEMO_DONATION_HISTORY.length, items: DEMO_DONATION_HISTORY }],
+    }
     return HttpResponse.json(result)
   }),
 

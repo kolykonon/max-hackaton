@@ -77,6 +77,16 @@ const colorExpression = (statuses: Record<string, StockStatus>): ExpressionSpeci
   return ['match', ['get', 'code'], ...pairs, STATUS_COLORS.none] as unknown as ExpressionSpecification
 }
 
+/** Границы региона. Москва и область на карте поделены на зоны — для них собираем все зоны с parent = code. */
+const regionBounds = (regions: RegionFeature[], code: string) => {
+  const matched = regions.filter(
+    (region) => region.properties.code === code || (region.properties as { parent?: string }).parent === code,
+  )
+  if (matched.length === 0) return null
+  const coordinates = matched.flatMap(({ geometry }) => (geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates))
+  return geometryBounds({ type: 'MultiPolygon', coordinates })
+}
+
 const selectedFilter = (code: string | null): ExpressionSpecification => ['==', ['get', 'code'], code ?? '']
 
 /** Донорский светофор поверх подложки с улицами: зум от всей страны до домов. */
@@ -211,8 +221,7 @@ export const RegionsMap = ({
   }, [map, userLocation])
 
   const focusRegion = (code: string) => {
-    const region = regions.find((item) => item.properties.code === code)
-    const bounds = region && geometryBounds(region.geometry)
+    const bounds = regionBounds(regions, code)
     if (map && bounds) map.fitBounds(bounds, { padding: 40, maxZoom: 9 })
   }
 
@@ -220,8 +229,7 @@ export const RegionsMap = ({
   useEffect(() => {
     if (!map || !initialFocusCode || focusedInitially.current) return
     focusedInitially.current = true
-    const region = regions.find((item) => item.properties.code === initialFocusCode)
-    const bounds = region && geometryBounds(region.geometry)
+    const bounds = regionBounds(regions, initialFocusCode)
     if (bounds) map.fitBounds(bounds, { padding: 40, maxZoom: 9 })
   }, [map, initialFocusCode, regions])
 

@@ -15,7 +15,7 @@ import { PREPARATION } from '@/content/preparation'
 import { useBackButton } from '@/hooks/useBackButton'
 import { useToast } from '@/hooks/useToast'
 import { useBookingStore } from '@/store/booking'
-import { formatDateTimeFull, parseISODate } from '@/utils/format'
+import { formatDateTimeFull, parseISODate, visibleTime } from '@/utils/format'
 
 import styles from './BookingConfirmedPage.module.scss'
 
@@ -53,7 +53,7 @@ export const BookingConfirmedPage = () => {
       {appointment ? (
         <>
           <AppointmentSummary
-            dateTime={formatDateTimeFull(parseISODate(appointment.local_date), appointment.local_time)}
+            dateTime={formatDateTimeFull(parseISODate(appointment.local_date), visibleTime(appointment))}
             donationType={appointment.donation_type}
             centerName={appointment.center.name}
             address={appointment.center.address}

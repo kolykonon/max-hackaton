@@ -1,14 +1,22 @@
 .center-card {
+  position: relative;
   display: flex;
   gap: $space-s;
   align-items: flex-start;
 
+  &--full {
+    opacity: 0.6;
+  }
+
   &__info {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex: 1;
     flex-direction: column;
     gap: $space-2xs;
     min-width: 0;
+    pointer-events: none;
   }
 
   &__name,
@@ -16,16 +24,37 @@
     display: block;
   }
 
-  &__address,
-  &__status {
+  &__address {
     display: flex;
     gap: $space-2xs;
     align-items: center;
     color: $color-text-secondary;
   }
 
+  &__select {
+    @include reset-button;
+    @include pressable;
+    @include focus-ring;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+  }
+
   &__status {
-    gap: $space-xs;
+    @include reset-button;
+    @include focus-ring;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: (-$space-2xs) 0;
+    border-radius: $radius-round;
+    pointer-events: auto;
+    cursor: help;
 
     &--urgent {
       color: $color-status-urgent;
@@ -38,9 +67,39 @@
     &--enough {
       color: #1f9a45;
     }
+
+    &:hover .center-card__tooltip,
+    &:focus .center-card__tooltip,
+    &--open .center-card__tooltip {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    bottom: calc(100% + #{$space-xs});
+    left: 0;
+    visibility: hidden;
+    width: max-content;
+    max-width: min(260px, calc(100vw - 64px));
+    padding: $space-xs $space-s;
+    border-radius: $radius-s;
+    background: $color-bg-overlay;
+    box-shadow: $shadow-floating;
+    color: $color-text-inverse;
+    font-size: 13px;
+    line-height: 18px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY($space-2xs);
+    transition: opacity $transition-fast, transform $transition-fast, visibility $transition-fast;
   }
 
   &__radio {
+    position: relative;
+    z-index: 2;
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;

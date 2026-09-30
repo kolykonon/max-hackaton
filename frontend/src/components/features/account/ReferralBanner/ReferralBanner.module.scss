@@ -12,6 +12,21 @@
     flex: 1;
   }
 
+  &__action {
+    display: flex;
+    flex-shrink: 0;
+    gap: $space-xs;
+    align-items: center;
+  }
+
+  &__count {
+    color: $color-text-secondary;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
   &__chevron {
     color: $color-text-tertiary;
   }

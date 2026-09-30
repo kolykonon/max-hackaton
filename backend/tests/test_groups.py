@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 import httpx
 import pytest
 import pytest_asyncio
+from sqlalchemy import select
 
 from app.api.deps import _apply_referral
 from app.core.db import get_session
@@ -16,6 +17,7 @@ from app.models import (
     Appointment,
     DonationGroup,
     DonationGroupMember,
+    Region,
     Slot,
     User,
 )
@@ -132,9 +134,11 @@ async def client(session, bot):
 
 
 @pytest.mark.asyncio
-async def test_http_me_region_impact_share(client, region):
+async def test_http_me_region_impact_share(client, session, region):
     me = (await client.get("/me")).json()
-    assert me["region"] is None
+    moscow = await session.scalar(select(Region).where(Region.code == "RU-MOW"))
+    # регион по умолчанию — Москва (если регионы засеяны)
+    assert me["region"] == ({"id": moscow.id, "name": "Москва"} if moscow else None)
 
     r = await client.put("/me/region", json={"region_id": region.id})
     assert r.status_code == 200 and r.json()["region"]["name"] == "Тестовый регион"
@@ -221,7 +225,7 @@ async def test_http_after_donation_flow(client, session, center, bot):
     r = await client.post("/appointments", json={"slot_id": slot.id})
     assert r.status_code == 201, r.text
     appt = r.json()
-    assert me.region_id == center.region_id  # регион проставился по записи
+    assert me.region_id is not None  # регион по умолчанию или по центру записи
 
     r = await client.post(f"/demo/appointments/{appt['appointment']['id']}/complete")
     assert r.status_code == 204

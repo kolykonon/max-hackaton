@@ -174,7 +174,7 @@ async def send_group_booked(
     name: str,
     center: str,
     date: str,
-    time: str,
+    time: str | None,
     booked: int,
     count: int,
 ) -> bool:

@@ -4,6 +4,11 @@
   align-items: center;
   padding: $space-xs 0;
 
+  &__name {
+    flex: 1;
+    min-width: 0;
+  }
+
   &__avatar {
     @include reset-button;
     border-radius: $radius-round;

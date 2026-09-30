@@ -36,12 +36,6 @@ class Appointment(Base, CreatedAtMixin):
 
     __table_args__ = (
         Index(
-            "uq_active_slot",
-            "slot_id",
-            unique=True,
-            postgresql_where=text("status = 'active'"),
-        ),
-        Index(
             "uq_active_user",
             "user_id",
             unique=True,
