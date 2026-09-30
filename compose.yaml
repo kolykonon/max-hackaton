@@ -1,73 +1,87 @@
+name: kaplya
+
+x-backend: &backend
+  build: ./backend
+  restart: unless-stopped
+  init: true
+  env_file: .env
+  volumes:
+    - ./certs:/certs:ro
+  networks: [default, database]
+
 services:
   postgres:
-    container_name: hackaton-db
-    image: postgres:17
-    restart: always
-    ports:
-      - "5434:5432"
-    env_file:
-      - .env
+    image: postgres:17.6-bookworm
+    restart: unless-stopped
+    env_file: .env
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
+    networks: [database]
     healthcheck:
-      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER:-postgres}\" -d \"$${POSTGRES_DB:-kaplya}\""]
       interval: 5s
-      timeout: 10s
-      retries: 5
+      timeout: 5s
+      retries: 12
+      start_period: 20s
 
   backend:
-    build: ./backend
-    container_name: hackaton-backend
-    restart: unless-stopped
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend/app:/backend/app
-      - ./certs:/certs:ro
-    environment:
-      - WATCHFILES_FORCE_POLLING=true
-    env_file:
-      - .env
+    <<: *backend
+    image: ${COMPOSE_PROJECT_NAME:-kaplya}-backend:local
     depends_on:
       postgres:
         condition: service_healthy
 
   bot:
-    build: ./backend
-    container_name: hackaton-bot
-    restart: unless-stopped
-    command: uv run --no-sync python -m app.bot.worker
-    volumes:
-      - ./backend/app:/backend/app
-      - ./certs:/certs:ro
-    environment:
-      - MAX_MODE=polling
-    env_file:
-      - .env
+    <<: *backend
+    image: ${COMPOSE_PROJECT_NAME:-kaplya}-bot:local
+    command: ["python", "-m", "app.bot.worker"]
     depends_on:
-      postgres:
+      backend:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os,time; assert time.time()-os.stat('/tmp/bot-heartbeat').st_mtime < 120"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   web:
     build:
       context: ./frontend
       args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api/v1}
         VITE_USE_MOCKS: ${VITE_USE_MOCKS:-false}
-        VITE_DEV_USER_ID: ${VITE_DEV_USER_ID:-}
-    container_name: hackaton-web
+        VITE_DEV_USER_ID: ${VITE_DEV_USER_ID-1}
     restart: unless-stopped
     ports:
-      - "${WEB_HTTP_PORT:-80}:80"
-      - "${WEB_HTTPS_PORT:-443}:443"
-      - "${WEB_HTTPS_PORT:-443}:443/udp"
+      - "127.0.0.1:${WEB_HTTP_PORT:-8088}:8080"
     environment:
-      - DOMAIN=${DOMAIN:-localhost}
+      DOMAIN: ${DOMAIN:-:8080}
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+
+  tunnel:
+    image: cloudflare/cloudflared:2026.9.0
+    profiles: [tunnel]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "cloudflared", "tunnel", "--metrics", "127.0.0.1:2000", "ready"]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 6
+    command: ["tunnel", "--no-autoupdate", "--metrics", "127.0.0.1:2000", "--url", "http://web:8080"]
+    depends_on:
+      web:
+        condition: service_healthy
+
+networks:
+  database:
+    internal: true
 
 volumes:
   postgres_data:

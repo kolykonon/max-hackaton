@@ -31,11 +31,11 @@ class PostgresSettings(SettingsConfigDictMixin, BaseSettings):
 
     model_config = _ENV_CONFIG
 
-    postgres_host: str
-    postgres_port: int
-    postgres_user: str
-    postgres_password: str
-    postgres_db: str
+    postgres_host: str = "postgres"
+    postgres_port: int = 5432
+    postgres_user: str = "postgres"
+    postgres_password: str = ""
+    postgres_db: str = "kaplya"
 
     @property
     def postgres_dsn(self) -> str:  # отсюда брать postgres url
@@ -56,12 +56,14 @@ class BotSettings(SettingsConfigDictMixin, BaseSettings):
 
     model_config = _ENV_CONFIG
 
-    max_bot_token: str
+    max_bot_token: str = ""
     init_data_ttl: int = 86400
 
     max_api_base_url: str = "https://platform-api2.max.ru"
     max_bot_username: str = ""
-    webapp_url: str = "https://example.ru"
+    # Совместимость со старым .env. Кнопки open_app используют привязку в MAX,
+    # а не этот URL: менять его для локального туннеля не требуется.
+    webapp_url: str = ""
 
     max_webhook_secret: str = ""
     max_webhook_url: str = ""

@@ -1,6 +1,7 @@
 import logging
 from contextlib import asynccontextmanager
 
+import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
@@ -10,6 +11,7 @@ from app.bot import webhook
 from app.core.config import settings
 from app.core.errors import register_errors
 from app.integrations.max_api import MaxBotClient
+from app.services.proactive import PUSH_HOUR_MSK, run_daily_pushes
 from app.services.reminders import restore_reminders
 
 log = logging.getLogger(__name__)
@@ -20,7 +22,22 @@ async def lifespan(app: FastAPI):
     app.state.max = MaxBotClient()
     log.info("Клиент макса создан, ссылка на апи=%s", app.state.max.base_url)
 
+    if settings.bot_settings.max_bot_token:
+        try:
+            await app.state.max.configure_username()
+        except (httpx.HTTPError, ValueError):
+            log.warning("MAX недоступен или отклонил токен; веб-проверка в AUTH_DEV_MODE доступна. Проверьте логи bot.")
+
     scheduler = AsyncIOScheduler(timezone="UTC")
+    scheduler.add_job(
+        run_daily_pushes,
+        "cron",
+        hour=PUSH_HOUR_MSK,
+        timezone="Europe/Moscow",
+        args=[app.state.max],
+        id="daily_pushes",
+        replace_existing=True,
+    )
     scheduler.start()
     app.state.scheduler = scheduler
     log.info("Планировщик запущен")

@@ -1,3 +1,6 @@
+> Для проверки жюри используйте [README](README.md): `docker compose --profile tunnel up --build`.
+> Ниже — прежняя персональная среда разработки без Docker; её домены и настройки не нужны для локального запуска.
+
 # Разработка MAX mini app: код локально, домен dev-max.akarmain.ru
 
 Схема: `https://dev-max.akarmain.ru` → Traefik на сервере → порт `172.18.0.1:15180` →

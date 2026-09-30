@@ -12,3 +12,12 @@ node_modules
 .claude-flow
 .ruff_cache
 tmp/
+
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+.pytest_cache/
+*.sqlite*

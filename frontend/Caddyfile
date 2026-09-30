@@ -1,0 +1,29 @@
+{
+	http_port 8080
+	https_port 8443
+	admin off
+}
+
+# Отдельный HTTP healthcheck работает и при DOMAIN с автоматическим HTTPS.
+http://:8081 {
+	handle /healthz {
+		respond "ok" 200
+	}
+}
+
+{$DOMAIN::8080} {
+	encode zstd gzip
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+	handle {
+		root * /srv
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+		route {
+			try_files {path} /index.html
+			header /index.html Cache-Control "no-cache"
+		}
+		file_server
+	}
+}

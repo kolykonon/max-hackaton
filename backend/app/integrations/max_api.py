@@ -58,13 +58,24 @@ class MaxBotClient:
         """Проверка ответа на ошибки."""
         if resp.status_code >= 400:
             log.error(
-                "MAX API %s %s → %s: %s",
+                "MAX API %s %s → %s",
                 resp.request.method,
                 resp.request.url.path,
                 resp.status_code,
-                resp.text,
             )  # отдаем ошибку в логи в формате метод путь -> статус текст
         resp.raise_for_status()
+
+    async def get_me(self) -> dict[str, Any]:
+        """Проверка токена и определение имени бота без дополнительных настроек."""
+        resp = await self._client.get("/me")
+        self._check(resp)
+        return resp.json()
+
+    async def configure_username(self) -> str:
+        me = await self.get_me()
+        if not settings.bot_settings.max_bot_username:
+            settings.bot_settings.max_bot_username = me.get("username") or ""
+        return settings.bot_settings.max_bot_username
 
     async def get_updates(
         self, marker: int | None = None, timeout: int = 30, limit: int = 100
