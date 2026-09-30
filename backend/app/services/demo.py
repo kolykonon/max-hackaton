@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.bot import pushes
@@ -8,7 +8,14 @@ from app.bot.handlers import send_reminder_1d
 from app.core.errors import AppError
 from app.core.utils.dates import now_msk, today_msk
 from app.integrations.max_api import MaxBotClient
-from app.models import Appointment, Region, RegionBloodStatus, User
+from app.models import (
+    Appointment,
+    DonationGroup,
+    DonationGroupMember,
+    Region,
+    RegionBloodStatus,
+    User,
+)
 from app.models.enums import AppointmentStatus, BloodGroup, DonationType
 from app.schemas.common import ErrorCode
 from app.services import proactive
@@ -41,6 +48,14 @@ class DemoService:
                 Appointment.status == AppointmentStatus.ACTIVE,
             )
             .values(status=AppointmentStatus.CANCELLED, cancelled_at=now_msk())
+        )
+        # Свои группы удаляются целиком (участники — через ON DELETE CASCADE),
+        # из чужих — просто выходим.
+        await self.session.execute(
+            delete(DonationGroup).where(DonationGroup.owner_user_id == user.id)
+        )
+        await self.session.execute(
+            delete(DonationGroupMember).where(DonationGroupMember.user_id == user.id)
         )
         user.onboarding_completed_at = None
         user.consent_at = None
